@@ -1,1816 +1,1487 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="ro" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Liviu Rebreanu — Experiență Web Cinematică 3D</title>
+  <title>Universul Liviu Rebreanu — Expoziție Digitală Interactivă</title>
 
-  <!-- Fonturi editoriale literare (Cormorant Garamond & Plus Jakarta Sans) -->
+  <!-- Google Fonts: Playfair Display, Cormorant Garamond & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- QRCode.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
-            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            literary: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
           },
           colors: {
-            paper: {
-              light: '#efe3c8',
-              base: '#e8dac0',
-              aged: '#dcc8a3',
-              edge: '#c5ab80',
-              ink: '#211913',
-              muted: '#5c4b3a',
-              accent: '#6f4b2b',
-            },
-          },
-        },
-      },
-    };
+            parchment: '#F3ECE0',
+            parchmentCard: '#FAF5EB',
+            parchmentDeep: '#E7DEC8',
+            charcoal: '#141210',
+            charcoalCard: '#1E1B18',
+            terracotta: '#9E2A2B',
+            terracottaHover: '#7D1E1F',
+            gold: '#C59B27',
+            goldLight: '#E8C565',
+            woodDark: '#1C1008',
+            leather: '#4A1811',
+            leatherDark: '#2A0C08'
+          }
+        }
+      }
+    }
   </script>
 
-  <!-- Three.js (r128) + EffectComposer / BokehPass + GSAP 3 -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/BokehShader.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/BokehPass.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-
   <style>
-    /* Reset de bază și prevenirea scroll-ului orizontal nedorit */
-    html {
-      scroll-behavior: auto;
-      background-color: #0f0c09;
-      color: #211913;
-      overflow-x: hidden;
+    /* ==========================================================================
+       TEXTURĂ AUTENTICĂ DE HÂRTIE ÎNVECHITĂ (SVG NOISE + FIBRE + VIGNETTE)
+       ========================================================================== */
+    :root {
+      --bg-primary: #F3ECE0;
+      --bg-card: #FAF5EB;
+      --text-primary: #241D18;
+      --text-secondary: #5A4F45;
+      --border-color: rgba(139, 108, 72, 0.25);
+    }
+
+    html.dark {
+      --bg-primary: #141210;
+      --bg-card: #1E1B18;
+      --text-primary: #F4EFE6;
+      --text-secondary: #A69F95;
+      --border-color: rgba(244, 239, 230, 0.12);
     }
 
     body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      transition: background-color 0.45s ease, color 0.45s ease;
       overflow-x: hidden;
-      background-color: #e8dac0;
-      font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Stratul scenei cinematografice 3D full-viewport */
-    #cinema-stage {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 20;
-      background-color: #0f0c09;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    #cinema-canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-
-    /* Vignetă cinematografică moale și discretă */
-    .cinema-vignette {
+    /* Strat permanent de textură de hârtie învechită peste tot site-ul */
+    .aged-paper-overlay {
       position: fixed;
       inset: 0;
       pointer-events: none;
-      z-index: 22;
-      background: radial-gradient(
-        circle at 50% 48%,
-        rgba(15, 12, 9, 0) 52%,
-        rgba(15, 12, 9, 0.22) 82%,
-        rgba(10, 8, 6, 0.52) 100%
-      );
-      transition: opacity 1.2s ease;
-    }
-
-    .cinema-vignette.is-hidden {
-      opacity: 0;
-    }
-
-    /* Textură subtilă de hârtie veche / carte pentru website */
-    .paper-surface {
-      background-color: #e8dac0;
+      z-index: 40;
+      opacity: 0.48;
+      mix-blend-mode: multiply;
       background-image:
-        radial-gradient(circle at 22% 18%, rgba(246, 236, 214, 0.52), transparent 56%),
-        radial-gradient(circle at 80% 74%, rgba(138, 102, 62, 0.12), transparent 62%),
-        radial-gradient(circle at 50% 50%, rgba(110, 82, 48, 0.05), transparent 80%),
-        repeating-linear-gradient(
-          0deg,
-          rgba(32, 24, 17, 0.014) 0px,
-          rgba(32, 24, 17, 0.014) 1px,
-          transparent 1px,
-          transparent 4px
-        );
+        radial-gradient(circle at 18% 22%, rgba(166, 124, 72, 0.14) 0%, transparent 45%),
+        radial-gradient(circle at 82% 78%, rgba(138, 98, 52, 0.16) 0%, transparent 50%),
+        radial-gradient(ellipse at center, transparent 55%, rgba(112, 78, 42, 0.18) 100%),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0  0 0.95 0 0 0  0 0 0.85 0 0  0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperNoise)'/%3E%3C/svg%3E");
     }
 
-    /* Granulație fină de peliculă cinematografică, aproape imperceptibilă */
-    .film-grain-overlay {
+    html.dark .aged-paper-overlay {
+      opacity: 0.18;
+      mix-blend-mode: screen;
+    }
+
+    /* ==========================================================================
+       ANIMAȚIE INTRODUCTIVĂ 3D: CARTE VECHE PE LEMN + RĂSFOIRE FILE
+       ========================================================================== */
+    #book-intro-stage {
       position: fixed;
       inset: 0;
-      pointer-events: none;
-      z-index: 23;
-      opacity: 0.032;
-      background-image: radial-gradient(rgba(235, 222, 198, 0.45) 0.5px, transparent 0.5px);
-      background-size: 3px 3px;
-      mix-blend-mode: overlay;
-    }
-
-    /* Controale subtile de stare (Auto-Scroll & Replay) poziționate discret */
-    .editorial-hud {
-      position: fixed;
-      bottom: 1.25rem;
-      right: 1.25rem;
-      z-index: 30;
+      z-index: 9999;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      justify-content: center;
+      perspective: 2200px;
+      overflow: hidden;
+      /* Textură bogată de masă din lemn vechi de stejar */
+      background:
+        radial-gradient(circle at center, rgba(62, 36, 18, 0.35) 0%, rgba(14, 7, 3, 0.92) 100%),
+        repeating-linear-gradient(
+          90deg,
+          #26150A 0px,
+          #2E1A0D 18px,
+          #1F1108 36px,
+          #2B180C 58px,
+          #1B0E06 80px
+        );
+      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    @media (max-width: 640px) {
-      .editorial-hud {
-        bottom: 0.9rem;
-        right: 0.9rem;
-        gap: 0.4rem;
+    /* Fibra lemnului generată cu SVG */
+    #book-intro-stage::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.35;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='woodGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.015 0.25' numOctaves='3' seed='8'/%3E%3CfeColorMatrix type='matrix' values='0.4 0 0 0 0.08  0 0.25 0 0 0.04  0 0 0.12 0 0.01  0 0 0 0.8 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23woodGrain)'/%3E%3C/svg%3E");
+    }
+
+    #book-intro-stage.intro-zoom-out {
+      opacity: 0;
+      transform: scale(1.22);
+      pointer-events: none;
+    }
+
+    /* Cartea 3D */
+    .ancient-book {
+      position: relative;
+      width: min(86vw, 390px);
+      height: min(74vh, 530px);
+      transform-style: preserve-3d;
+      transform: rotateX(14deg) rotateY(-6deg) rotateZ(-1deg);
+      transition: transform 1.2s cubic-bezier(0.25, 1, 0.35, 1);
+      box-shadow:
+        -22px 32px 55px rgba(0, 0, 0, 0.85),
+        -6px 10px 18px rgba(0, 0, 0, 0.65);
+    }
+
+    .ancient-book.book-centered {
+      transform: rotateX(4deg) rotateY(0deg) rotateZ(0deg) scale(1.04);
+    }
+
+    @media (min-width: 768px) {
+      .ancient-book.book-centered {
+        transform: translateX(25%) rotateX(4deg) rotateY(0deg) rotateZ(0deg) scale(1.06);
       }
     }
 
-    .hud-pill {
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      background-color: rgba(232, 218, 192, 0.78);
-      border: 1px solid rgba(33, 25, 19, 0.16);
-      color: #211913;
-      transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+    /* Coperta spate + blocul gros de file */
+    .book-back-board {
+      position: absolute;
+      inset: 0;
+      border-radius: 4px 14px 14px 4px;
+      background: linear-gradient(135deg, #3D120C 0%, #240905 100%);
+      border: 2px solid #5C2218;
+      box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.8);
+      transform: translateZ(-14px);
     }
 
-    .hud-pill:hover {
-      background-color: rgba(242, 232, 212, 0.94);
-      border-color: rgba(33, 25, 19, 0.3);
-    }
-
-    .hud-pill:active {
-      transform: scale(0.98);
-    }
-
-    /* Linie editorială fină de separare */
-    .editorial-rule {
-      height: 1px;
-      background: linear-gradient(
-        90deg,
-        rgba(33, 25, 19, 0) 0%,
-        rgba(33, 25, 19, 0.22) 50%,
-        rgba(33, 25, 19, 0) 100%
+    /* Muchia filelor (grosimea cărții) */
+    .book-pages-block {
+      position: absolute;
+      top: 10px;
+      bottom: 10px;
+      left: 6px;
+      right: 10px;
+      border-radius: 2px 10px 10px 2px;
+      background: #EFE4CE;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        #EFE4CE 0px,
+        #E2D2B5 2px,
+        #F5ECD9 4px
       );
+      box-shadow:
+        inset -6px 0 12px rgba(92, 64, 32, 0.35),
+        inset 12px 0 22px rgba(48, 30, 14, 0.45);
+      transform: translateZ(-4px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 28px 24px;
+      color: #2E2218;
+    }
+
+    /* Fiecare filă care se răsfoiește */
+    .flipping-leaf {
+      position: absolute;
+      top: 10px;
+      bottom: 10px;
+      left: 6px;
+      right: 10px;
+      transform-origin: left center;
+      transform-style: preserve-3d;
+      border-radius: 2px 10px 10px 2px;
+      background: linear-gradient(90deg, #DFCFAE 0%, #F4EBDA 14%, #EFE3CC 88%, #DECBA8 100%);
+      box-shadow:
+        inset 10px 0 18px rgba(65, 42, 18, 0.25),
+        0 4px 12px rgba(0, 0, 0, 0.22);
+      transition: transform 1.15s cubic-bezier(0.645, 0.045, 0.355, 1);
+      padding: 26px 22px;
+      backface-visibility: visible;
+      overflow: hidden;
+    }
+
+    .flipping-leaf.turned {
+      transform: rotateY(-176deg);
+    }
+
+    /* Coperta față din piele veche + ornament auriu */
+    .book-front-cover {
+      position: absolute;
+      inset: 0;
+      transform-origin: left center;
+      transform-style: preserve-3d;
+      border-radius: 4px 14px 14px 4px;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(120, 42, 28, 0.45) 0%, transparent 60%),
+        linear-gradient(145deg, #541B12 0%, #370F09 55%, #230804 100%);
+      border: 2px solid #6E281B;
+      box-shadow:
+        inset 14px 0 24px rgba(0, 0, 0, 0.65),
+        inset -2px 0 6px rgba(232, 197, 101, 0.25);
+      transition: transform 1.45s cubic-bezier(0.645, 0.045, 0.355, 1);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 22px;
+    }
+
+    .book-front-cover.opened {
+      transform: rotateY(-178deg);
+    }
+
+    /* Cotorul cărții (nervuri în relief) */
+    .book-spine-ridges {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 24px;
+      background: linear-gradient(90deg, #1E0704 0%, #4A1810 50%, #240905 100%);
+      border-right: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 4px 0 0 4px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      padding: 24px 0;
+    }
+
+    .book-spine-ridges span {
+      display: block;
+      height: 5px;
+      width: 100%;
+      background: linear-gradient(to bottom, rgba(232,197,101,0.35), rgba(0,0,0,0.6));
+      box-shadow: 0 2px 3px rgba(0,0,0,0.7);
+    }
+
+    /* Chenar auriu embosat pe copertă */
+    .gold-emboss-frame {
+      position: relative;
+      width: calc(100% - 18px);
+      height: 100%;
+      margin-left: 16px;
+      border: 1.5px solid rgba(218, 178, 76, 0.65);
+      outline: 1px solid rgba(218, 178, 76, 0.28);
+      outline-offset: -6px;
+      border-radius: 2px 8px 8px 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 16px;
+      text-align: center;
+    }
+
+    .gold-foil-text {
+      background: linear-gradient(180deg, #F7E199 0%, #D4A438 48%, #9C721C 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.85));
+    }
+
+    /* ==========================================================================
+       RESTUL STILURILOR SITE-ULUI (FLASHCARD 3D, PLAYER AUDIO, ETC.)
+       ========================================================================== */
+    .perspective-1000 { perspective: 1000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+    .backface-hidden { backface-visibility: hidden; }
+    .rotate-y-180 { transform: rotateY(180deg); }
+
+    @keyframes eqBar {
+      0%, 100% { height: 22%; }
+      50% { height: 95%; }
+    }
+    .eq-playing .eq-bar-1 { animation: eqBar 0.75s ease-in-out infinite; }
+    .eq-playing .eq-bar-2 { animation: eqBar 0.55s ease-in-out infinite 0.15s; }
+    .eq-playing .eq-bar-3 { animation: eqBar 0.85s ease-in-out infinite 0.3s; }
+    .eq-playing .eq-bar-4 { animation: eqBar 0.65s ease-in-out infinite 0.1s; }
+
+    /* Stil subtil de margine de hârtie pentru carduri */
+    .paper-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 6px 24px -8px rgba(68, 46, 22, 0.14);
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      #qr-print-area, #qr-print-area * { visibility: visible; }
+      #qr-print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+        color: black !important;
+      }
     }
   </style>
 </head>
+<body class="font-sans antialiased selection:bg-terracotta selection:text-white">
 
-<body class="paper-surface text-paper-ink selection:bg-paper-accent/20 selection:text-paper-ink">
-  <!-- =====================================================================
-       SCENA CINEMATOGRAFICĂ 3D (CARTEA PE LEMN VECHI + DESCHIDERE + ZOOM)
-       ===================================================================== -->
-  <div id="cinema-stage" aria-hidden="true">
-    <canvas id="cinema-canvas"></canvas>
+  <!-- Textură permanentă de hârtie învechită peste tot site-ul -->
+  <div class="aged-paper-overlay" aria-hidden="true"></div>
+
+  <!-- ========================================================================
+       ANIMAȚIE DE DESCHIDERE FULL-SCREEN: CARTE VECHE PE MASĂ DE LEMN
+       ======================================================================== -->
+  <div id="book-intro-stage" role="dialog" aria-label="Introducere Liviu Rebreanu">
+    <div id="ancient-book" class="ancient-book">
+      <!-- Coperta spate -->
+      <div class="book-back-board"></div>
+
+      <!-- Blocul de file (Pagina finală de gardă înainte de tranziția în site) -->
+      <div class="book-pages-block font-literary">
+        <div class="text-center border-b border-amber-900/25 pb-3">
+          <p class="text-[11px] uppercase tracking-[0.28em] text-amber-900/70">Arhivă Literară &amp; Expoziție Digitală</p>
+          <p class="font-serif italic text-lg text-terracotta mt-1">„Glasul pământului și al iubirii”</p>
+        </div>
+        <div class="my-auto text-center px-2 space-y-3">
+          <p class="text-base sm:text-lg italic leading-relaxed text-stone-800">
+            „Nu frumosul, o născocire omenească, interesează în artă, ci pulsația vieții. Când ai reușit să închizi în cuvinte câteva clipe de viață adevărată, ai realizat o operă mai prețioasă decât toate frazele frumoase din lume.”
+          </p>
+          <p class="font-serif font-bold text-xs uppercase tracking-[0.25em] text-amber-950">— Liviu Rebreanu</p>
+        </div>
+        <div class="text-center border-t border-amber-900/20 pt-2">
+          <span class="text-[11px] tracking-[0.2em] uppercase text-amber-900/60">Se deschide expoziția...</span>
+        </div>
+      </div>
+
+      <!-- Fila 3 care se răsfoiește -->
+      <div id="leaf-3" class="flipping-leaf font-literary text-stone-800 flex flex-col justify-between" style="z-index: 12;">
+        <div class="flex justify-between text-[10px] uppercase tracking-widest text-amber-900/60 border-b border-amber-900/20 pb-2">
+          <span>Capitolul III</span>
+          <span>1920 — 1932</span>
+        </div>
+        <div class="space-y-2.5 text-sm italic leading-relaxed opacity-85">
+          <p>„Satul Pripas dormea dus în căldura amiezii. Ulița mare se încolăcea printre casele bătrânești ca o panglică albă, prăfuită...”</p>
+          <p class="text-xs not-italic text-amber-950/75 border-l-2 border-terracotta pl-2.5">20 de tablouri fotografice, poeme rostite, curiozități și personaje nemuritoare.</p>
+        </div>
+        <div class="text-right text-[11px] italic text-amber-900/60">III</div>
+      </div>
+
+      <!-- Fila 2 care se răsfoiește -->
+      <div id="leaf-2" class="flipping-leaf font-literary text-stone-800 flex flex-col justify-between" style="z-index: 14;">
+        <div class="flex justify-between text-[10px] uppercase tracking-widest text-amber-900/60 border-b border-amber-900/20 pb-2">
+          <span>Manuscris Original</span>
+          <span>Târlișua • Prislop</span>
+        </div>
+        <div class="my-auto text-center space-y-2">
+          <p class="font-serif text-xl font-bold text-amber-950">ION • PĂDUREA SPÂNZURAȚILOR • RĂSCOALA</p>
+          <div class="w-16 h-[1px] bg-terracotta/50 mx-auto"></div>
+          <p class="text-sm italic text-stone-700">O incursiune vizuală și sonoră în universul creatorului romanului românesc modern.</p>
+        </div>
+        <div class="text-right text-[11px] italic text-amber-900/60">II</div>
+      </div>
+
+      <!-- Fila 1 (Pagina de titlu interioară) -->
+      <div id="leaf-1" class="flipping-leaf font-literary text-stone-800 flex flex-col justify-between" style="z-index: 16;">
+        <div class="text-center pt-2">
+          <span class="text-[10px] uppercase tracking-[0.3em] text-amber-900/70">Ediție Specială</span>
+        </div>
+        <div class="text-center space-y-3 my-auto">
+          <p class="text-xs uppercase tracking-[0.25em] text-terracotta font-semibold">Expoziție Interactivă</p>
+          <h2 class="font-serif text-3xl font-bold text-stone-900 tracking-wide">LIVIU REBREANU</h2>
+          <p class="text-sm italic text-stone-600">1885 — 1944</p>
+        </div>
+        <div class="text-center text-[11px] uppercase tracking-[0.22em] text-amber-900/60 pb-1">
+          Colecție Digitală
+        </div>
+      </div>
+
+      <!-- Coperta față din piele cu scris auriu LIVIU REBREANU -->
+      <div id="book-front-cover" class="book-front-cover">
+        <div class="book-spine-ridges" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="gold-emboss-frame">
+          <div class="space-y-1.5">
+            <p class="text-[10px] uppercase tracking-[0.32em] text-amber-200/75 font-sans">Arhivă Literară</p>
+            <div class="w-12 h-[1px] bg-amber-300/40 mx-auto"></div>
+          </div>
+
+          <div class="my-auto space-y-3">
+            <!-- Ornament literar SVG -->
+            <svg class="w-10 h-10 mx-auto text-amber-300/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+              <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
+            </svg>
+            <h1 class="font-serif text-3xl sm:text-4xl font-extrabold tracking-[0.14em] uppercase gold-foil-text leading-tight">
+              LIVIU<br/>REBREANU
+            </h1>
+            <div class="w-20 h-[1px] bg-amber-300/45 mx-auto"></div>
+            <p class="font-literary italic text-base text-amber-100/85 tracking-wide">
+              Opere, Glasuri &amp; Destine
+            </p>
+          </div>
+
+          <div class="space-y-1">
+            <p class="text-[10px] uppercase tracking-[0.28em] text-amber-200/65 font-sans">Ediție de Colecție</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buton discret pentru a sări animația dacă cineva revine des pe site -->
+    <button onclick="finishBookIntro()" class="fixed bottom-6 right-6 z-50 px-4 py-2 rounded-full bg-black/50 hover:bg-black/75 text-amber-100/85 text-xs uppercase tracking-widest border border-amber-300/30 backdrop-blur-sm transition">
+      Intră direct în expoziție →
+    </button>
   </div>
-  <div id="cinema-vignette" class="cinema-vignette" aria-hidden="true"></div>
-  <div class="film-grain-overlay" aria-hidden="true"></div>
 
-  <!-- =====================================================================
-       BARĂ DISCRETĂ DE CONTROL (AUTO-SCROLL & RELUARE INTRO)
-       ===================================================================== -->
-  <aside
-    id="editorial-hud"
-    class="editorial-hud opacity-0 pointer-events-none"
-    aria-label="Controale lectură și animație"
-  >
-    <button
-      id="autoscroll-toggle-btn"
-      type="button"
-      class="hud-pill rounded-full px-3.5 py-2 text-xs tracking-wide font-medium flex items-center gap-2 cursor-pointer"
-    >
-      <span
-        id="autoscroll-dot"
-        class="inline-block w-2 h-2 rounded-full bg-paper-accent transition-opacity duration-300"
-      ></span>
-      <span id="autoscroll-label">Auto-scroll: Activ</span>
-    </button>
+  <!-- ========================================================================
+       CONȚINUTUL PRINCIPAL AL SITE-ULUI (CU TEXTURĂ DE HÂRTIE ÎNVECHITĂ)
+       ======================================================================== -->
+  <div id="main-site-wrapper" class="relative z-10 transition-opacity duration-700">
 
-    <button
-      id="replay-intro-btn"
-      type="button"
-      class="hud-pill rounded-full px-3.5 py-2 text-xs tracking-wide font-medium cursor-pointer"
-      title="Reia secvența cinematografică"
-    >
-      Reia intro-ul
-    </button>
-  </aside>
+    <!-- BARA DE NAVIGARE -->
+    <header class="sticky top-0 z-30 backdrop-blur-md bg-[#F3ECE0]/90 dark:bg-[#141210]/90 border-b border-amber-900/15 dark:border-white/10 transition-colors">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
+        <!-- Logo + Buton rejucare animație carte -->
+        <div class="flex items-center gap-3">
+          <a href="#" class="flex items-center gap-2.5 group">
+            <span class="w-9 h-9 rounded-lg bg-terracotta text-parchment flex items-center justify-center font-serif font-bold text-lg shadow-sm group-hover:scale-105 transition-transform">
+              LR
+            </span>
+            <div class="leading-tight">
+              <span class="font-serif font-bold text-base sm:text-lg tracking-tight block">Universul Rebreanu</span>
+              <span class="text-[11px] uppercase tracking-widest opacity-70 hidden sm:block">Expoziție Digitală</span>
+            </div>
+          </a>
+        </div>
 
-  <!-- =====================================================================
-       WEBSITE EDITORIAL — CONTINUARE NATURALĂ A PRIMEI PAGINI
-       ===================================================================== -->
-  <main id="website-content" class="relative z-10 w-full">
-    <!-- HERO SECTION: continuă vizual textura și atmosfera primei pagini din carte -->
-    <section
-      id="hero-section"
-      class="min-h-screen w-full flex flex-col justify-between px-6 sm:px-12 md:px-20 lg:px-28 py-12 sm:py-16 max-w-6xl mx-auto"
-    >
-      <!-- Antet editorial discret -->
-      <header class="reveal-item opacity-0 translate-y-4 flex items-center justify-between pt-2">
-        <span class="text-[11px] sm:text-xs uppercase tracking-[0.26em] text-paper-muted font-medium">
-          Arhivă Literară · Ediție Digitală
-        </span>
-        <span class="text-[11px] sm:text-xs tracking-[0.18em] text-paper-muted/80 hidden sm:inline">
-          1885 — 1944
-        </span>
-      </header>
+        <!-- Link-uri Desktop -->
+        <nav class="hidden lg:flex items-center gap-6 text-sm font-medium">
+          <a href="#galerie" class="hover:text-terracotta transition-colors">Galerie (20)</a>
+          <a href="#quiz-personaj" class="hover:text-terracotta transition-colors">Ce personaj ești?</a>
+          <a href="#flashcards" class="hover:text-terracotta transition-colors">Curiozități</a>
+          <a href="#cinema" class="hover:text-terracotta transition-colors">Cinema &amp; Animații</a>
+          <a href="#playlist" class="hover:text-terracotta transition-colors">Playlist</a>
+          <a href="#concurs" id="nav-concurs-link" class="px-3 py-1 rounded-full bg-terracotta/15 text-terracotta font-semibold hover:bg-terracotta hover:text-white transition-all">
+            Concurs QR
+          </a>
+        </nav>
 
-      <!-- Centrul Hero Section -->
-      <div class="my-auto py-16 sm:py-24 text-center max-w-3xl mx-auto">
-        <p
-          class="reveal-item opacity-0 translate-y-4 text-xs sm:text-sm uppercase tracking-[0.28em] text-paper-accent font-medium mb-5"
-        >
-          Proză · Destin · Conștiință
-        </p>
+        <!-- Acțiuni dreapta -->
+        <div class="flex items-center gap-2">
+          <button onclick="replayBookIntro()" title="Revezi deschiderea cărții" class="p-2 rounded-full border border-amber-900/20 dark:border-white/15 hover:bg-amber-900/10 dark:hover:bg-white/10 transition-colors" aria-label="Revezi animația cărții">
+            <i data-lucide="book-open" class="w-4 h-4 text-terracotta"></i>
+          </button>
 
-        <h1
-          id="hero-title"
-          class="reveal-item opacity-0 translate-y-4 font-serif text-5xl sm:text-7xl md:text-8xl font-normal tracking-[-0.015em] text-paper-ink leading-[1.03]"
-        >
-          Liviu Rebreanu
+          <button id="theme-toggle" aria-label="Schimbă tema" class="p-2 rounded-full border border-amber-900/20 dark:border-white/15 hover:bg-amber-900/10 dark:hover:bg-white/10 transition-colors">
+            <i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i>
+            <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-gold"></i>
+          </button>
+
+          <button id="mobile-menu-btn" aria-label="Meniu" class="lg:hidden p-2 rounded-lg border border-amber-900/20 dark:border-white/15">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Meniu Mobil -->
+      <div id="mobile-menu" class="hidden lg:hidden px-4 pt-2 pb-5 space-y-2 border-t border-amber-900/15 dark:border-white/10 bg-[#F3ECE0] dark:bg-[#141210]">
+        <a href="#galerie" class="mobile-nav-link block py-2 font-medium hover:text-terracotta">1. Galerie Foto + Audio (20)</a>
+        <a href="#quiz-personaj" class="mobile-nav-link block py-2 font-medium hover:text-terracotta">2. Quiz: Ce personaj ești?</a>
+        <a href="#flashcards" class="mobile-nav-link block py-2 font-medium hover:text-terracotta">3. Curiozități (Flashcard-uri)</a>
+        <a href="#cinema" class="mobile-nav-link block py-2 font-medium hover:text-terracotta">4. Povestire &amp; Animații „Ion”</a>
+        <a href="#playlist" class="mobile-nav-link block py-2 font-medium hover:text-terracotta">5. Playlist Liviu Rebreanu</a>
+        <a href="#concurs" id="mobile-concurs-link" class="mobile-nav-link block py-2 font-semibold text-terracotta">6. Concursul celor 7 Coduri QR</a>
+      </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative overflow-hidden py-14 sm:py-20 lg:py-24 border-b border-amber-900/15 dark:border-white/10">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest bg-terracotta/10 text-terracotta border border-terracotta/25">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          <span>Arhivă Culturală &amp; Expoziție Interactivă</span>
+        </div>
+
+        <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.12]">
+          Glasul pământului și al iubirii: <span class="italic text-terracotta font-normal">Universul lui Liviu Rebreanu</span>
         </h1>
 
-        <div class="reveal-item opacity-0 translate-y-4 editorial-rule w-36 sm:w-48 mx-auto my-8"></div>
-
-        <p
-          id="hero-subtitle"
-          class="reveal-item opacity-0 translate-y-4 font-serif italic text-xl sm:text-2xl md:text-[1.7rem] text-paper-muted leading-relaxed max-w-2xl mx-auto"
-        >
-          O cronică interioară a pământului, a datoriei și a neliniștii umane, așezată în
-          răbdarea paginii tipărite.
-        </p>
-      </div>
-
-      <!-- Indicație discretă de derulare -->
-      <footer
-        class="reveal-item opacity-0 translate-y-4 flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t border-paper-ink/10 text-xs text-paper-muted"
-      >
-        <span class="tracking-[0.16em] uppercase text-[11px]">
-          Derulare lentă automată · Preluare manuală la orice gest
-        </span>
-        <span class="font-serif italic text-sm text-paper-muted/90">
-          Capitolul I — Pragul lecturii
-        </span>
-      </footer>
-    </section>
-
-    <!-- SECȚIUNE DE PRAG EDITORIAL (Fundație pregătită pentru capitolele următoare) -->
-    <section
-      id="threshold-section"
-      class="w-full px-6 sm:px-12 md:px-20 lg:px-28 py-24 sm:py-32 max-w-5xl mx-auto"
-    >
-      <div class="reveal-item opacity-0 translate-y-6 space-y-8">
-        <p class="text-[11px] uppercase tracking-[0.26em] text-paper-accent font-medium">
-          Introducere în spațiul operei
+        <p class="max-w-2xl mx-auto text-base sm:text-lg opacity-85 leading-relaxed font-literary text-xl sm:text-2xl">
+          Explorează cele 20 de tablouri fotografice însoțite de poeme rostite, descoperă cu ce personaj semeni și parcurge curiozitățile din viața creatorului romanului românesc modern.
         </p>
 
-        <h2 class="font-serif text-3xl sm:text-5xl font-normal text-paper-ink leading-[1.15]">
-          Dincolo de coperta veche începe respirația lentă a textului.
-        </h2>
-
-        <p class="text-base sm:text-lg text-paper-muted leading-[1.85] max-w-3xl">
-          Această structură editorială constituie temelia unei viitoare antologii dedicate vieții
-          și creației lui Liviu Rebreanu. Spațiul este gândit cu măsură, lumină caldă de hârtie și
-          ritm contemplativ, pregătit să primească ulterior cronologia, manuscrisele, fotografiile
-          de epocă și paginile esențiale ale operei.
-        </p>
+        <div class="pt-3 flex flex-wrap items-center justify-center gap-3.5">
+          <a href="#galerie" class="px-6 py-3.5 rounded-xl bg-terracotta hover:bg-terracottaHover text-white font-semibold shadow-lg shadow-terracotta/25 transition-all flex items-center gap-2">
+            <i data-lucide="headphones" class="w-4 h-4"></i>
+            <span>Explorează Expoziția</span>
+          </a>
+          <a href="#quiz-personaj" class="px-6 py-3.5 rounded-xl paper-card hover:border-terracotta font-semibold transition-all flex items-center gap-2">
+            <i data-lucide="user-check" class="w-4 h-4 text-terracotta"></i>
+            <span>Ce personaj ești?</span>
+          </a>
+        </div>
       </div>
     </section>
 
-    <!-- SECȚIUNE DE CONTINUITATE PENTRU AUTO-SCROLL -->
-    <section
-      id="continuum-section"
-      class="w-full px-6 sm:px-12 md:px-20 lg:px-28 pt-8 pb-36 sm:pb-48 max-w-5xl mx-auto"
-    >
-      <div class="reveal-item opacity-0 translate-y-6 border-t border-paper-ink/15 pt-12">
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-          <div class="md:col-span-5">
-            <p class="text-[11px] uppercase tracking-[0.25em] text-paper-muted font-medium">
-              Ritm &amp; Lectură
-            </p>
-            <h3 class="font-serif text-2xl sm:text-3xl text-paper-ink mt-2">
-              O derulare gândită fără grabă.
-            </h3>
+    <!-- ======================================================================
+         1. GALERIA INTERACTIVĂ (20 EXPONATE: FOTO + POEM + AUDIO)
+         ====================================================================== -->
+    <section id="galerie" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-terracotta">01 • Colecția Vizuală și Sonoră</span>
+          <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-1">Galeria Exponatelor (1 – 20)</h2>
+          <p class="opacity-80 mt-2 max-w-2xl text-sm sm:text-base">
+            Apasă pe orice tablou pentru a citi poemul dedicat și pentru a asculta înregistrarea audio. În sala de expoziție, fiecare lucrare are propriul cod QR.
+          </p>
+        </div>
+
+        <div class="relative w-full md:w-72">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 opacity-50"></i>
+          <input id="exhibit-search" type="text" placeholder="Caută exponat (ex: Ion, 04)..." class="w-full pl-10 pr-4 py-2.5 rounded-xl paper-card text-sm focus:outline-none focus:border-terracotta" />
+        </div>
+      </div>
+
+      <div id="exhibits-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+    </section>
+
+    <!-- ======================================================================
+         2. QUIZ DE PERSONALITATE: CE PERSONAJ DIN REBREANU EȘTI?
+         ====================================================================== -->
+    <section id="quiz-personaj" class="py-16 sm:py-24 bg-[#EAE0CE]/65 dark:bg-white/[0.02] border-y border-amber-900/15 dark:border-white/10">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-10">
+          <span class="text-xs font-bold uppercase tracking-widest text-terracotta">02 • Test Interactiv</span>
+          <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-1">Cu ce personaj din romanele lui Rebreanu semeni?</h2>
+          <p class="opacity-80 mt-2 text-sm sm:text-base">Răspunde la 7 întrebări scurte și află ce destin literar ți se potrivește.</p>
+        </div>
+
+        <div id="quiz-container" class="paper-card rounded-2xl p-6 sm:p-10 shadow-xl">
+          <!-- Injectat prin JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         3. FLASHCARD-URI INTERACTIVE: CURIOZITĂȚI DESPRE REBREANU
+         ====================================================================== -->
+    <section id="flashcards" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-terracotta">03 • Știai că?</span>
+          <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-1">Curiozități — Flashcard-uri 3D</h2>
+          <p class="opacity-80 mt-2 text-sm sm:text-base">Atinge orice card pentru a-l întoarce și a descoperi povestea din spatele lui.</p>
+        </div>
+        <div class="flex flex-wrap gap-2" id="flashcard-filters">
+          <button data-cat="toate" class="fc-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-terracotta text-white">Toate</button>
+          <button data-cat="biografie" class="fc-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold paper-card hover:border-terracotta">Biografie</button>
+          <button data-cat="opere" class="fc-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold paper-card hover:border-terracotta">Opere</button>
+        </div>
+      </div>
+
+      <div id="flashcards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- ======================================================================
+         4. CINEMA & POVESTIRE (O POVESTIRE + ANIMAȚII "ION")
+         ====================================================================== -->
+    <section id="cinema" class="py-16 sm:py-24 bg-[#EAE0CE]/65 dark:bg-white/[0.02] border-y border-amber-900/15 dark:border-white/10">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-10">
+          <span class="text-xs font-bold uppercase tracking-widest text-terracotta">04 • Proiecții Speciale</span>
+          <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-1">Povestire Audio-Video &amp; Animații „Ion”</h2>
+          <p class="opacity-80 mt-2 text-sm sm:text-base">Materiale multimedia realizate în cadrul proiectului.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="paper-card rounded-2xl overflow-hidden shadow-md">
+            <div class="aspect-video bg-black relative">
+              <iframe class="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Liviu Rebreanu - O povestire" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="p-6">
+              <span class="text-xs font-bold uppercase tracking-wider text-terracotta">Audio + Video</span>
+              <h3 class="font-serif text-xl font-bold mt-1">Liviu Rebreanu — O povestire</h3>
+              <p class="text-sm opacity-80 mt-2">Lectură dramatizată însoțită de ilustrații și atmosferă sonoră de epocă.</p>
+            </div>
           </div>
-          <div class="md:col-span-7 space-y-5 text-paper-muted leading-[1.8] text-base">
-            <p>
-              După încheierea secvenței cinematografice, pagina înaintează lin și aproape
-              imperceptibil, lăsând privirea să se așeze firesc pe suprafață.
-            </p>
-            <p>
-              În clipa în care folosești rotița mouse-ului, atingerea pe ecran sau bara de derulare,
-              controlul revine imediat și integral în mâinile tale.
-            </p>
+
+          <div class="paper-card rounded-2xl overflow-hidden shadow-md">
+            <div class="aspect-video bg-black relative">
+              <iframe class="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Animații Ion - Ionel" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="p-6">
+              <span class="text-xs font-bold uppercase tracking-wider text-gold">Animație Originală</span>
+              <h3 class="font-serif text-xl font-bold mt-1">Animații „Ion” (Ionel)</h3>
+              <p class="text-sm opacity-80 mt-2">Secvențe cheie din romanul „Ion” transpuse într-o formă vizuală animată.</p>
+            </div>
           </div>
         </div>
       </div>
     </section>
-  </main>
 
-  <!-- =====================================================================
-       SCRIPT PRINCIPAL: SCENĂ 3D CINEMATOGRAFICĂ, GSAP TIMELINE & AUTO-SCROLL
-       ===================================================================== -->
+    <!-- ======================================================================
+         5. PLAYLIST REBREANU
+         ====================================================================== -->
+    <section id="playlist" class="py-16 sm:py-24 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-terracotta">05 • Atmosferă Sonoră</span>
+          <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-1">Playlist-ul lui Liviu Rebreanu</h2>
+          <p class="opacity-80 mt-2 text-sm sm:text-base">Piese și compoziții care au însoțit scrisul și epoca marelui romancier.</p>
+        </div>
+        <a href="https://www.radioromaniacultural.ro/sectiuni-articole/literatura/playlist-de-scriitor-liviu-rebreanu-id25892.html" target="_blank" rel="noopener" class="text-xs font-semibold text-terracotta hover:underline flex items-center gap-1">
+          <span>Sursă: Radio România Cultural</span>
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+
+      <div class="rounded-2xl bg-[#181614] text-[#F4EFE6] p-5 sm:p-8 shadow-2xl border border-white/10">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5 pb-6 border-b border-white/10">
+          <div class="w-20 h-20 rounded-xl bg-gradient-to-br from-terracotta to-amber-900 flex items-center justify-center shrink-0 shadow-lg">
+            <i data-lucide="disc-3" class="w-10 h-10 text-gold"></i>
+          </div>
+          <div class="flex-1">
+            <span class="text-[11px] uppercase tracking-widest text-gold font-semibold">Colecție Muzicală</span>
+            <h3 class="font-serif text-2xl font-bold mt-0.5">În atelierul de creație al lui Rebreanu</h3>
+            <p class="text-xs text-white/70 mt-1" id="playlist-now-playing">Selectează o piesă din listă pentru audiție</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="prevPlaylistTrack()" aria-label="Piesa anterioară" class="p-2.5 rounded-full bg-white/10 hover:bg-white/20 transition">
+              <i data-lucide="skip-back" class="w-4 h-4"></i>
+            </button>
+            <button id="playlist-main-play" onclick="togglePlaylistPlay()" aria-label="Redă sau pune pauză" class="w-12 h-12 rounded-full bg-terracotta hover:bg-terracottaHover text-white flex items-center justify-center shadow-lg transition">
+              <i data-lucide="play" class="w-5 h-5 ml-0.5" id="playlist-main-icon"></i>
+            </button>
+            <button onclick="nextPlaylistTrack()" aria-label="Piesa următoare" class="p-2.5 rounded-full bg-white/10 hover:bg-white/20 transition">
+              <i data-lucide="skip-forward" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="playlist-tracks" class="divide-y divide-white/5 mt-2"></div>
+        <audio id="playlist-audio-element" preload="none"></audio>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         6. CONCURSUL DIN ZIUA EXPOZIȚIEI (CELE 7 CODURI QR DIFERITE)
+         ====================================================================== -->
+    <section id="concurs" class="py-16 sm:py-24 bg-terracotta/5 border-t border-terracotta/20">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-terracotta text-white text-xs font-bold uppercase tracking-wider mb-2">
+              <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+              <span>Activ doar în ziua expoziției</span>
+            </div>
+            <h2 class="font-serif text-3xl sm:text-4xl font-bold">Vânătoarea celor 7 Coduri QR</h2>
+            <p class="opacity-80 mt-2 max-w-2xl text-sm sm:text-base">
+              Găsește cele 7 coduri QR ascunse în spațiul expoziției! Fiecare cod îți dezvăluie o întrebare despre activitățile proiectului.
+            </p>
+          </div>
+
+          <a href="https://kahoot.it" target="_blank" rel="noopener" class="px-5 py-3 rounded-xl bg-[#46178F] hover:bg-[#381272] text-white font-bold text-sm shadow-md flex items-center gap-2 shrink-0 self-start">
+            <i data-lucide="trophy" class="w-4 h-4"></i>
+            <span>Intră în Kahoot Live</span>
+          </a>
+        </div>
+
+        <div id="contest-codes-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+
+        <div id="contest-question-box" class="hidden mt-8 p-6 sm:p-8 rounded-2xl paper-card border-2 border-terracotta shadow-xl">
+          <!-- Injectat prin JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SUBSOL & PANOU ORGANIZATORI (QR PRINT + TOGGLE ZIUA EVENIMENTULUI)
+         ====================================================================== -->
+    <footer class="py-12 border-t border-amber-900/15 dark:border-white/10 text-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div>
+          <p class="font-serif font-bold text-lg">Universul Liviu Rebreanu</p>
+          <p class="opacity-70 text-xs mt-1">Expoziție culturală interactivă • Arhivă digitală permanentă</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <button onclick="openQrPrintModal()" class="px-4 py-2 rounded-xl paper-card hover:border-terracotta font-semibold text-xs flex items-center gap-2 transition">
+            <i data-lucide="qr-code" class="w-4 h-4 text-terracotta"></i>
+            <span>Generează Codurile QR (Print)</span>
+          </button>
+
+          <label class="inline-flex items-center gap-2 px-4 py-2 rounded-xl paper-card cursor-pointer text-xs font-semibold">
+            <input type="checkbox" id="toggle-event-day" checked class="accent-terracotta w-4 h-4" />
+            <span>Mod Ziua Evenimentului (Concurs Activ)</span>
+          </label>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ========================================================================
+       MODAL EXPONAT (FOTO HD + POEM + PLAYER AUDIO)
+       ======================================================================== -->
+  <div id="exhibit-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="relative w-full max-w-4xl rounded-2xl bg-[#FAF5EB] dark:bg-[#1E1B18] text-[#241D18] dark:text-[#F4EFE6] shadow-2xl border border-amber-900/20 dark:border-white/15 overflow-hidden my-auto">
+      <button onclick="closeExhibitModal()" aria-label="Închide" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/60 text-white hover:bg-terracotta flex items-center justify-center transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="grid grid-cols-1 md:grid-cols-2">
+        <div class="bg-black flex items-center justify-center min-h-[280px] sm:min-h-[420px]">
+          <img id="modal-img" src="" alt="" class="w-full h-full object-cover max-h-[520px]" />
+        </div>
+
+        <div class="p-6 sm:p-8 flex flex-col justify-between space-y-6">
+          <div>
+            <div class="flex items-center justify-between gap-2">
+              <span id="modal-badge" class="text-xs font-bold uppercase tracking-widest text-terracotta">Exponat #01</span>
+              <button onclick="copyCurrentExhibitLink()" class="text-xs opacity-75 hover:opacity-100 flex items-center gap-1 underline">
+                <i data-lucide="link" class="w-3 h-3"></i>
+                <span id="copy-link-label">Copiază link QR</span>
+              </button>
+            </div>
+            <h3 id="modal-title" class="font-serif text-2xl sm:text-3xl font-bold mt-1">Titlu Exponat</h3>
+
+            <div class="mt-4 p-4 rounded-xl bg-amber-900/[0.06] dark:bg-white/5 border border-amber-900/15 dark:border-white/10 max-h-52 overflow-y-auto">
+              <p id="modal-poem" class="font-literary italic text-lg sm:text-xl leading-relaxed whitespace-pre-line"></p>
+            </div>
+          </div>
+
+          <!-- Player Audio dedicat -->
+          <div class="p-4 rounded-xl bg-terracotta/10 border border-terracotta/25 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-terracotta flex items-center gap-1.5">
+                <i data-lucide="volume-2" class="w-4 h-4"></i>
+                <span>Înregistrare Audio Poem</span>
+              </span>
+              <div id="modal-eq" class="flex items-end gap-0.5 h-3.5">
+                <span class="eq-bar-1 w-1 bg-terracotta rounded-full h-1"></span>
+                <span class="eq-bar-2 w-1 bg-terracotta rounded-full h-2"></span>
+                <span class="eq-bar-3 w-1 bg-terracotta rounded-full h-1.5"></span>
+                <span class="eq-bar-4 w-1 bg-terracotta rounded-full h-2.5"></span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <button id="modal-play-btn" onclick="toggleExhibitAudio()" class="w-11 h-11 rounded-full bg-terracotta hover:bg-terracottaHover text-white flex items-center justify-center shrink-0 shadow transition">
+                <i data-lucide="play" class="w-5 h-5 ml-0.5" id="modal-play-icon"></i>
+              </button>
+              <div class="flex-1 space-y-1">
+                <input id="modal-progress" type="range" min="0" max="100" value="0" class="w-full accent-terracotta h-1.5 bg-amber-900/20 dark:bg-white/20 rounded-lg cursor-pointer" />
+                <div class="flex justify-between text-[11px] opacity-70 font-mono">
+                  <span id="modal-time-current">0:00</span>
+                  <span id="modal-time-duration">0:00</span>
+                </div>
+              </div>
+            </div>
+            <audio id="exhibit-audio-player" preload="metadata"></audio>
+          </div>
+
+          <div class="flex items-center justify-between pt-2 border-t border-amber-900/15 dark:border-white/10">
+            <button onclick="navigateExhibit(-1)" class="px-4 py-2 rounded-lg text-xs font-semibold hover:bg-amber-900/10 dark:hover:bg-white/10 flex items-center gap-1.5 transition">
+              <i data-lucide="arrow-left" class="w-4 h-4"></i>
+              <span>Anterior</span>
+            </button>
+            <button onclick="navigateExhibit(1)" class="px-4 py-2 rounded-lg text-xs font-semibold hover:bg-amber-900/10 dark:hover:bg-white/10 flex items-center gap-1.5 transition">
+              <span>Următor</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL PRINTARE CODURI QR (20 EXPONATE + 7 CONCURS)
+       ======================================================================== -->
+  <div id="qr-print-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white text-black w-full max-w-5xl rounded-2xl p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-black/15">
+        <div>
+          <h3 class="font-serif text-2xl font-bold">Etichete QR pentru Sala de Expoziție</h3>
+          <p class="text-xs text-black/70 mt-1">Conține toate cele 20 de coduri pentru tablouri + cele 7 coduri pentru concurs. Apasă „Printează”.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-terracotta text-white text-xs font-bold flex items-center gap-1.5">
+            <i data-lucide="printer" class="w-4 h-4"></i>
+            <span>Printează PDF / Hârtie</span>
+          </button>
+          <button onclick="closeQrPrintModal()" class="px-3 py-2 rounded-xl bg-black/10 text-xs font-bold">Închide</button>
+        </div>
+      </div>
+
+      <div id="qr-print-area" class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6"></div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       JAVASCRIPT: ANIMAȚIA CĂRȚII + DATELE ȘI LOGICA SITE-ULUI
+       ======================================================================== -->
   <script>
-    (function () {
-      'use strict';
+    /* ========================================================================
+       LOGICA ANIMAȚIEI DE DESCHIDERE A CĂRȚII PE MASĂ DE LEMN
+       ======================================================================== */
+    let introTimers = [];
 
-      /* =====================================================================
-         1. CONFIGURAȚIE CENTRALIZATĂ (UȘOR DE MODIFICAT ULTERIOR)
-         ===================================================================== */
-      const CONFIG = {
-        texts: {
-          coverTitle: 'LIVIU REBREANU',
-          coverSubtitle: 'EDIȚIE VECHE',
-          firstPageTitle: 'Liviu Rebreanu',
-          firstPageTag: 'OPERA LITERARĂ',
-        },
+    function runBookIntroAnimation() {
+      const stage = document.getElementById('book-intro-stage');
+      const book = document.getElementById('ancient-book');
+      const cover = document.getElementById('book-front-cover');
+      const leaf1 = document.getElementById('leaf-1');
+      const leaf2 = document.getElementById('leaf-2');
+      const leaf3 = document.getElementById('leaf-3');
 
-        model: {
-          // Calea către modelul 3D final GLB/GLTF (când este plasat în proiect)
-          url: './assets/book.glb',
-          enableExternalLoad: true,
-        },
+      // Reset stare inițială
+      introTimers.forEach(clearTimeout);
+      introTimers = [];
+      stage.classList.remove('intro-zoom-out');
+      stage.style.display = 'flex';
+      book.classList.remove('book-centered');
+      cover.classList.remove('opened');
+      leaf1.classList.remove('turned');
+      leaf2.classList.remove('turned');
+      leaf3.classList.remove('turned');
 
-        cameraAndAnimation: {
-          introStartDelay: 0.45,
-          approachDuration: 3.8,
-          openCoverDuration: 3.5,
-          pushInDuration: 3.6,
-          timeScale: 1.0,
+      // 1. Îndreaptă cartea pe masa de lemn (0.6s)
+      introTimers.push(setTimeout(() => {
+        book.classList.add('book-centered');
+      }, 650));
 
-          fovInitial: 36,
-          fovPushIn: 32,
-          parallaxStrength: 0.08,
+      // 2. Deschide coperta groasă din piele cu scris auriu (1.4s)
+      introTimers.push(setTimeout(() => {
+        cover.classList.add('opened');
+      }, 1450));
 
-          // Unghi cinematografic mai de sus (~42–48 grade față de suprafața mesei de lemn)
-          startPos: { x: 0.0, y: 6.1, z: 5.3 },
-          midPos: { x: 0.08, y: 4.25, z: 3.45 },
-          openPos: { x: 0.14, y: 2.95, z: 2.05 },
-          pagePos: { x: 0.28, y: 1.55, z: 0.56 },
-        },
+      // 3. Răsfoiește prima filă (2.4s)
+      introTimers.push(setTimeout(() => {
+        leaf1.classList.add('turned');
+      }, 2400));
 
-        autoScroll: {
-          enabledByDefault: true,
-          pixelsPerSecond: 18,
-          startDelayAfterIntro: 1.4,
-          resumeAfterIdleMs: 0,
-        },
+      // 4. Răsfoiește a doua filă (3.0s)
+      introTimers.push(setTimeout(() => {
+        leaf2.classList.add('turned');
+      }, 3050));
 
-        performance: {
-          maxPixelRatioDesktop: 2,
-          maxPixelRatioMobile: 1.5,
-          dustCountDesktop: 34,
-          dustCountMobile: 14,
-          lowPowerConcurrencyThreshold: 4,
-        },
-      };
+      // 5. Răsfoiește a treia filă și dezvăluie citatul (3.7s)
+      introTimers.push(setTimeout(() => {
+        leaf3.classList.add('turned');
+      }, 3700));
 
-      /* =====================================================================
-         2. DETECȚIE DISPOZITIV & STARE GLOBALĂ
-         ===================================================================== */
-      const isTouchDevice =
-        'ontouchstart' in window ||
-        (navigator.maxTouchPoints && navigator.maxTouchPoints > 0);
-      const isSmallScreen = window.innerWidth < 768;
-      const isLowPowerDevice =
-        (navigator.hardwareConcurrency &&
-          navigator.hardwareConcurrency <= CONFIG.performance.lowPowerConcurrencyThreshold) ||
-        (navigator.deviceMemory && navigator.deviceMemory <= 4);
+      // 6. Tranziție lină (zoom-in în hârtia învechită) către site (5.1s)
+      introTimers.push(setTimeout(() => {
+        finishBookIntro();
+      }, 5150));
+    }
 
-      const state = {
-        isMobile: isSmallScreen || isTouchDevice,
-        isLowPower: Boolean(isLowPowerDevice),
-        introCompleted: false,
-        isTransitioningOut: false,
-        introTimeline: null,
+    function finishBookIntro() {
+      introTimers.forEach(clearTimeout);
+      const stage = document.getElementById('book-intro-stage');
+      stage.classList.add('intro-zoom-out');
+      setTimeout(() => {
+        stage.style.display = 'none';
+      }, 950);
+    }
 
-        autoScrollActive: false,
-        userPausedAutoScroll: false,
-        autoScrollRafId: null,
-        lastAutoScrollTime: null,
-        scrollAccumulator: 0,
-        idleResumeTimer: null,
+    function replayBookIntro() {
+      runBookIntroAnimation();
+    }
 
-        pointerTarget: { x: 0, y: 0 },
-        pointerCurrent: { x: 0, y: 0 },
-        baseCamPos: new THREE.Vector3(
-          CONFIG.cameraAndAnimation.startPos.x,
-          CONFIG.cameraAndAnimation.startPos.y,
-          CONFIG.cameraAndAnimation.startPos.z
-        ),
-        baseCamLookAt: new THREE.Vector3(0, 0.04, 0),
-        currentCamLookAt: new THREE.Vector3(0, 0.04, 0),
-      };
-
-      const canvasEl = document.getElementById('cinema-canvas');
-      const stageEl = document.getElementById('cinema-stage');
-      const vignetteEl = document.getElementById('cinema-vignette');
-      const hudEl = document.getElementById('editorial-hud');
-      const autoScrollBtn = document.getElementById('autoscroll-toggle-btn');
-      const autoScrollLabel = document.getElementById('autoscroll-label');
-      const autoScrollDot = document.getElementById('autoscroll-dot');
-      const replayBtn = document.getElementById('replay-intro-btn');
-
-      /* =====================================================================
-         3. GENERATOR DE TEXTURI ORGANICE MATE (LEMN VECHI, PIELE MATĂ, HÂRTIE VECHE)
-         ===================================================================== */
-      function createSeededRandom(seed) {
-        let s = seed % 2147483647;
-        if (s <= 0) s += 2147483646;
-        return function () {
-          s = (s * 16807) % 2147483647;
-          return (s - 1) / 2147483646;
-        };
+    /* ========================================================================
+       SECȚIUNEA A: DATELE EXPOZIȚIEI (AICI ÎNLOCUIȚI POZELE, POEMELE ȘI MP3-URILE)
+       ======================================================================== */
+    const EXHIBITS_DATA = [
+      {
+        id: 1,
+        title: "Glasul Pământului — Pripas",
+        subtitle: "Tablou I • Început de drum",
+        image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=900&q=80",
+        audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        poem: "Din huma grea a satului uitat,\nSe naște dorul vechi și neîmpăcat,\nIar drumul alb ce urcă spre Pripas\nPăstrează-n colb al vremii aprig pas."
+      },
+      {
+        id: 2,
+        title: "Sărutul Gliei",
+        subtitle: "Tablou II • Patima",
+        image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80",
+        audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+        poem: "Îngenuncheat în fața brazdei reci,\nSimțea cum lutul îi pătrunde-n vene,\nO dragoste mai tare decât vecii,\nȘi-un vis aprins sub grelele sprâncene."
+      },
+      {
+        id: 3,
+        title: "Hora din Sat",
+        subtitle: "Tablou III • Destine împletite",
+        image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=900&q=80",
+        audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+        poem: "În ritmul viu al strunei de vioară,\nSe-nvârte viața-n cerc amețitor,\nPriviri se caută și se-nfioară\nSub cerul cald al satului de dor."
+      },
+      {
+        id: 4,
+        title: "Tăcerea Anei",
+        subtitle: "Tablou IV • Suflet frânt",
+        image: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=900&q=80",
+        audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        poem: "O lacrimă ascunsă sub maramă,\nO inimă ce bate în zadar,\nIubirea ei tăcută, fără seamă,\nS-a stins ca o lumină pe altar."
       }
+    ];
 
-      function buildAgedWoodTextures() {
-        const rand = createSeededRandom(3107);
-        const width = 1024;
-        const height = 1024;
-
-        const colorCanvas = document.createElement('canvas');
-        colorCanvas.width = width;
-        colorCanvas.height = height;
-        const ctx = colorCanvas.getContext('2d');
-
-        const bumpCanvas = document.createElement('canvas');
-        bumpCanvas.width = width;
-        bumpCanvas.height = height;
-        const bCtx = bumpCanvas.getContext('2d');
-
-        // Scânduri vechi de lemn natural (gri-maro-sepia uzat, fără aspect lucios sau sintetic)
-        ctx.fillStyle = '#473c32';
-        ctx.fillRect(0, 0, width, height);
-        bCtx.fillStyle = '#808080';
-        bCtx.fillRect(0, 0, width, height);
-
-        const plankCount = 3;
-        const plankH = height / plankCount;
-
-        for (let p = 0; p < plankCount; p++) {
-          const y0 = p * plankH;
-          const toneShift = (rand() - 0.5) * 14;
-          const rBase = Math.max(46, Math.min(92, 72 + toneShift));
-          const gBase = Math.max(39, Math.min(80, 61 + toneShift * 0.85));
-          const bBase = Math.max(32, Math.min(68, 51 + toneShift * 0.72));
-
-          const pGrad = ctx.createLinearGradient(0, y0, 0, y0 + plankH);
-          pGrad.addColorStop(0, `rgb(${rBase - 7}, ${gBase - 6}, ${bBase - 5})`);
-          pGrad.addColorStop(0.5, `rgb(${rBase + 4}, ${gBase + 3}, ${bBase + 2})`);
-          pGrad.addColorStop(1, `rgb(${rBase - 8}, ${gBase - 7}, ${bBase - 6})`);
-          ctx.fillStyle = pGrad;
-          ctx.fillRect(0, y0, width, plankH);
-
-          // Noduri de lemn și fibre fine naturale
-          for (let k = 0; k < 2; k++) {
-            const kx = width * (0.22 + k * 0.52 + (rand() - 0.5) * 0.14);
-            const ky = y0 + plankH * (0.25 + rand() * 0.5);
-            const krx = 22 + rand() * 26;
-            const kry = 8 + rand() * 11;
-            const knotGrad = ctx.createRadialGradient(kx, ky, 2, kx, ky, krx);
-            knotGrad.addColorStop(0, 'rgba(34, 26, 20, 0.42)');
-            knotGrad.addColorStop(0.6, 'rgba(56, 45, 36, 0.22)');
-            knotGrad.addColorStop(1, 'rgba(56, 45, 36, 0)');
-            ctx.fillStyle = knotGrad;
-            ctx.beginPath();
-            ctx.ellipse(kx, ky, krx, kry, (rand() - 0.5) * 0.25, 0, Math.PI * 2);
-            ctx.fill();
-          }
-
-          // Fibre naturale fine și neregulate de lemn
-          for (let f = 0; f < 460; f++) {
-            const fy = y0 + rand() * plankH;
-            const alpha = 0.03 + rand() * 0.075;
-            const dark = rand() > 0.42;
-            ctx.strokeStyle = dark
-              ? `rgba(24, 18, 13, ${alpha})`
-              : `rgba(138, 122, 102, ${alpha * 0.7})`;
-            ctx.lineWidth = 0.55 + rand() * 1.6;
-            ctx.beginPath();
-            ctx.moveTo(0, fy);
-            const midY = fy + (rand() - 0.5) * 9;
-            ctx.bezierCurveTo(
-              width * 0.33,
-              midY,
-              width * 0.66,
-              fy + (rand() - 0.5) * 9,
-              width,
-              fy + (rand() - 0.5) * 5
-            );
-            ctx.stroke();
-
-            bCtx.strokeStyle = dark ? 'rgba(92,92,92,0.26)' : 'rgba(164,164,164,0.2)';
-            bCtx.lineWidth = ctx.lineWidth;
-            bCtx.beginPath();
-            bCtx.moveTo(0, fy);
-            bCtx.lineTo(width, fy + (rand() - 0.5) * 3.5);
-            bCtx.stroke();
-          }
-
-          // Patină și imperfecțiuni discrete pe lemn
-          for (let m = 0; m < 12; m++) {
-            const mx = rand() * width;
-            const my = y0 + rand() * plankH;
-            const rad = 16 + rand() * 54;
-            const mGrad = ctx.createRadialGradient(mx, my, 2, mx, my, rad);
-            mGrad.addColorStop(0, 'rgba(26, 20, 15, 0.17)');
-            mGrad.addColorStop(1, 'rgba(26, 20, 15, 0)');
-            ctx.fillStyle = mGrad;
-            ctx.beginPath();
-            ctx.arc(mx, my, rad, 0, Math.PI * 2);
-            ctx.fill();
-          }
-
-          // Îmbinare naturală între scânduri
-          if (p > 0) {
-            ctx.fillStyle = 'rgba(18, 14, 10, 0.72)';
-            ctx.fillRect(0, y0 - 2, width, 4);
-            bCtx.fillStyle = 'rgba(34, 34, 34, 0.85)';
-            bCtx.fillRect(0, y0 - 2.5, width, 5);
-          }
-        }
-
-        const map = new THREE.CanvasTexture(colorCanvas);
-        map.colorSpace = THREE.SRGBColorSpace;
-        map.wrapS = THREE.RepeatWrapping;
-        map.wrapT = THREE.RepeatWrapping;
-        map.repeat.set(2.2, 2.2);
-        map.anisotropy = state.isLowPower ? 2 : 8;
-
-        const bumpMap = new THREE.CanvasTexture(bumpCanvas);
-        bumpMap.wrapS = THREE.RepeatWrapping;
-        bumpMap.wrapT = THREE.RepeatWrapping;
-        bumpMap.repeat.set(2.2, 2.2);
-        bumpMap.anisotropy = state.isLowPower ? 2 : 4;
-
-        return { map, bumpMap };
-      }
-
-      // Referința 1: Copertă veche mată din piele/material îmbătrânit (burgundy/maro închis desaturat)
-      function buildCoverTextures() {
-        const rand = createSeededRandom(4219);
-        const width = 1024;
-        const height = 1440;
-
-        const colorCanvas = document.createElement('canvas');
-        colorCanvas.width = width;
-        colorCanvas.height = height;
-        const ctx = colorCanvas.getContext('2d');
-
-        const bumpCanvas = document.createElement('canvas');
-        bumpCanvas.width = width;
-        bumpCanvas.height = height;
-        const bCtx = bumpCanvas.getContext('2d');
-
-        // Paletă mată și naturală: burgundy foarte închis + maro îmbătrânit (fără luciu de plastic)
-        const baseGrad = ctx.createRadialGradient(
-          width * 0.52,
-          height * 0.44,
-          120,
-          width * 0.5,
-          height * 0.5,
-          height * 0.85
-        );
-        baseGrad.addColorStop(0, '#442420');
-        baseGrad.addColorStop(0.55, '#2e1816');
-        baseGrad.addColorStop(1, '#1a0e0d');
-        ctx.fillStyle = baseGrad;
-        ctx.fillRect(0, 0, width, height);
-
-        bCtx.fillStyle = '#808080';
-        bCtx.fillRect(0, 0, width, height);
-
-        // Textură fină de piele veche mată și micropori
-        for (let i = 0; i < 24000; i++) {
-          const x = rand() * width;
-          const y = rand() * height;
-          const r = 0.7 + rand() * 2.0;
-          const bright = rand() > 0.5;
-          ctx.fillStyle = bright
-            ? 'rgba(154, 114, 84, 0.025)'
-            : 'rgba(12, 7, 6, 0.09)';
-          ctx.fillRect(x, y, r, r);
-
-          bCtx.fillStyle = bright
-            ? 'rgba(164, 164, 164, 0.22)'
-            : 'rgba(92, 92, 92, 0.22)';
-          bCtx.fillRect(x, y, r, r);
-        }
-
-        // Cute neregulate de piele și uzură naturală pe suprafață
-        for (let c = 0; c < 56; c++) {
-          const cx = rand() * width;
-          const cy = rand() * height;
-          const len = 30 + rand() * 140;
-          const ang = rand() * Math.PI * 2;
-          ctx.strokeStyle = 'rgba(14, 8, 7, 0.21)';
-          ctx.lineWidth = 1.0 + rand() * 1.9;
-          ctx.beginPath();
-          ctx.moveTo(cx, cy);
-          ctx.quadraticCurveTo(
-            cx + Math.cos(ang + 0.18) * len * 0.5,
-            cy + Math.sin(ang + 0.18) * len * 0.5,
-            cx + Math.cos(ang) * len,
-            cy + Math.sin(ang) * len
-          );
-          ctx.stroke();
-
-          bCtx.strokeStyle = 'rgba(70, 70, 70, 0.38)';
-          bCtx.lineWidth = ctx.lineWidth;
-          bCtx.beginPath();
-          bCtx.moveTo(cx, cy);
-          bCtx.lineTo(cx + Math.cos(ang) * len, cy + Math.sin(ang) * len);
-          bCtx.stroke();
-        }
-
-        // Uzură mată la colțuri (ton ocru-maro șters, nu lucios)
-        const corners = [
-          { x: 0, y: 0, dx: 1, dy: 1 },
-          { x: width, y: 0, dx: -1, dy: 1 },
-          { x: 0, y: height, dx: 1, dy: -1 },
-          { x: width, y: height, dx: -1, dy: -1 },
-        ];
-        corners.forEach((cn) => {
-          const wGrad = ctx.createRadialGradient(
-            cn.x,
-            cn.y,
-            8,
-            cn.x + cn.dx * 65,
-            cn.y + cn.dy * 65,
-            140
-          );
-          wGrad.addColorStop(0, 'rgba(122, 92, 62, 0.48)');
-          wGrad.addColorStop(0.5, 'rgba(68, 44, 30, 0.24)');
-          wGrad.addColorStop(1, 'rgba(26, 14, 13, 0)');
-          ctx.fillStyle = wGrad;
-          ctx.fillRect(0, 0, width, height);
-        });
-
-        // Uzură discretă de-a lungul cotorului
-        const spineWear = ctx.createLinearGradient(0, 0, 120, 0);
-        spineWear.addColorStop(0, 'rgba(114, 86, 56, 0.3)');
-        spineWear.addColorStop(0.5, 'rgba(18, 10, 9, 0.24)');
-        spineWear.addColorStop(1, 'rgba(18, 10, 9, 0)');
-        ctx.fillStyle = spineWear;
-        ctx.fillRect(0, 0, 120, height);
-
-        // Ornamente tipografice discrete și textul LIVIU REBREANU integrat mat/embosat în copertă
-        const centerX = width * 0.53;
-        const titleY = height * 0.41;
-
-        ctx.save();
-        ctx.strokeStyle = 'rgba(176, 146, 98, 0.54)';
-        ctx.fillStyle = 'rgba(176, 146, 98, 0.54)';
-        ctx.lineWidth = 1.9;
-
-        const topOrnY = titleY - 120;
-        ctx.beginPath();
-        ctx.moveTo(centerX - 180, topOrnY);
-        ctx.bezierCurveTo(centerX - 85, topOrnY - 22, centerX - 42, topOrnY + 15, centerX, topOrnY - 7);
-        ctx.bezierCurveTo(centerX + 42, topOrnY + 15, centerX + 85, topOrnY - 22, centerX + 180, topOrnY);
-        ctx.stroke();
-
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.font = '600 60px "Cormorant Garamond", Georgia, serif';
-
-        // Embosare moale în piele (umbră discretă + nuanță ocru-auriu mat)
-        ctx.fillStyle = 'rgba(10, 6, 5, 0.68)';
-        ctx.fillText(CONFIG.texts.coverTitle, centerX + 1.5, titleY + 2.0);
-
-        ctx.fillStyle = 'rgba(182, 152, 104, 0.72)';
-        ctx.fillText(CONFIG.texts.coverTitle, centerX, titleY);
-
-        const botOrnY = titleY + 64;
-        ctx.beginPath();
-        ctx.moveTo(centerX - 180, botOrnY);
-        ctx.bezierCurveTo(centerX - 85, botOrnY + 22, centerX - 42, botOrnY - 15, centerX, botOrnY + 7);
-        ctx.bezierCurveTo(centerX + 42, botOrnY - 15, centerX + 85, botOrnY + 22, centerX + 180, botOrnY);
-        ctx.stroke();
-
-        ctx.fillStyle = 'rgba(170, 142, 98, 0.52)';
-        ctx.font = '400 20px "Plus Jakarta Sans", sans-serif';
-        ctx.fillText(CONFIG.texts.coverSubtitle, centerX, titleY + 114);
-        ctx.restore();
-
-        // Relief (bump) pentru embosarea textului și ornamentelor
-        bCtx.save();
-        bCtx.textAlign = 'center';
-        bCtx.textBaseline = 'middle';
-        bCtx.fillStyle = '#d4d4d4';
-        bCtx.font = '600 60px "Cormorant Garamond", Georgia, serif';
-        bCtx.fillText(CONFIG.texts.coverTitle, centerX, titleY);
-        bCtx.strokeStyle = '#cccccc';
-        bCtx.lineWidth = 2.0;
-        bCtx.beginPath();
-        bCtx.moveTo(centerX - 180, topOrnY);
-        bCtx.lineTo(centerX + 180, topOrnY);
-        bCtx.moveTo(centerX - 180, botOrnY);
-        bCtx.lineTo(centerX + 180, botOrnY);
-        bCtx.stroke();
-        bCtx.restore();
-
-        const map = new THREE.CanvasTexture(colorCanvas);
-        map.colorSpace = THREE.SRGBColorSpace;
-        map.anisotropy = state.isLowPower ? 2 : 8;
-
-        const bumpMap = new THREE.CanvasTexture(bumpCanvas);
-        bumpMap.anisotropy = state.isLowPower ? 2 : 4;
-
-        return { map, bumpMap };
-      }
-
-      // Referința 2 & 3: Hârtie veche crem + ocru + beige + sepia discret, cu „Liviu Rebreanu” pe prima pagină
-      function buildFirstPageTexture() {
-        const rand = createSeededRandom(1920);
-        const width = 1024;
-        const height = 1440;
-
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-
-        // Nuanțe naturale de hârtie veche: crem, beige, ocru și sepia discret
-        const paperGrad = ctx.createRadialGradient(
-          width * 0.52,
-          height * 0.45,
-          90,
-          width * 0.5,
-          height * 0.5,
-          height * 0.8
-        );
-        paperGrad.addColorStop(0, '#eadcc0');
-        paperGrad.addColorStop(0.62, '#dcc8a3');
-        paperGrad.addColorStop(1, '#c5ab80');
-        ctx.fillStyle = paperGrad;
-        ctx.fillRect(0, 0, width, height);
-
-        // Pete moi de vechime și ocru-sepia
-        for (let s = 0; s < 28; s++) {
-          const sx = rand() * width;
-          const sy = rand() * height;
-          const rad = 32 + rand() * 125;
-          const stainGrad = ctx.createRadialGradient(sx, sy, 2, sx, sy, rad);
-          stainGrad.addColorStop(0, 'rgba(136, 98, 52, 0.12)');
-          stainGrad.addColorStop(0.65, 'rgba(154, 116, 68, 0.05)');
-          stainGrad.addColorStop(1, 'rgba(154, 116, 68, 0)');
-          ctx.fillStyle = stainGrad;
-          ctx.beginPath();
-          ctx.arc(sx, sy, rad, 0, Math.PI * 2);
-          ctx.fill();
-        }
-
-        // Fibre organice fine de hârtie
-        for (let i = 0; i < 18000; i++) {
-          const x = rand() * width;
-          const y = rand() * height;
-          ctx.fillStyle =
-            rand() > 0.46 ? 'rgba(96, 70, 40, 0.032)' : 'rgba(248, 238, 216, 0.06)';
-          ctx.fillRect(x, y, 1 + rand() * 1.5, 0.8 + rand() * 1.1);
-        }
-
-        // Umbră naturală spre cotor și marginile hârtiei
-        const spineShade = ctx.createLinearGradient(0, 0, 115, 0);
-        spineShade.addColorStop(0, 'rgba(34, 24, 14, 0.24)');
-        spineShade.addColorStop(1, 'rgba(34, 24, 14, 0)');
-        ctx.fillStyle = spineShade;
-        ctx.fillRect(0, 0, 115, height);
-
-        const edgeShade = ctx.createLinearGradient(width - 75, 0, width, 0);
-        edgeShade.addColorStop(0, 'rgba(112, 82, 44, 0)');
-        edgeShade.addColorStop(1, 'rgba(112, 82, 44, 0.2)');
-        ctx.fillStyle = edgeShade;
-        ctx.fillRect(width - 75, 0, 75, height);
-
-        // Tipografie editorială imprimată pe hârtie: Liviu Rebreanu
-        ctx.save();
-        ctx.textAlign = 'center';
-        const textCenterX = width * 0.53;
-
-        ctx.fillStyle = 'rgba(112, 82, 45, 0.72)';
-        ctx.font = '500 17px "Plus Jakarta Sans", sans-serif';
-        ctx.fillText(CONFIG.texts.firstPageTag, textCenterX, height * 0.29);
-
-        ctx.fillStyle = '#211913';
-        ctx.font = '400 76px "Cormorant Garamond", Georgia, serif';
-        ctx.fillText(CONFIG.texts.firstPageTitle, textCenterX, height * 0.45);
-
-        ctx.strokeStyle = 'rgba(33, 25, 19, 0.22)';
-        ctx.lineWidth = 1.4;
-        ctx.beginPath();
-        ctx.moveTo(textCenterX - 135, height * 0.51);
-        ctx.lineTo(textCenterX + 135, height * 0.51);
-        ctx.stroke();
-
-        ctx.fillStyle = 'rgba(88, 72, 54, 0.84)';
-        ctx.font = 'italic 400 27px "Cormorant Garamond", Georgia, serif';
-        ctx.fillText('Pagini de proză, destin și memorie', textCenterX, height * 0.56);
-        ctx.restore();
-
-        const texture = new THREE.CanvasTexture(canvas);
-        texture.colorSpace = THREE.SRGBColorSpace;
-        texture.anisotropy = state.isLowPower ? 2 : 8;
-        return texture;
-      }
-
-      function buildGenericPaperTexture(warmTint = '#decba8') {
-        const rand = createSeededRandom(7731);
-        const canvas = document.createElement('canvas');
-        canvas.width = 512;
-        canvas.height = 512;
-        const ctx = canvas.getContext('2d');
-
-        ctx.fillStyle = warmTint;
-        ctx.fillRect(0, 0, 512, 512);
-
-        for (let i = 0; i < 6000; i++) {
-          ctx.fillStyle =
-            rand() > 0.45 ? 'rgba(84, 60, 34, 0.038)' : 'rgba(248, 238, 216, 0.055)';
-          ctx.fillRect(rand() * 512, rand() * 512, 1.4, 1.3);
-        }
-
-        const tex = new THREE.CanvasTexture(canvas);
-        tex.colorSpace = THREE.SRGBColorSpace;
-        tex.wrapS = THREE.RepeatWrapping;
-        tex.wrapT = THREE.RepeatWrapping;
-        tex.repeat.set(2, 2);
-        return tex;
-      }
-
-      /* =====================================================================
-         4. INIȚIALIZARE SCENĂ THREE.JS, CAMERĂ, LUMINI SOFT & DOF DISCRET
-         ===================================================================== */
-      const initialFov = CONFIG.cameraAndAnimation.fovInitial;
-      const scene = new THREE.Scene();
-      scene.background = new THREE.Color('#130f0b');
-      scene.fog = new THREE.FogExp2('#130f0b', 0.015);
-
-      const camera = new THREE.PerspectiveCamera(
-        initialFov,
-        window.innerWidth / Math.max(window.innerHeight, 1),
-        0.08,
-        60
-      );
-      camera.position.copy(state.baseCamPos);
-
-      const renderer = new THREE.WebGLRenderer({
-        canvas: canvasEl,
-        antialias: true,
-        powerPreference: state.isLowPower ? 'low-power' : 'high-performance',
-        alpha: false,
+    // Completăm automat până la 20 de exponate (înlocuiți cu datele voastre reale)
+    for (let i = 5; i <= 20; i++) {
+      EXHIBITS_DATA.push({
+        id: i,
+        title: `Tablou Literar #${String(i).padStart(2, '0')}`,
+        subtitle: `Exponat ${i} din 20 • Colecția Rebreanu`,
+        image: `https://picsum.photos/seed/rebreanu${i}/800/1000`,
+        audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+        poem: `Versuri dedicate exponatului #${i}:\n\nÎn file vechi cu miros de cerneală,\nTrăiesc povești ce nu se vor uita,\nIar glasul nostru-n taină le dezleagă\nSpre a le duce-n inima ta.`
       });
-      renderer.outputColorSpace = THREE.SRGBColorSpace;
-      renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.02;
-      renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    }
 
-      const initialPixelRatio = Math.min(
-        window.devicePixelRatio || 1,
-        state.isMobile
-          ? CONFIG.performance.maxPixelRatioMobile
-          : CONFIG.performance.maxPixelRatioDesktop
-      );
-      renderer.setPixelRatio(initialPixelRatio);
-      renderer.setSize(window.innerWidth, window.innerHeight);
+    const QUIZ_QUESTIONS = [
+      {
+        q: "1. Ce te motivează cel mai puternic atunci când îți propui un obiectiv mare?",
+        options: [
+          { text: "Dorința de a avea stabilitate, statut și ceva concret al meu.", char: "ion" },
+          { text: "Adevărul moral și liniștea propriei conștiințe.", char: "bologa" },
+          { text: "Nevoia de a fi iubit(ă) sincer și de a-mi proteja familia.", char: "ana" },
+          { text: "Curiozitatea intelectuală și dorința de a schimba lumea prin idei.", char: "titu" }
+        ]
+      },
+      {
+        q: "2. Cum reacționezi în fața unei nedreptăți?",
+        options: [
+          { text: "Lupt cu încăpățânare, chiar dacă trebuie să-mi asum riscuri mari.", char: "ion" },
+          { text: "Analizez profund situația și aleg ce este drept, indiferent de preț.", char: "bologa" },
+          { text: "Suport în tăcere, dar sufletul meu nu uită niciodată.", char: "ana" },
+          { text: "Scriu, vorbesc și încerc să îi trezesc și pe ceilalți.", char: "titu" }
+        ]
+      },
+      {
+        q: "3. Ce peisaj ți se potrivește cel mai bine?",
+        options: [
+          { text: "Un câmp întins, bogat, la răsăritul soarelui.", char: "ion" },
+          { text: "O pădure liniștită, învăluită în ceață și mister.", char: "bologa" },
+          { text: "O grădină primăvara, plină de flori și liniște.", char: "ana" },
+          { text: "O cafenea literară sau un tren spre un oraș nou.", char: "titu" }
+        ]
+      },
+      {
+        q: "4. Care este cea mai mare calitate a ta?",
+        options: [
+          { text: "Ambiția și forța de muncă.", char: "ion" },
+          { text: "Integritatea și profunzimea gândirii.", char: "bologa" },
+          { text: "Devotamentul și sensibilitatea.", char: "ana" },
+          { text: "Entuziasmul și creativitatea.", char: "titu" }
+        ]
+      },
+      {
+        q: "5. Ce te poate destabiliza cel mai ușor?",
+        options: [
+          { text: "Să simt că pierd controlul asupra muncii mele.", char: "ion" },
+          { text: "Conflictul dintre datorie și ceea ce simt cu adevărat.", char: "bologa" },
+          { text: "Indiferența oamenilor la care țin.", char: "ana" },
+          { text: "Rutina și lipsa de inspirație.", char: "titu" }
+        ]
+      },
+      {
+        q: "6. Cum te văd prietenii tăi?",
+        options: [
+          { text: "Hotărât(ă), puternic(ă) și greu de oprit.", char: "ion" },
+          { text: "Serios(oasă), reflexiv(ă) și demn(ă) de încredere.", char: "bologa" },
+          { text: "Blând(ă), empatic(ă) și mereu gata să ajute.", char: "ana" },
+          { text: "Visător(oare), plin(ă) de povești și mereu în mișcare.", char: "titu" }
+        ]
+      },
+      {
+        q: "7. Ce moto ți se potrivește?",
+        options: [
+          { text: "„Cine muncește și nu se lasă, stăpânește lumea.”", char: "ion" },
+          { text: "„Lumina adevărată se aprinde în interiorul omului.”", char: "bologa" },
+          { text: "„Iubirea adevărată dăruiește totul fără să ceară.”", char: "ana" },
+          { text: "„Cuvântul scris poate schimba destine.”", char: "titu" }
+        ]
+      }
+    ];
 
-      // Suprafața de lemn vechi (Referința de fundal natural, mat, imperfect)
-      const woodTex = buildAgedWoodTextures();
-      const woodFloorGeo = new THREE.PlaneGeometry(24, 24);
-      woodFloorGeo.rotateX(-Math.PI * 0.5);
-      const woodFloorMat = new THREE.MeshStandardMaterial({
-        map: woodTex.map,
-        bumpMap: woodTex.bumpMap,
-        bumpScale: 0.018,
-        roughness: 0.93,
-        metalness: 0.0,
+    const CHARACTER_PROFILES = {
+      ion: {
+        name: "Ion al Glanetașului",
+        work: "Romanul „Ion” (1920)",
+        desc: "Ești o forță a naturii: ambițios, pragmatic și extrem de hotărât atunci când îți dorești ceva. Ai o energie uriașă, dar trebuie să ai grijă ca ambiția să nu lase în urmă oamenii care te iubesc."
+      },
+      bologa: {
+        name: "Apostol Bologa",
+        work: "Romanul „Pădurea spânzuraților” (1922)",
+        desc: "Ai o conștiință profundă și o verticalitate morală rară. Nu accepți compromisurile ușoare, cauți sensul autentic al lucrurilor și ai curajul să îți urmezi propriile principii."
+      },
+      ana: {
+        name: "Ana Baciu",
+        work: "Romanul „Ion” (1920)",
+        desc: "Ești un suflet cald, loial și profund empatic. Iubești cu toată ființa și pui armonia celor dragi pe primul loc. Lecția ta este să îți faci vocea auzită și să îți prețuiești propria valoare."
+      },
+      titu: {
+        name: "Titu Herdelea",
+        work: "„Ion” & „Răscoala”",
+        desc: "Ești spiritul liber, creativ și idealist! Îți place să observi lumea, să scrii, să explorezi idei noi și să fii puntea de legătură între oameni și cultură."
+      }
+    };
+
+    const FLASHCARDS_DATA = [
+      { cat: "biografie", front: "Când și unde s-a născut Liviu Rebreanu?", back: "S-a născut pe 27 noiembrie 1885, în satul Târlișua (județul Bistrița-Năsăud), fiind primul dintre cei 14 copii ai învățătorului Vasile Rebreanu." },
+      { cat: "opere", front: "Cum i-a venit ideea romanului „Ion”?", back: "A pornit de la trei scene reale văzute în satul Prislop: un țăran care a sărutat pământul ca pe o ibovnică, o fată bogată bătută de tatăl ei și povestea lui Ion Boldijar." },
+      { cat: "biografie", front: "Cum lucra Rebreanu noaptea?", back: "Scria aproape exclusiv noaptea, în liniște deplină, fumând mult și bând cafea tare, rescriind fiecare pagină de zeci de ori până atingea perfecțiunea." },
+      { cat: "opere", front: "Ce tragedie personală a inspirat „Pădurea spânzuraților”?", back: "Execuția fratelui său, Emil Rebreanu, ofițer în armata austro-ungară, spânzurat în 1917 la Ghimeș pentru că a încercat să treacă de partea armatei române." },
+      { cat: "biografie", front: "Ce funcții culturale importante a deținut?", back: "A fost director al Teatrului Național din București, președinte al Societății Scriitorilor Români și membru titular al Academiei Române (din 1939)." },
+      { cat: "opere", front: "De ce este considerat creatorul romanului românesc modern?", back: "Prin „Ion” (1920), a înlocuit idilismul sămănătorist cu realismul obiectiv, dur și psihologic, construit cu o arhitectură narativă circulară impecabilă." }
+    ];
+
+    const PLAYLIST_DATA = [
+      { title: "Simfonia a V-a — Adagietto", composer: "Gustav Mahler", duration: "04:12", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+      { title: "Nocturna în Mi bemol major, Op. 9 Nr. 2", composer: "Frédéric Chopin", duration: "04:30", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+      { title: "Rapsodia Română nr. 1", composer: "George Enescu", duration: "05:18", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+      { title: "Sonata Lunii — Mișcarea I", composer: "Ludwig van Beethoven", duration: "05:45", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" }
+    ];
+
+    const CONTEST_CODES_DATA = [
+      { code: 1, title: "Codul #1 — Pripas", question: "Cum se numește satul în care se petrece acțiunea principală a romanului „Ion”?", hint: "Verifică Tabloul #01 din galerie." },
+      { code: 2, title: "Codul #2 — Biografie", question: "Câți frați a avut Liviu Rebreanu în familia învățătorului Vasile Rebreanu?", hint: "Răspunsul se află în Flashcard-urile de la secțiunea Curiozități." },
+      { code: 3, title: "Codul #3 — Muzică", question: "Ce compoziție de George Enescu se regăsește în Playlist-ul expoziției?", hint: "Ascultă secțiunea 05 • Playlist." },
+      { code: 4, title: "Codul #4 — Pădurea spânzuraților", question: "Cine este personajul principal din romanul inspirat de drama fratelui său, Emil?", hint: "Poți afla și din Quiz-ul de personalitate." },
+      { code: 5, title: "Codul #5 — Anul de grație", question: "În ce an a fost publicat romanul „Ion”, marcând nașterea romanului românesc modern?", hint: "Caută în secțiunea Curiozități." },
+      { code: 6, title: "Codul #6 — Animație", question: "Care este numele personajului din secțiunea de animații video ale expoziției?", hint: "Privește secțiunea 04 • Cinema." },
+      { code: 7, title: "Codul #7 — Academia", question: "În ce an a devenit Liviu Rebreanu membru titular al Academiei Române?", hint: "Răspunsul este pe unul dintre Flashcard-urile 3D." }
+    ];
+
+    /* ========================================================================
+       INIȚIALIZARE & LOGICĂ APLICAȚIE
+       ======================================================================== */
+    let currentExhibitIndex = 0;
+    let currentQuizStep = 0;
+    let quizScores = { ion: 0, bologa: 0, ana: 0, titu: 0 };
+    let currentPlaylistIndex = 0;
+    let isPlaylistPlaying = false;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      initTheme();
+      renderExhibits(EXHIBITS_DATA);
+      renderQuiz();
+      renderFlashcards('toate');
+      renderPlaylist();
+      renderContestCodes();
+      handleUrlParameters();
+      setupEventListeners();
+
+      // Pornește animația de deschidere a cărții pe masă de lemn
+      runBookIntroAnimation();
+    });
+
+    function initTheme() {
+      const saved = localStorage.getItem('rebreanu-theme');
+      if (saved === 'dark') document.documentElement.classList.add('dark');
+      document.getElementById('theme-toggle').addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('rebreanu-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
       });
-      const woodFloor = new THREE.Mesh(woodFloorGeo, woodFloorMat);
-      woodFloor.position.y = -0.004;
-      woodFloor.receiveShadow = true;
-      scene.add(woodFloor);
+    }
 
-      // Iluminare cinematografică moale, difuză și naturală (fără lumini colorate sau contraste dure)
-      const hemiLight = new THREE.HemisphereLight('#e5d7c1', '#241c16', 0.68);
-      scene.add(hemiLight);
+    function renderExhibits(list) {
+      const grid = document.getElementById('exhibits-grid');
+      grid.innerHTML = list.map(item => `
+        <article onclick="openExhibitModal(${item.id})" class="group cursor-pointer rounded-2xl overflow-hidden paper-card hover:border-terracotta shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+          <div class="relative aspect-[4/5] overflow-hidden bg-black/10">
+            <img src="${item.image}" alt="${item.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/70 text-white text-xs font-mono font-bold backdrop-blur-sm">
+              #${String(item.id).padStart(2, '0')}
+            </div>
+            <div class="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-terracotta text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+              <i data-lucide="headphones" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="p-4 flex-1 flex flex-col justify-between">
+            <div>
+              <p class="text-[11px] uppercase tracking-wider text-terracotta font-semibold">${item.subtitle}</p>
+              <h3 class="font-serif text-lg font-bold mt-0.5 group-hover:text-terracotta transition-colors">${item.title}</h3>
+            </div>
+            <p class="text-xs opacity-70 mt-3 flex items-center gap-1 font-medium">
+              <span>Citește poemul &amp; ascultă</span>
+              <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+            </p>
+          </div>
+        </article>
+      `).join('');
+      lucide.createIcons();
+    }
 
-      const keyLight = new THREE.DirectionalLight('#f4e3c9', 1.62);
-      keyLight.position.set(2.2, 5.4, 2.4);
-      keyLight.castShadow = true;
-      keyLight.shadow.mapSize.width = state.isLowPower ? 1024 : 2048;
-      keyLight.shadow.mapSize.height = state.isLowPower ? 1024 : 2048;
-      keyLight.shadow.camera.near = 0.5;
-      keyLight.shadow.camera.far = 18;
-      const dShadow = 3.8;
-      keyLight.shadow.camera.left = -dShadow;
-      keyLight.shadow.camera.right = dShadow;
-      keyLight.shadow.camera.top = dShadow;
-      keyLight.shadow.camera.bottom = -dShadow;
-      keyLight.shadow.bias = -0.0005;
-      scene.add(keyLight);
+    const exhibitAudio = document.getElementById('exhibit-audio-player');
+    const modalProgress = document.getElementById('modal-progress');
 
-      const fillLight = new THREE.DirectionalLight('#dfd1bc', 0.58);
-      fillLight.position.set(-2.8, 3.4, 2.2);
-      scene.add(fillLight);
+    function openExhibitModal(id) {
+      const idx = EXHIBITS_DATA.findIndex(e => e.id === id);
+      if (idx === -1) return;
+      currentExhibitIndex = idx;
+      const item = EXHIBITS_DATA[idx];
 
-      const rimLight = new THREE.DirectionalLight('#e4d6c0', 0.48);
-      rimLight.position.set(-2.4, 3.6, -2.8);
-      scene.add(rimLight);
+      document.getElementById('modal-badge').textContent = `Exponat #${String(item.id).padStart(2, '0')}`;
+      document.getElementById('modal-title').textContent = item.title;
+      document.getElementById('modal-img').src = item.image;
+      document.getElementById('modal-img').alt = item.title;
+      document.getElementById('modal-poem').textContent = item.poem;
 
-      const pageGlowLight = new THREE.PointLight('#f3e0c2', 0.24, 6, 1.8);
-      pageGlowLight.position.set(0.3, 1.8, 0.4);
-      scene.add(pageGlowLight);
+      exhibitAudio.pause();
+      exhibitAudio.src = item.audio;
+      modalProgress.value = 0;
+      document.getElementById('modal-time-current').textContent = '0:00';
+      updateModalPlayUI(false);
 
-      // Particule de praf foarte discrete și aproape imperceptibile în aer
-      const dustCount = state.isMobile
-        ? Math.min(14, CONFIG.performance.dustCountMobile)
-        : Math.min(34, CONFIG.performance.dustCountDesktop);
-      const dustPositions = new Float32Array(dustCount * 3);
-      const dustSeeds = new Float32Array(dustCount);
+      document.getElementById('exhibit-modal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
 
-      for (let i = 0; i < dustCount; i++) {
-        dustPositions[i * 3 + 0] = (Math.random() - 0.5) * 6.5;
-        dustPositions[i * 3 + 1] = Math.random() * 3.8 + 0.2;
-        dustPositions[i * 3 + 2] = (Math.random() - 0.5) * 6.5;
-        dustSeeds[i] = Math.random() * Math.PI * 2;
+    function closeExhibitModal() {
+      exhibitAudio.pause();
+      updateModalPlayUI(false);
+      document.getElementById('exhibit-modal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    function navigateExhibit(dir) {
+      const next = (currentExhibitIndex + dir + EXHIBITS_DATA.length) % EXHIBITS_DATA.length;
+      openExhibitModal(EXHIBITS_DATA[next].id);
+    }
+
+    function toggleExhibitAudio() {
+      if (exhibitAudio.paused) {
+        exhibitAudio.play();
+        updateModalPlayUI(true);
+      } else {
+        exhibitAudio.pause();
+        updateModalPlayUI(false);
       }
+    }
 
-      const dustGeo = new THREE.BufferGeometry();
-      dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
+    function updateModalPlayUI(playing) {
+      const icon = document.getElementById('modal-play-icon');
+      const eq = document.getElementById('modal-eq');
+      icon.setAttribute('data-lucide', playing ? 'pause' : 'play');
+      eq.classList.toggle('eq-playing', playing);
+      lucide.createIcons();
+    }
 
-      const dustMat = new THREE.PointsMaterial({
-        color: '#e5d3b5',
-        size: state.isMobile ? 0.015 : 0.012,
-        transparent: true,
-        opacity: 0.075,
-        depthWrite: false,
-        blending: THREE.NormalBlending,
+    exhibitAudio.addEventListener('timeupdate', () => {
+      if (!exhibitAudio.duration) return;
+      modalProgress.value = (exhibitAudio.currentTime / exhibitAudio.duration) * 100;
+      document.getElementById('modal-time-current').textContent = formatTime(exhibitAudio.currentTime);
+      document.getElementById('modal-time-duration').textContent = formatTime(exhibitAudio.duration);
+    });
+
+    exhibitAudio.addEventListener('ended', () => updateModalPlayUI(false));
+
+    modalProgress.addEventListener('input', () => {
+      if (exhibitAudio.duration) {
+        exhibitAudio.currentTime = (modalProgress.value / 100) * exhibitAudio.duration;
+      }
+    });
+
+    function copyCurrentExhibitLink() {
+      const item = EXHIBITS_DATA[currentExhibitIndex];
+      const url = `${window.location.origin}${window.location.pathname}?exponat=${item.id}`;
+      navigator.clipboard.writeText(url);
+      const lbl = document.getElementById('copy-link-label');
+      lbl.textContent = 'Link copiat!';
+      setTimeout(() => lbl.textContent = 'Copiază link QR', 2000);
+    }
+
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m}:${String(s).padStart(2, '0')}`;
+    }
+
+    function renderQuiz() {
+      const box = document.getElementById('quiz-container');
+      if (currentQuizStep < QUIZ_QUESTIONS.length) {
+        const qObj = QUIZ_QUESTIONS[currentQuizStep];
+        const pct = Math.round((currentQuizStep / QUIZ_QUESTIONS.length) * 100);
+        box.innerHTML = `
+          <div class="space-y-6">
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs font-semibold opacity-70">
+                <span>Întrebarea ${currentQuizStep + 1} din ${QUIZ_QUESTIONS.length}</span>
+                <span>${pct}%</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-amber-900/15 dark:bg-white/10 overflow-hidden">
+                <div class="h-full bg-terracotta transition-all duration-300" style="width: ${pct}%"></div>
+              </div>
+            </div>
+            <h3 class="font-serif text-xl sm:text-2xl font-bold">${qObj.q}</h3>
+            <div class="space-y-3">
+              ${qObj.options.map(opt => `
+                <button onclick="answerQuiz('${opt.char}')" class="w-full text-left p-4 rounded-xl border border-amber-900/20 dark:border-white/15 hover:border-terracotta hover:bg-terracotta/5 transition-all text-sm sm:text-base font-medium">
+                  ${opt.text}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else {
+        const winnerKey = Object.keys(quizScores).reduce((a, b) => quizScores[a] >= quizScores[b] ? a : b);
+        const profile = CHARACTER_PROFILES[winnerKey];
+        box.innerHTML = `
+          <div class="text-center space-y-5">
+            <span class="inline-block px-3.5 py-1 rounded-full bg-gold/20 text-amber-900 dark:text-gold text-xs font-bold uppercase tracking-widest">
+              Rezultatul tău literar
+            </span>
+            <h3 class="font-serif text-3xl sm:text-4xl font-bold text-terracotta">${profile.name}</h3>
+            <p class="text-xs font-semibold uppercase tracking-wider opacity-70">${profile.work}</p>
+            <p class="max-w-xl mx-auto text-sm sm:text-base leading-relaxed opacity-90">${profile.desc}</p>
+            <div class="pt-4 flex flex-wrap justify-center gap-3">
+              <button onclick="shareQuizResult('${profile.name}')" class="px-5 py-2.5 rounded-xl bg-terracotta text-white text-sm font-semibold flex items-center gap-2 hover:bg-terracottaHover transition">
+                <i data-lucide="share-2" class="w-4 h-4"></i>
+                <span id="share-quiz-btn">Copiază rezultatul</span>
+              </button>
+              <button onclick="resetQuiz()" class="px-5 py-2.5 rounded-xl border border-amber-900/25 dark:border-white/15 text-sm font-semibold hover:border-terracotta transition">
+                Reia testul
+              </button>
+            </div>
+          </div>
+        `;
+        lucide.createIcons();
+      }
+    }
+
+    function answerQuiz(charKey) {
+      quizScores[charKey]++;
+      currentQuizStep++;
+      renderQuiz();
+    }
+
+    function resetQuiz() {
+      currentQuizStep = 0;
+      quizScores = { ion: 0, bologa: 0, ana: 0, titu: 0 };
+      renderQuiz();
+    }
+
+    function shareQuizResult(name) {
+      const text = `Am făcut quiz-ul „Universul Liviu Rebreanu” și semăn cel mai mult cu ${name}! Descoperă și tu ce personaj ești: ${window.location.origin}${window.location.pathname}#quiz-personaj`;
+      navigator.clipboard.writeText(text);
+      document.getElementById('share-quiz-btn').textContent = 'Copiat pentru WhatsApp / IG!';
+    }
+
+    function renderFlashcards(category) {
+      const grid = document.getElementById('flashcards-grid');
+      const filtered = category === 'toate' ? FLASHCARDS_DATA : FLASHCARDS_DATA.filter(f => f.cat === category);
+      grid.innerHTML = filtered.map(fc => `
+        <div onclick="this.querySelector('.fc-inner').classList.toggle('rotate-y-180')" class="h-64 perspective-1000 cursor-pointer group">
+          <div class="fc-inner relative w-full h-full transition-transform duration-500 transform-style-3d">
+            <div class="absolute inset-0 backface-hidden rounded-2xl p-6 paper-card shadow-sm group-hover:border-terracotta flex flex-col justify-between">
+              <span class="text-[11px] font-bold uppercase tracking-widest text-terracotta">${fc.cat}</span>
+              <h3 class="font-serif text-xl font-bold leading-snug">${fc.front}</h3>
+              <span class="text-xs opacity-60 flex items-center gap-1">
+                <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
+                <span>Atinge pentru răspuns</span>
+              </span>
+            </div>
+            <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-2xl p-6 bg-terracotta text-white shadow-lg flex flex-col justify-between">
+              <span class="text-[11px] font-bold uppercase tracking-widest text-white/75">Curiozitate Rebreanu</span>
+              <p class="text-sm sm:text-base leading-relaxed font-medium">${fc.back}</p>
+              <span class="text-xs text-white/70">Atinge pentru a reveni</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    const playlistAudio = document.getElementById('playlist-audio-element');
+
+    function renderPlaylist() {
+      const list = document.getElementById('playlist-tracks');
+      list.innerHTML = PLAYLIST_DATA.map((track, idx) => `
+        <button onclick="playPlaylistTrack(${idx})" class="w-full py-3.5 px-3 rounded-xl hover:bg-white/5 flex items-center justify-between gap-4 text-left transition ${idx === currentPlaylistIndex && isPlaylistPlaying ? 'bg-white/10 text-gold' : ''}">
+          <div class="flex items-center gap-3.5 min-w-0">
+            <span class="w-6 text-xs font-mono opacity-60">${idx + 1}</span>
+            <div class="truncate">
+              <p class="font-semibold text-sm truncate">${track.title}</p>
+              <p class="text-xs text-white/60 truncate">${track.composer}</p>
+            </div>
+          </div>
+          <span class="text-xs font-mono opacity-60 shrink-0">${track.duration}</span>
+        </button>
+      `).join('');
+    }
+
+    function playPlaylistTrack(idx) {
+      currentPlaylistIndex = idx;
+      const track = PLAYLIST_DATA[idx];
+      playlistAudio.src = track.src;
+      playlistAudio.play();
+      isPlaylistPlaying = true;
+      document.getElementById('playlist-now-playing').textContent = `Acum rulează: ${track.title} — ${track.composer}`;
+      updatePlaylistMainBtn();
+      renderPlaylist();
+    }
+
+    function togglePlaylistPlay() {
+      if (!playlistAudio.src) {
+        playPlaylistTrack(0);
+        return;
+      }
+      if (playlistAudio.paused) {
+        playlistAudio.play();
+        isPlaylistPlaying = true;
+      } else {
+        playlistAudio.pause();
+        isPlaylistPlaying = false;
+      }
+      updatePlaylistMainBtn();
+      renderPlaylist();
+    }
+
+    function prevPlaylistTrack() {
+      playPlaylistTrack((currentPlaylistIndex - 1 + PLAYLIST_DATA.length) % PLAYLIST_DATA.length);
+    }
+
+    function nextPlaylistTrack() {
+      playPlaylistTrack((currentPlaylistIndex + 1) % PLAYLIST_DATA.length);
+    }
+
+    function updatePlaylistMainBtn() {
+      document.getElementById('playlist-main-icon').setAttribute('data-lucide', isPlaylistPlaying ? 'pause' : 'play');
+      lucide.createIcons();
+    }
+
+    function renderContestCodes() {
+      const grid = document.getElementById('contest-codes-grid');
+      grid.innerHTML = CONTEST_CODES_DATA.map(c => `
+        <button onclick="openContestCode(${c.code})" class="p-4 rounded-2xl paper-card hover:border-terracotta text-left transition shadow-sm">
+          <span class="text-xs font-bold uppercase tracking-wider text-terracotta">QR #0${c.code}</span>
+          <h4 class="font-serif font-bold text-lg mt-1">${c.title}</h4>
+          <p class="text-xs opacity-70 mt-2">Apasă pentru întrebarea #${c.code} →</p>
+        </button>
+      `).join('');
+    }
+
+    function openContestCode(codeNum) {
+      const item = CONTEST_CODES_DATA.find(c => c.code === codeNum);
+      if (!item) return;
+      const box = document.getElementById('contest-question-box');
+      box.classList.remove('hidden');
+      box.innerHTML = `
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-terracotta">Provocarea QR #0${item.code}</span>
+            <h3 class="font-serif text-2xl font-bold mt-1">${item.question}</h3>
+            <p class="text-xs opacity-75 mt-3 italic">Indiciu: ${item.hint}</p>
+          </div>
+          <button onclick="document.getElementById('contest-question-box').classList.add('hidden')" class="p-2 rounded-lg hover:bg-amber-900/10">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      `;
+      lucide.createIcons();
+      box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function openQrPrintModal() {
+      const modal = document.getElementById('qr-print-modal');
+      const area = document.getElementById('qr-print-area');
+      area.innerHTML = '';
+      modal.classList.remove('hidden');
+
+      const baseUrl = `${window.location.origin}${window.location.pathname}`;
+
+      EXHIBITS_DATA.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'p-4 border border-black/20 rounded-xl flex flex-col items-center text-center break-inside-avoid';
+        const qrHolder = document.createElement('div');
+        new QRCode(qrHolder, { text: `${baseUrl}?exponat=${item.id}`, width: 120, height: 120 });
+        card.appendChild(qrHolder);
+        card.innerHTML += `<p class="font-serif font-bold text-sm mt-3">Exponat #${String(item.id).padStart(2, '0')}</p><p class="text-[11px] text-black/70">${item.title}</p>`;
+        area.appendChild(card);
       });
-      const dustPoints = new THREE.Points(dustGeo, dustMat);
-      scene.add(dustPoints);
 
-      // Post-procesare discretă: Depth of Field subtil (fără bloom excesiv)
-      let composer = null;
-      let bokehPass = null;
+      CONTEST_CODES_DATA.forEach(c => {
+        const card = document.createElement('div');
+        card.className = 'p-4 border-2 border-dashed border-black/40 rounded-xl flex flex-col items-center text-center break-inside-avoid';
+        const qrHolder = document.createElement('div');
+        new QRCode(qrHolder, { text: `${baseUrl}?concurs=${c.code}`, width: 120, height: 120 });
+        card.appendChild(qrHolder);
+        card.innerHTML += `<p class="font-serif font-bold text-sm mt-3">CONCURS QR #0${c.code}</p><p class="text-[11px] text-black/70">${c.title}</p>`;
+        area.appendChild(card);
+      });
+    }
 
-      if (!state.isLowPower && typeof THREE.EffectComposer !== 'undefined') {
-        try {
-          composer = new THREE.EffectComposer(renderer);
-          composer.setPixelRatio(initialPixelRatio);
-          composer.setSize(window.innerWidth, window.innerHeight);
+    function closeQrPrintModal() {
+      document.getElementById('qr-print-modal').classList.add('hidden');
+    }
 
-          const renderPass = new THREE.RenderPass(scene, camera);
-          composer.addPass(renderPass);
+    function handleUrlParameters() {
+      const params = new URLSearchParams(window.location.search);
+      const expId = parseInt(params.get('exponat'), 10);
+      const contestId = parseInt(params.get('concurs'), 10);
 
-          if (typeof THREE.BokehPass !== 'undefined') {
-            bokehPass = new THREE.BokehPass(scene, camera, {
-              focus: state.baseCamPos.length(),
-              aperture: 0.00012,
-              maxblur: 0.0016,
-              width: window.innerWidth,
-              height: window.innerHeight,
-            });
-            composer.addPass(bokehPass);
-          }
-        } catch (postErr) {
-          composer = null;
-          bokehPass = null;
-        }
+      if (expId >= 1 && expId <= EXHIBITS_DATA.length) {
+        finishBookIntro();
+        openExhibitModal(expId);
+      } else if (contestId >= 1 && contestId <= CONTEST_CODES_DATA.length) {
+        finishBookIntro();
+        openContestCode(contestId);
       }
+    }
 
-      /* =====================================================================
-         5. CONSTRUIREA CĂRȚII 3D CU COMPONENTE LOGICE & MATERIALE MATE REALISTE
-         ===================================================================== */
-      function createProceduralBook() {
-        const bookRoot = new THREE.Group();
-        bookRoot.name = 'ProceduralHardcoverBook';
-
-        const bookWidth = 2.25;
-        const bookHeight = 3.05;
-        const coverThickness = 0.074;
-        const pageBlockThickness = 0.44;
-        const spineWidth = 0.135;
-
-        const coverTex = buildCoverTextures();
-        const firstPageTex = buildFirstPageTexture();
-        const innerPaperTex = buildGenericPaperTexture('#decba8');
-        const edgePagesTex = buildGenericPaperTexture('#cbb38a');
-
-        // Copertă mată din piele veche (roughness ridicat, fără luciu artificial)
-        const coverMaterial = new THREE.MeshStandardMaterial({
-          map: coverTex.map,
-          bumpMap: coverTex.bumpMap,
-          bumpScale: 0.016,
-          roughness: 0.91,
-          metalness: 0.01,
-        });
-
-        const boardEdgeMaterial = new THREE.MeshStandardMaterial({
-          color: '#231411',
-          bumpMap: coverTex.bumpMap,
-          bumpScale: 0.008,
-          roughness: 0.93,
-          metalness: 0.0,
-        });
-
-        const pageSideMaterial = new THREE.MeshStandardMaterial({
-          map: edgePagesTex,
-          roughness: 0.95,
-          metalness: 0.0,
-        });
-
-        const firstPageMaterial = new THREE.MeshStandardMaterial({
-          map: firstPageTex,
-          roughness: 0.92,
-          metalness: 0.0,
-        });
-
-        const innerPageMaterial = new THREE.MeshStandardMaterial({
-          map: innerPaperTex,
-          roughness: 0.94,
-          metalness: 0.0,
-        });
-
-        // Componenta 1: Coperta inferioară rigidă cu imperfecțiuni organice discrete
-        const bottomCoverGeo = new THREE.BoxGeometry(bookWidth, coverThickness, bookHeight, 16, 1, 20);
-        const bPos = bottomCoverGeo.attributes.position;
-        for (let i = 0; i < bPos.count; i++) {
-          const vx = bPos.getX(i);
-          const vy = bPos.getY(i);
-          const vz = bPos.getZ(i);
-          const warp = Math.sin(vx * 1.45) * Math.cos(vz * 1.15) * 0.0045;
-          bPos.setY(i, vy + warp);
-        }
-        bottomCoverGeo.computeVertexNormals();
-
-        const bottomCover = new THREE.Mesh(bottomCoverGeo, [
-          boardEdgeMaterial,
-          boardEdgeMaterial,
-          innerPageMaterial,
-          coverMaterial,
-          boardEdgeMaterial,
-          boardEdgeMaterial,
-        ]);
-        bottomCover.position.set(0, coverThickness * 0.5, 0);
-        bottomCover.castShadow = true;
-        bottomCover.receiveShadow = true;
-        bookRoot.add(bottomCover);
-
-        // Componenta 2: Cotor curbat cu nervuri discrete de legătorie veche
-        const spineGeo = new THREE.CylinderGeometry(
-          (coverThickness * 2 + pageBlockThickness) * 0.5,
-          (coverThickness * 2 + pageBlockThickness) * 0.5,
-          bookHeight,
-          28,
-          1,
-          false,
-          Math.PI * 0.5,
-          Math.PI
+    function setupEventListeners() {
+      document.getElementById('exhibit-search').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase().trim();
+        const filtered = EXHIBITS_DATA.filter(item =>
+          item.title.toLowerCase().includes(term) ||
+          String(item.id).padStart(2, '0').includes(term) ||
+          item.poem.toLowerCase().includes(term)
         );
-        spineGeo.rotateZ(Math.PI * 0.5);
-        spineGeo.rotateY(Math.PI * 0.5);
-        const spineMesh = new THREE.Mesh(spineGeo, coverMaterial);
-        const spineCenterY = (coverThickness * 2 + pageBlockThickness) * 0.5;
-        spineMesh.position.set(-bookWidth * 0.5 + spineWidth * 0.32, spineCenterY, 0);
-        spineMesh.castShadow = true;
-        spineMesh.receiveShadow = true;
-        bookRoot.add(spineMesh);
+        renderExhibits(filtered);
+      });
 
-        // Nervuri subtile pe cotor (5 benzi reliefate)
-        const ribGeo = new THREE.BoxGeometry(
-          (coverThickness * 2 + pageBlockThickness) * 0.98,
-          0.028,
-          (coverThickness * 2 + pageBlockThickness) * 0.98
-        );
-        for (let r = -2; r <= 2; r++) {
-          const ribMesh = new THREE.Mesh(ribGeo, coverMaterial);
-          ribMesh.position.set(
-            -bookWidth * 0.5 + spineWidth * 0.25,
-            spineCenterY,
-            r * (bookHeight * 0.165)
-          );
-          ribMesh.castShadow = true;
-          ribMesh.receiveShadow = true;
-          bookRoot.add(ribMesh);
-        }
-
-        // Componenta 3: Blocul de pagini cu variații discrete pe margini și suprafață
-        const pageBlockGeo = new THREE.BoxGeometry(
-          bookWidth * 0.95,
-          pageBlockThickness,
-          bookHeight * 0.968,
-          10,
-          14,
-          14
-        );
-        const pBlockPos = pageBlockGeo.attributes.position;
-        for (let i = 0; i < pBlockPos.count; i++) {
-          const vx = pBlockPos.getX(i);
-          const vy = pBlockPos.getY(i);
-          const vz = pBlockPos.getZ(i);
-          if (Math.abs(vx) > bookWidth * 0.45) {
-            pBlockPos.setX(i, vx + Math.sin(vy * 95 + vz * 3) * 0.0045);
-          }
-          if (Math.abs(vz) > bookHeight * 0.46) {
-            pBlockPos.setZ(i, vz + Math.cos(vy * 88 + vx * 2.5) * 0.0035);
-          }
-        }
-        pageBlockGeo.computeVertexNormals();
-
-        const pageBlock = new THREE.Mesh(pageBlockGeo, [
-          pageSideMaterial,
-          pageSideMaterial,
-          innerPageMaterial,
-          innerPageMaterial,
-          pageSideMaterial,
-          pageSideMaterial,
-        ]);
-        pageBlock.position.set(0.025, coverThickness + pageBlockThickness * 0.5, 0);
-        pageBlock.castShadow = true;
-        pageBlock.receiveShadow = true;
-        bookRoot.add(pageBlock);
-
-        // Componenta 4: Prima pagină flexibilă (cu curbură naturală de hârtie)
-        const firstPageGeo = new THREE.PlaneGeometry(
-          bookWidth * 0.945,
-          bookHeight * 0.962,
-          40,
-          24
-        );
-        firstPageGeo.rotateX(-Math.PI * 0.5);
-        firstPageGeo.translate(bookWidth * 0.4725, 0, 0);
-
-        const pos = firstPageGeo.attributes.position;
-        for (let i = 0; i < pos.count; i++) {
-          const vx = pos.getX(i);
-          const vz = pos.getZ(i);
-          const normX = vx / (bookWidth * 0.945);
-          const wave = Math.sin(normX * Math.PI) * 0.032 + Math.cos(vz * 2.1 + normX * 1.4) * 0.0055;
-          pos.setY(i, wave);
-        }
-        firstPageGeo.computeVertexNormals();
-
-        const firstPagePivot = new THREE.Group();
-        firstPagePivot.position.set(
-          -bookWidth * 0.45,
-          coverThickness + pageBlockThickness + 0.004,
-          0
-        );
-        const firstPageMesh = new THREE.Mesh(firstPageGeo, firstPageMaterial);
-        firstPageMesh.castShadow = true;
-        firstPageMesh.receiveShadow = true;
-        firstPagePivot.add(firstPageMesh);
-        bookRoot.add(firstPagePivot);
-
-        // Componenta 5: Coperta superioară rigidă (animată independent în jurul cotorului)
-        const topCoverGeo = new THREE.BoxGeometry(bookWidth, coverThickness, bookHeight, 16, 1, 20);
-        topCoverGeo.translate(bookWidth * 0.5, coverThickness * 0.5, 0);
-        const tPos = topCoverGeo.attributes.position;
-        for (let i = 0; i < tPos.count; i++) {
-          const vx = tPos.getX(i);
-          const vy = tPos.getY(i);
-          const vz = tPos.getZ(i);
-          const normX = Math.max(0, Math.min(1, vx / bookWidth));
-          const subtleBow = Math.sin(normX * Math.PI) * Math.cos(vz * 0.9) * 0.005;
-          tPos.setY(i, vy + subtleBow);
-        }
-        topCoverGeo.computeVertexNormals();
-
-        const topCoverPivot = new THREE.Group();
-        topCoverPivot.position.set(
-          -bookWidth * 0.5 + 0.025,
-          coverThickness + pageBlockThickness + 0.01,
-          0
-        );
-
-        const topCoverMesh = new THREE.Mesh(topCoverGeo, [
-          boardEdgeMaterial,
-          boardEdgeMaterial,
-          coverMaterial,
-          innerPageMaterial,
-          boardEdgeMaterial,
-          boardEdgeMaterial,
-        ]);
-        topCoverMesh.castShadow = true;
-        topCoverMesh.receiveShadow = true;
-        topCoverPivot.add(topCoverMesh);
-        bookRoot.add(topCoverPivot);
-
-        bookRoot.rotation.set(0, 0.12, 0);
-
-        return {
-          root: bookRoot,
-          topCoverPivot,
-          firstPagePivot,
-          firstPageMesh,
-        };
-      }
-
-      function tryLoadExternalBookModel(targetScene, bookRig) {
-        if (!CONFIG.model.enableExternalLoad || typeof THREE.GLTFLoader === 'undefined') {
-          return;
-        }
-
-        const protocol = window.location.protocol;
-        if (protocol !== 'http:' && protocol !== 'https:') {
-          return;
-        }
-
-        let resolvedUrl = '';
-        try {
-          resolvedUrl = new URL(CONFIG.model.url, window.location.href).href;
-        } catch (urlErr) {
-          return;
-        }
-
-        const loader = new THREE.GLTFLoader();
-        loader.load(
-          resolvedUrl,
-          function (gltf) {
-            if (!gltf || !gltf.scene) return;
-
-            const externalBook = gltf.scene;
-            externalBook.traverse((child) => {
-              if (child.isMesh) {
-                child.castShadow = true;
-                child.receiveShadow = true;
-              }
-            });
-
-            externalBook.position.copy(bookRig.root.position);
-            externalBook.rotation.copy(bookRig.root.rotation);
-
-            targetScene.remove(bookRig.root);
-            targetScene.add(externalBook);
-
-            const coverNode =
-              externalBook.getObjectByName('TopCoverPivot') ||
-              externalBook.getObjectByName('CoverPivot') ||
-              externalBook.getObjectByName('Cover');
-            if (coverNode) {
-              bookRig.topCoverPivot = coverNode;
-            }
-            bookRig.root = externalBook;
-          },
-          undefined,
-          function () {
-            // Când /assets/book.glb nu există încă, păstrăm cartea 3D procedurală fără erori
-          }
-        );
-      }
-
-      const bookRig = createProceduralBook();
-      scene.add(bookRig.root);
-      tryLoadExternalBookModel(scene, bookRig);
-
-      /* =====================================================================
-         6. TRANZIȚIA CONTINUĂ CĂTRE WEBSITE-UL EDITORIAL
-         ===================================================================== */
-      function completeSeamlessTransitionToSite() {
-        if (state.isTransitioningOut || state.introCompleted) return;
-        state.isTransitioningOut = true;
-
-        const warmPaperColor = new THREE.Color('#e8dac0');
-        gsap.to(scene.background, {
-          r: warmPaperColor.r,
-          g: warmPaperColor.g,
-          b: warmPaperColor.b,
-          duration: 0.95,
-          ease: 'power2.inOut',
-        });
-        if (scene.fog) {
-          gsap.to(scene.fog.color, {
-            r: warmPaperColor.r,
-            g: warmPaperColor.g,
-            b: warmPaperColor.b,
-            duration: 0.95,
-            ease: 'power2.inOut',
+      document.querySelectorAll('.fc-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.fc-filter-btn').forEach(b => {
+            b.classList.remove('bg-terracotta', 'text-white');
+            b.classList.add('paper-card');
           });
-        }
-
-        vignetteEl.classList.add('is-hidden');
-
-        gsap.to(stageEl, {
-          opacity: 0,
-          duration: 1.15,
-          ease: 'power2.inOut',
-          onComplete: () => {
-            stageEl.style.display = 'none';
-            state.introCompleted = true;
-            state.isTransitioningOut = false;
-
-            hudEl.classList.remove('opacity-0', 'pointer-events-none');
-            hudEl.classList.add('opacity-100');
-
-            setupSectionReveals();
-
-            if (CONFIG.autoScroll.enabledByDefault) {
-              setTimeout(() => {
-                if (!state.userPausedAutoScroll && state.introCompleted) {
-                  enableAutoScroll(true);
-                }
-              }, CONFIG.autoScroll.startDelayAfterIntro * 1000);
-            }
-          },
+          btn.classList.add('bg-terracotta', 'text-white');
+          btn.classList.remove('paper-card');
+          renderFlashcards(btn.dataset.cat);
         });
-
-        gsap.to('#hero-section .reveal-item', {
-          opacity: 1,
-          y: 0,
-          duration: 1.15,
-          stagger: 0.14,
-          delay: 0.25,
-          ease: 'power2.out',
-        });
-      }
-
-      /* =====================================================================
-         7. TIMELINE-UL CINEMATOGRAFIC GSAP (UNGHI DE SUS + DESCHIDERE + PUSH-IN)
-         ===================================================================== */
-      function buildIntroTimeline() {
-        if (state.introTimeline) {
-          state.introTimeline.kill();
-        }
-
-        state.introCompleted = false;
-        state.isTransitioningOut = false;
-        stageEl.style.display = 'block';
-        stageEl.style.opacity = '1';
-        vignetteEl.classList.remove('is-hidden');
-        hudEl.classList.add('opacity-0', 'pointer-events-none');
-        hudEl.classList.remove('opacity-100');
-        window.scrollTo({ top: 0, behavior: 'auto' });
-
-        scene.background = new THREE.Color('#0f0c09');
-        if (scene.fog) {
-          scene.fog.color.set('#0f0c09');
-          scene.fog.density = 0.018;
-        }
-
-        const camAnim = CONFIG.cameraAndAnimation;
-        const mobileScale = state.isMobile ? 1.22 : 1.0;
-
-        state.baseCamPos.set(
-          camAnim.startPos.x,
-          camAnim.startPos.y * mobileScale,
-          camAnim.startPos.z * mobileScale
-        );
-        state.baseCamLookAt.set(0, 0.04, 0);
-        camera.fov = initialFov;
-        camera.updateProjectionMatrix();
-
-        bookRig.root.rotation.set(0, 0.12, 0);
-        bookRig.root.position.set(0, 0, 0);
-        bookRig.topCoverPivot.rotation.set(0, 0, 0);
-        bookRig.firstPagePivot.rotation.set(0, 0, 0);
-
-        keyLight.intensity = 1.55;
-        keyLight.position.set(2.2, 5.4, 2.4);
-        rimLight.intensity = 0.45;
-        pageGlowLight.intensity = 0.22;
-        dustMat.opacity = 0.085;
-
-        gsap.set('.reveal-item', { opacity: 0, y: 18 });
-
-        const tl = gsap.timeline({
-          delay: camAnim.introStartDelay,
-        });
-
-        // SCENA 1 & 2: Slow dolly-in de sus, dezvăluind coperta mată și lemnul vechi
-        tl.to(
-          state.baseCamPos,
-          {
-            x: camAnim.midPos.x,
-            y: camAnim.midPos.y * mobileScale,
-            z: camAnim.midPos.z * mobileScale,
-            duration: camAnim.approachDuration,
-            ease: 'sine.inOut',
-          },
-          0
-        )
-          .to(
-            state.baseCamLookAt,
-            {
-              x: 0.1,
-              y: 0.22,
-              z: 0,
-              duration: camAnim.approachDuration,
-              ease: 'sine.inOut',
-            },
-            0
-          )
-          .to(
-            keyLight.position,
-            {
-              x: 1.5,
-              y: 5.6,
-              z: 1.9,
-              duration: camAnim.approachDuration,
-              ease: 'sine.inOut',
-            },
-            0
-          )
-          .to(
-            keyLight,
-            {
-              intensity: 1.72,
-              duration: camAnim.approachDuration,
-              ease: 'sine.inOut',
-            },
-            0
-          );
-
-        // SCENA 3 & 4: Coperta rigidă se deschide lent în jurul cotorului, descoperind paginile
-        const openStart = camAnim.approachDuration * 0.78;
-        tl.to(
-          bookRig.topCoverPivot.rotation,
-          {
-            z: 2.34,
-            y: 0.04,
-            duration: camAnim.openCoverDuration,
-            ease: 'power2.inOut',
-          },
-          openStart
-        )
-          .to(
-            bookRig.firstPagePivot.rotation,
-            {
-              z: 0.14,
-              duration: camAnim.openCoverDuration * 0.7,
-              ease: 'sine.inOut',
-            },
-            openStart + camAnim.openCoverDuration * 0.22
-          )
-          .to(
-            pageGlowLight,
-            {
-              intensity: 0.55,
-              duration: camAnim.openCoverDuration,
-              ease: 'sine.inOut',
-            },
-            openStart
-          )
-          .to(
-            state.baseCamPos,
-            {
-              x: camAnim.openPos.x,
-              y: camAnim.openPos.y * mobileScale,
-              z: camAnim.openPos.z * mobileScale,
-              duration: camAnim.openCoverDuration,
-              ease: 'power1.inOut',
-            },
-            openStart
-          )
-          .to(
-            state.baseCamLookAt,
-            {
-              x: 0.24,
-              y: 0.34,
-              z: 0,
-              duration: camAnim.openCoverDuration,
-              ease: 'power1.inOut',
-            },
-            openStart
-          );
-
-        // SCENA 5, 6 & 7: Slow push-in către prima pagină „Liviu Rebreanu” și fuziune cu site-ul
-        const pushStart = openStart + camAnim.openCoverDuration * 0.82;
-        tl.to(
-          state.baseCamPos,
-          {
-            x: camAnim.pagePos.x,
-            y: camAnim.pagePos.y,
-            z: camAnim.pagePos.z,
-            duration: camAnim.pushInDuration,
-            ease: 'power2.inOut',
-          },
-          pushStart
-        )
-          .to(
-            state.baseCamLookAt,
-            {
-              x: 0.28,
-              y: 0.44,
-              z: 0,
-              duration: camAnim.pushInDuration,
-              ease: 'power2.inOut',
-            },
-            pushStart
-          )
-          .to(
-            camera,
-            {
-              fov: camAnim.fovPushIn,
-              duration: camAnim.pushInDuration,
-              ease: 'sine.inOut',
-              onUpdate: () => camera.updateProjectionMatrix(),
-            },
-            pushStart
-          )
-          .to(
-            dustMat,
-            {
-              opacity: 0.02,
-              duration: camAnim.pushInDuration * 0.7,
-              ease: 'power1.out',
-            },
-            pushStart
-          )
-          .call(
-            completeSeamlessTransitionToSite,
-            null,
-            pushStart + camAnim.pushInDuration * 0.78
-          );
-
-        tl.timeScale(camAnim.timeScale);
-        state.introTimeline = tl;
-      }
-
-      /* =====================================================================
-         8. SISTEM INTELIGENT DE AUTO-SCROLL (LENT, FLUID, CU CEDARE LA INTERACȚIUNE)
-         ===================================================================== */
-      function updateAutoScrollUi() {
-        if (state.autoScrollActive) {
-          autoScrollLabel.textContent = 'Auto-scroll: Activ';
-          autoScrollDot.classList.remove('opacity-30');
-          autoScrollDot.classList.add('opacity-100');
-        } else {
-          autoScrollLabel.textContent = 'Auto-scroll: Pauză';
-          autoScrollDot.classList.remove('opacity-100');
-          autoScrollDot.classList.add('opacity-30');
-        }
-      }
-
-      function autoScrollStep(timestamp) {
-        if (!state.autoScrollActive) {
-          state.lastAutoScrollTime = null;
-          state.autoScrollRafId = null;
-          return;
-        }
-
-        if (state.lastAutoScrollTime === null) {
-          state.lastAutoScrollTime = timestamp;
-        }
-
-        const deltaSeconds = Math.min((timestamp - state.lastAutoScrollTime) / 1000, 0.1);
-        state.lastAutoScrollTime = timestamp;
-
-        const maxScroll = Math.max(
-          0,
-          document.documentElement.scrollHeight - window.innerHeight
-        );
-
-        if (window.scrollY < maxScroll - 1) {
-          state.scrollAccumulator += CONFIG.autoScroll.pixelsPerSecond * deltaSeconds;
-          if (state.scrollAccumulator >= 1) {
-            const stepPx = Math.floor(state.scrollAccumulator);
-            state.scrollAccumulator -= stepPx;
-            window.scrollBy({ top: stepPx, left: 0, behavior: 'auto' });
-          }
-        } else {
-          enableAutoScroll(false);
-          return;
-        }
-
-        state.autoScrollRafId = requestAnimationFrame(autoScrollStep);
-      }
-
-      function enableAutoScroll(active) {
-        state.autoScrollActive = Boolean(active);
-        state.lastAutoScrollTime = null;
-        state.scrollAccumulator = 0;
-        updateAutoScrollUi();
-
-        if (state.autoScrollActive && state.autoScrollRafId === null) {
-          state.autoScrollRafId = requestAnimationFrame(autoScrollStep);
-        } else if (!state.autoScrollActive && state.autoScrollRafId !== null) {
-          cancelAnimationFrame(state.autoScrollRafId);
-          state.autoScrollRafId = null;
-        }
-      }
-
-      function handleUserManualOverride() {
-        if (!state.introCompleted) return;
-
-        if (state.autoScrollActive) {
-          state.userPausedAutoScroll = true;
-          enableAutoScroll(false);
-        }
-
-        if (CONFIG.autoScroll.resumeAfterIdleMs > 0) {
-          clearTimeout(state.idleResumeTimer);
-          state.idleResumeTimer = setTimeout(() => {
-            if (state.introCompleted) {
-              state.userPausedAutoScroll = false;
-              enableAutoScroll(true);
-            }
-          }, CONFIG.autoScroll.resumeAfterIdleMs);
-        }
-      }
-
-      window.addEventListener('wheel', handleUserManualOverride, { passive: true });
-      window.addEventListener('touchstart', handleUserManualOverride, { passive: true });
-      window.addEventListener('touchmove', handleUserManualOverride, { passive: true });
-      window.addEventListener('pointerdown', (e) => {
-        if (e.target && e.target.closest && e.target.closest('#editorial-hud')) return;
-        handleUserManualOverride();
-      });
-      window.addEventListener('keydown', (e) => {
-        const navKeys = ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Space', 'Home', 'End'];
-        if (navKeys.includes(e.code) || navKeys.includes(e.key)) {
-          handleUserManualOverride();
-        }
       });
 
-      autoScrollBtn.addEventListener('click', () => {
-        if (!state.introCompleted) return;
-        if (state.autoScrollActive) {
-          state.userPausedAutoScroll = true;
-          enableAutoScroll(false);
-        } else {
-          state.userPausedAutoScroll = false;
-          enableAutoScroll(true);
-        }
+      const mobileMenu = document.getElementById('mobile-menu');
+      document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+      document.querySelectorAll('.mobile-nav-link').forEach(link => {
+        link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
       });
 
-      replayBtn.addEventListener('click', () => {
-        enableAutoScroll(false);
-        state.userPausedAutoScroll = false;
-        clearTimeout(state.idleResumeTimer);
-        buildIntroTimeline();
+      document.getElementById('toggle-event-day').addEventListener('change', (e) => {
+        const active = e.target.checked;
+        document.getElementById('concurs').classList.toggle('hidden', !active);
+        document.getElementById('nav-concurs-link').classList.toggle('hidden', !active);
+        document.getElementById('mobile-concurs-link').classList.toggle('hidden', !active);
       });
-
-      /* =====================================================================
-         9. DEZVĂLUIRE SUBTILĂ LA SCROLL PENTRU SECȚIUNILE EDITORIALE
-         ===================================================================== */
-      let sectionObserver = null;
-
-      function setupSectionReveals() {
-        const items = document.querySelectorAll(
-          '#threshold-section .reveal-item, #continuum-section .reveal-item'
-        );
-
-        if (!('IntersectionObserver' in window)) {
-          gsap.to(items, { opacity: 1, y: 0, duration: 0.9, stagger: 0.15 });
-          return;
-        }
-
-        if (sectionObserver) {
-          sectionObserver.disconnect();
-        }
-
-        sectionObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                gsap.to(entry.target, {
-                  opacity: 1,
-                  y: 0,
-                  duration: 1.05,
-                  ease: 'power2.out',
-                });
-                sectionObserver.unobserve(entry.target);
-              }
-            });
-          },
-          {
-            threshold: 0.14,
-            rootMargin: '0px 0px -40px 0px',
-          }
-        );
-
-        items.forEach((el) => sectionObserver.observe(el));
-      }
-
-      /* =====================================================================
-         10. PARALLAX SUBTIL & BUCLA PRINCIPALĂ DE RANDARE (REQUESTANIMATIONFRAME)
-         ===================================================================== */
-      window.addEventListener(
-        'mousemove',
-        (e) => {
-          const nx = (e.clientX / Math.max(window.innerWidth, 1)) * 2 - 1;
-          const ny = (e.clientY / Math.max(window.innerHeight, 1)) * 2 - 1;
-          state.pointerTarget.x = nx;
-          state.pointerTarget.y = ny;
-        },
-        { passive: true }
-      );
-
-      function handleResize() {
-        const w = window.innerWidth;
-        const h = Math.max(window.innerHeight, 1);
-        state.isMobile = w < 768 || isTouchDevice;
-
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
-
-        const pr = Math.min(
-          window.devicePixelRatio || 1,
-          state.isMobile
-            ? CONFIG.performance.maxPixelRatioMobile
-            : CONFIG.performance.maxPixelRatioDesktop
-        );
-        renderer.setPixelRatio(pr);
-        renderer.setSize(w, h);
-
-        if (composer) {
-          composer.setPixelRatio(pr);
-          composer.setSize(w, h);
-        }
-        if (bokehPass && bokehPass.setSize) {
-          bokehPass.setSize(w, h);
-        }
-      }
-
-      window.addEventListener('resize', handleResize);
-
-      const clock = new THREE.Clock();
-
-      function animateFrame() {
-        requestAnimationFrame(animateFrame);
-
-        if (state.introCompleted && !state.isTransitioningOut) {
-          return;
-        }
-
-        const elapsed = clock.getElapsedTime();
-
-        state.pointerCurrent.x += (state.pointerTarget.x - state.pointerCurrent.x) * 0.04;
-        state.pointerCurrent.y += (state.pointerTarget.y - state.pointerCurrent.y) * 0.04;
-
-        const pStrength = CONFIG.cameraAndAnimation.parallaxStrength;
-        camera.position.set(
-          state.baseCamPos.x + state.pointerCurrent.x * pStrength,
-          state.baseCamPos.y - state.pointerCurrent.y * pStrength * 0.55,
-          state.baseCamPos.z + state.pointerCurrent.y * pStrength * 0.35
-        );
-
-        state.currentCamLookAt.lerp(state.baseCamLookAt, 0.06);
-        camera.lookAt(state.currentCamLookAt);
-
-        if (bokehPass && bokehPass.uniforms) {
-          const focusDist = camera.position.distanceTo(state.currentCamLookAt);
-          bokehPass.uniforms['focus'].value = Math.max(0.4, focusDist);
-          const camDist = camera.position.length();
-          const closeFactor = Math.max(0, Math.min(1, 1 - (camDist - 1.2) / 5.5));
-          bokehPass.uniforms['aperture'].value = 0.0001 + closeFactor * 0.00028;
-        }
-
-        const posAttr = dustGeo.getAttribute('position');
-        for (let i = 0; i < dustCount; i++) {
-          const seed = dustSeeds[i];
-          const baseY = posAttr.getY(i);
-          const nextY = baseY + Math.sin(elapsed * 0.32 + seed) * 0.00045;
-          posAttr.setY(i, nextY);
-        }
-        posAttr.needsUpdate = true;
-
-        if (composer) {
-          composer.render();
-        } else {
-          renderer.render(scene, camera);
-        }
-      }
-
-      /* =====================================================================
-         11. PORNIREA AUTOMATĂ A EXPERIENȚEI LA ÎNCĂRCARE
-         ===================================================================== */
-      window.addEventListener('DOMContentLoaded', () => {
-        buildIntroTimeline();
-        animateFrame();
-      });
-    })();
+    }
   </script>
 </body>
 </html>
