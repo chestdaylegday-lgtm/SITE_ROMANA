@@ -49,6 +49,9 @@
   </script>
 
   <style>
+    /* ==========================================================================
+       TEXTURĂ AUTENTICĂ DE HÂRTIE ÎNVECHITĂ (SVG NOISE + FIBRE + VIGNETTE)
+       ========================================================================== */
     :root {
       --bg-primary: #F3ECE0;
       --bg-card: #FAF5EB;
@@ -72,6 +75,7 @@
       overflow-x: hidden;
     }
 
+    /* Strat permanent de textură de hârtie învechită peste tot site-ul */
     .aged-paper-overlay {
       position: fixed;
       inset: 0;
@@ -91,6 +95,9 @@
       mix-blend-mode: screen;
     }
 
+    /* ==========================================================================
+       ANIMAȚIE INTRODUCTIVĂ 3D: CARTE VECHE PE LEMN + RĂSFOIRE FILE
+       ========================================================================== */
     #book-intro-stage {
       position: fixed;
       inset: 0;
@@ -100,6 +107,7 @@
       justify-content: center;
       perspective: 2200px;
       overflow: hidden;
+      /* Textură bogată de masă din lemn vechi de stejar */
       background:
         radial-gradient(circle at center, rgba(62, 36, 18, 0.35) 0%, rgba(14, 7, 3, 0.92) 100%),
         repeating-linear-gradient(
@@ -113,6 +121,7 @@
       transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
+    /* Fibra lemnului generată cu SVG */
     #book-intro-stage::before {
       content: "";
       position: absolute;
@@ -128,6 +137,7 @@
       pointer-events: none;
     }
 
+    /* Cartea 3D */
     .ancient-book {
       position: relative;
       width: min(86vw, 390px);
@@ -150,6 +160,7 @@
       }
     }
 
+    /* Coperta spate + blocul gros de file */
     .book-back-board {
       position: absolute;
       inset: 0;
@@ -160,6 +171,7 @@
       transform: translateZ(-14px);
     }
 
+    /* Muchia filelor (grosimea cărții) */
     .book-pages-block {
       position: absolute;
       top: 10px;
@@ -185,6 +197,7 @@
       color: #2E2218;
     }
 
+    /* Fiecare filă care se răsfoiește */
     .flipping-leaf {
       position: absolute;
       top: 10px;
@@ -208,6 +221,7 @@
       transform: rotateY(-176deg);
     }
 
+    /* Coperta față din piele veche + ornament auriu */
     .book-front-cover {
       position: absolute;
       inset: 0;
@@ -234,6 +248,7 @@
       transform: rotateY(-178deg);
     }
 
+    /* Cotorul cărții (nervuri în relief) */
     .book-spine-ridges {
       position: absolute;
       left: 0;
@@ -257,6 +272,7 @@
       box-shadow: 0 2px 3px rgba(0,0,0,0.7);
     }
 
+    /* Chenar auriu embosat pe copertă */
     .gold-emboss-frame {
       position: relative;
       width: calc(100% - 18px);
@@ -281,6 +297,9 @@
       filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.85));
     }
 
+    /* ==========================================================================
+       RESTUL STILURILOR SITE-ULUI (FLASHCARD 3D, PLAYER AUDIO, ETC.)
+       ========================================================================== */
     .perspective-1000 { perspective: 1000px; }
     .transform-style-3d { transform-style: preserve-3d; }
     .backface-hidden { backface-visibility: hidden; }
@@ -295,6 +314,7 @@
     .eq-playing .eq-bar-3 { animation: eqBar 0.85s ease-in-out infinite 0.3s; }
     .eq-playing .eq-bar-4 { animation: eqBar 0.65s ease-in-out infinite 0.1s; }
 
+    /* Stil subtil de margine de hârtie pentru carduri */
     .paper-card {
       background-color: var(--bg-card);
       border: 1px solid var(--border-color);
@@ -320,6 +340,7 @@
 </head>
 <body class="font-sans antialiased selection:bg-terracotta selection:text-white">
 
+  <!-- Textură permanentă de hârtie învechită peste tot site-ul -->
   <div class="aged-paper-overlay" aria-hidden="true"></div>
 
   <!-- ========================================================================
@@ -327,8 +348,10 @@
        ======================================================================== -->
   <div id="book-intro-stage" role="dialog" aria-label="Introducere Liviu Rebreanu">
     <div id="ancient-book" class="ancient-book">
+      <!-- Coperta spate -->
       <div class="book-back-board"></div>
 
+      <!-- Blocul de file (Pagina finală de gardă înainte de tranziția în site) -->
       <div class="book-pages-block font-literary">
         <div class="text-center border-b border-amber-900/25 pb-3">
           <p class="text-[11px] uppercase tracking-[0.28em] text-amber-900/70">Arhivă Literară &amp; Expoziție Digitală</p>
@@ -345,6 +368,7 @@
         </div>
       </div>
 
+      <!-- Fila 3 care se răsfoiește -->
       <div id="leaf-3" class="flipping-leaf font-literary text-stone-800 flex flex-col justify-between" style="z-index: 12;">
         <div class="flex justify-between text-[10px] uppercase tracking-widest text-amber-900/60 border-b border-amber-900/20 pb-2">
           <span>Capitolul III</span>
@@ -357,6 +381,7 @@
         <div class="text-right text-[11px] italic text-amber-900/60">III</div>
       </div>
 
+      <!-- Fila 2 care se răsfoiește -->
       <div id="leaf-2" class="flipping-leaf font-literary text-stone-800 flex flex-col justify-between" style="z-index: 14;">
         <div class="flex justify-between text-[10px] uppercase tracking-widest text-amber-900/60 border-b border-amber-900/20 pb-2">
           <span>Manuscris Original</span>
@@ -370,6 +395,7 @@
         <div class="text-right text-[11px] italic text-amber-900/60">II</div>
       </div>
 
+      <!-- Fila 1 (Pagina de titlu interioară) -->
       <div id="leaf-1" class="flipping-leaf font-literary text-stone-800 flex flex-col justify-between" style="z-index: 16;">
         <div class="text-center pt-2">
           <span class="text-[10px] uppercase tracking-[0.3em] text-amber-900/70">Ediție Specială</span>
@@ -384,6 +410,7 @@
         </div>
       </div>
 
+      <!-- Coperta față din piele cu scris auriu LIVIU REBREANU -->
       <div id="book-front-cover" class="book-front-cover">
         <div class="book-spine-ridges" aria-hidden="true">
           <span></span><span></span><span></span><span></span><span></span>
@@ -395,6 +422,7 @@
           </div>
 
           <div class="my-auto space-y-3">
+            <!-- Ornament literar SVG -->
             <svg class="w-10 h-10 mx-auto text-amber-300/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
               <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
             </svg>
@@ -414,18 +442,21 @@
       </div>
     </div>
 
+    <!-- Buton discret pentru a sări animația dacă cineva revine des pe site -->
     <button onclick="finishBookIntro()" class="fixed bottom-6 right-6 z-50 px-4 py-2 rounded-full bg-black/50 hover:bg-black/75 text-amber-100/85 text-xs uppercase tracking-widest border border-amber-300/30 backdrop-blur-sm transition">
       Intră direct în expoziție →
     </button>
   </div>
 
   <!-- ========================================================================
-       CONȚINUTUL PRINCIPAL AL SITE-ULUI
+       CONȚINUTUL PRINCIPAL AL SITE-ULUI (CU TEXTURĂ DE HÂRTIE ÎNVECHITĂ)
        ======================================================================== -->
   <div id="main-site-wrapper" class="relative z-10 transition-opacity duration-700">
 
+    <!-- BARA DE NAVIGARE -->
     <header class="sticky top-0 z-30 backdrop-blur-md bg-[#F3ECE0]/90 dark:bg-[#141210]/90 border-b border-amber-900/15 dark:border-white/10 transition-colors">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
+        <!-- Logo + Buton rejucare animație carte -->
         <div class="flex items-center gap-3">
           <a href="#" class="flex items-center gap-2.5 group">
             <span class="w-9 h-9 rounded-lg bg-terracotta text-parchment flex items-center justify-center font-serif font-bold text-lg shadow-sm group-hover:scale-105 transition-transform">
@@ -438,6 +469,7 @@
           </a>
         </div>
 
+        <!-- Link-uri Desktop -->
         <nav class="hidden lg:flex items-center gap-6 text-sm font-medium">
           <a href="#galerie" class="hover:text-terracotta transition-colors">Galerie (20)</a>
           <a href="#quiz-personaj" class="hover:text-terracotta transition-colors">Tu ce personaj ai fi?</a>
@@ -449,6 +481,7 @@
           </a>
         </nav>
 
+        <!-- Acțiuni dreapta -->
         <div class="flex items-center gap-2">
           <button onclick="replayBookIntro()" title="Revezi deschiderea cărții" class="p-2 rounded-full border border-amber-900/20 dark:border-white/15 hover:bg-amber-900/10 dark:hover:bg-white/10 transition-colors" aria-label="Revezi animația cărții">
             <i data-lucide="book-open" class="w-4 h-4 text-terracotta"></i>
@@ -465,6 +498,7 @@
         </div>
       </div>
 
+      <!-- Meniu Mobil -->
       <div id="mobile-menu" class="hidden lg:hidden px-4 pt-2 pb-5 space-y-2 border-t border-amber-900/15 dark:border-white/10 bg-[#F3ECE0] dark:bg-[#141210]">
         <a href="#galerie" class="mobile-nav-link block py-2 font-medium hover:text-terracotta">1. Galerie Foto + Audio (20)</a>
         <a href="#quiz-personaj" class="mobile-nav-link block py-2 font-medium hover:text-terracotta">2. Quiz: Tu ce personaj ai fi?</a>
@@ -475,6 +509,7 @@
       </div>
     </header>
 
+    <!-- HERO SECTION -->
     <section class="relative overflow-hidden py-14 sm:py-20 lg:py-24 border-b border-amber-900/15 dark:border-white/10">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-6">
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest bg-terracotta/10 text-terracotta border border-terracotta/25">
@@ -503,7 +538,9 @@
       </div>
     </section>
 
-    <!-- 1. GALERIA INTERACTIVĂ -->
+    <!-- ======================================================================
+         1. GALERIA INTERACTIVĂ (20 EXPONATE: FOTO + POEM + AUDIO)
+         ====================================================================== -->
     <section id="galerie" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
         <div>
@@ -523,7 +560,9 @@
       <div id="exhibits-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
     </section>
 
-    <!-- 2. QUIZ DE PERSONALITATE -->
+    <!-- ======================================================================
+         2. QUIZ DE PERSONALITATE: TU CE PERSONAJ AI FI? (LIVIU REBREANU)
+         ====================================================================== -->
     <section id="quiz-personaj" class="py-16 sm:py-24 bg-[#EAE0CE]/65 dark:bg-white/[0.02] border-y border-amber-900/15 dark:border-white/10">
       <div class="max-w-3xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-8">
@@ -532,29 +571,35 @@
           <p class="opacity-80 mt-2 text-sm sm:text-base">În universul lui Liviu Rebreanu — 8 întrebări pentru a-ți descoperi reflexia literară.</p>
         </div>
 
-        <div id="quiz-container" class="paper-card rounded-2xl p-6 sm:p-10 shadow-xl transition-all duration-300"></div>
+        <div id="quiz-container" class="paper-card rounded-2xl p-6 sm:p-10 shadow-xl transition-all duration-300">
+          <!-- Injectat prin JS -->
+        </div>
       </div>
     </section>
 
-    <!-- 3. FLASHCARD-URI -->
+    <!-- ======================================================================
+         3. FLASHCARD-URI INTERACTIVE: CURIOZITĂȚI DESPRE REBREANU
+         ====================================================================== -->
     <section id="flashcards" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
         <div>
           <span class="text-xs font-bold uppercase tracking-widest text-terracotta">03 • Știai că?</span>
           <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-1">Curiozități — Flashcard-uri 3D</h2>
-          <p class="opacity-80 mt-2 text-sm sm:text-base">Atinge orice card pentru a-l întoarce și a descoperi povestea din spatele lui.</p>
+          <p class="opacity-80 mt-2 text-sm sm:text-base">Ritualuri nocturne, tabieturi la birou și curiozități din viața personală a lui Liviu Rebreanu. Atinge orice card pentru a-l întoarce.</p>
         </div>
         <div class="flex flex-wrap gap-2" id="flashcard-filters">
-          <button data-cat="toate" class="fc-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-terracotta text-white">Toate</button>
-          <button data-cat="biografie" class="fc-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold paper-card hover:border-terracotta">Biografie</button>
-          <button data-cat="opere" class="fc-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold paper-card hover:border-terracotta">Opere</button>
+          <button data-cat="toate" class="fc-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-terracotta text-white">Toate (9)</button>
+          <button data-cat="ritualuri" class="fc-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold paper-card hover:border-terracotta">Ritualuri de Scris</button>
+          <button data-cat="biografie" class="fc-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold paper-card hover:border-terracotta">Viață Personală</button>
         </div>
       </div>
 
       <div id="flashcards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- 4. CINEMA & POVESTIRE -->
+    <!-- ======================================================================
+         4. CINEMA & POVESTIRE (O POVESTIRE + ANIMAȚII "ION")
+         ====================================================================== -->
     <section id="cinema" class="py-16 sm:py-24 bg-[#EAE0CE]/65 dark:bg-white/[0.02] border-y border-amber-900/15 dark:border-white/10">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-10">
@@ -589,7 +634,9 @@
       </div>
     </section>
 
-    <!-- 5. PLAYLIST REBREANU -->
+    <!-- ======================================================================
+         5. PLAYLIST REBREANU
+         ====================================================================== -->
     <section id="playlist" class="py-16 sm:py-24 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
@@ -631,7 +678,9 @@
       </div>
     </section>
 
-    <!-- 6. CONCURSUL DIN ZIUA EXPOZIȚIEI -->
+    <!-- ======================================================================
+         6. CONCURSUL DIN ZIUA EXPOZIȚIEI (CELE 7 CODURI QR DIFERITE)
+         ====================================================================== -->
     <section id="concurs" class="py-16 sm:py-24 bg-terracotta/5 border-t border-terracotta/20">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
@@ -654,11 +703,15 @@
 
         <div id="contest-codes-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
 
-        <div id="contest-question-box" class="hidden mt-8 p-6 sm:p-8 rounded-2xl paper-card border-2 border-terracotta shadow-xl"></div>
+        <div id="contest-question-box" class="hidden mt-8 p-6 sm:p-8 rounded-2xl paper-card border-2 border-terracotta shadow-xl">
+          <!-- Injectat prin JS -->
+        </div>
       </div>
     </section>
 
-    <!-- SUBSOL -->
+    <!-- ======================================================================
+         SUBSOL & PANOU ORGANIZATORI (QR PRINT + TOGGLE ZIUA EVENIMENTULUI)
+         ====================================================================== -->
     <footer class="py-12 border-t border-amber-900/15 dark:border-white/10 text-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
@@ -681,7 +734,9 @@
     </footer>
   </div>
 
-  <!-- MODAL EXPONAT -->
+  <!-- ========================================================================
+       MODAL EXPONAT (FOTO HD + POEM + PLAYER AUDIO)
+       ======================================================================== -->
   <div id="exhibit-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
     <div class="relative w-full max-w-4xl rounded-2xl bg-[#FAF5EB] dark:bg-[#1E1B18] text-[#241D18] dark:text-[#F4EFE6] shadow-2xl border border-amber-900/20 dark:border-white/15 overflow-hidden my-auto">
       <button onclick="closeExhibitModal()" aria-label="Închide" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/60 text-white hover:bg-terracotta flex items-center justify-center transition">
@@ -697,9 +752,9 @@
           <div>
             <div class="flex items-center justify-between gap-2">
               <span id="modal-badge" class="text-xs font-bold uppercase tracking-widest text-terracotta">Exponat #01</span>
-              <button onclick="shareCurrentExhibit()" class="text-xs opacity-80 hover:opacity-100 hover:text-terracotta flex items-center gap-1 font-semibold transition">
-                <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
-                <span id="share-exhibit-label">Distribuie exponatul</span>
+              <button onclick="copyCurrentExhibitLink()" class="text-xs opacity-75 hover:opacity-100 flex items-center gap-1 underline">
+                <i data-lucide="link" class="w-3 h-3"></i>
+                <span id="copy-link-label">Copiază link QR</span>
               </button>
             </div>
             <h3 id="modal-title" class="font-serif text-2xl sm:text-3xl font-bold mt-1">Titlu Exponat</h3>
@@ -709,6 +764,7 @@
             </div>
           </div>
 
+          <!-- Player Audio dedicat -->
           <div class="p-4 rounded-xl bg-terracotta/10 border border-terracotta/25 space-y-3">
             <div class="flex items-center justify-between">
               <span class="text-xs font-bold uppercase tracking-wider text-terracotta flex items-center gap-1.5">
@@ -753,7 +809,9 @@
     </div>
   </div>
 
-  <!-- MODAL PRINTARE QR -->
+  <!-- ========================================================================
+       MODAL PRINTARE CODURI QR (20 EXPONATE + 7 CONCURS)
+       ======================================================================== -->
   <div id="qr-print-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white text-black w-full max-w-5xl rounded-2xl p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
       <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-black/15">
@@ -774,7 +832,13 @@
     </div>
   </div>
 
+  <!-- ========================================================================
+       JAVASCRIPT: ANIMAȚIA CĂRȚII + DATELE ȘI LOGICA SITE-ULUI
+       ======================================================================== -->
   <script>
+    /* ========================================================================
+       LOGICA ANIMAȚIEI DE DESCHIDERE A CĂRȚII PE MASĂ DE LEMN
+       ======================================================================== */
     let introTimers = [];
 
     function runBookIntroAnimation() {
@@ -785,6 +849,7 @@
       const leaf2 = document.getElementById('leaf-2');
       const leaf3 = document.getElementById('leaf-3');
 
+      // Reset stare inițială
       introTimers.forEach(clearTimeout);
       introTimers = [];
       stage.classList.remove('intro-zoom-out');
@@ -795,12 +860,35 @@
       leaf2.classList.remove('turned');
       leaf3.classList.remove('turned');
 
-      introTimers.push(setTimeout(() => book.classList.add('book-centered'), 650));
-      introTimers.push(setTimeout(() => cover.classList.add('opened'), 1450));
-      introTimers.push(setTimeout(() => leaf1.classList.add('turned'), 2400));
-      introTimers.push(setTimeout(() => leaf2.classList.add('turned'), 3050));
-      introTimers.push(setTimeout(() => leaf3.classList.add('turned'), 3700));
-      introTimers.push(setTimeout(() => finishBookIntro(), 5150));
+      // 1. Îndreaptă cartea pe masa de lemn (0.6s)
+      introTimers.push(setTimeout(() => {
+        book.classList.add('book-centered');
+      }, 650));
+
+      // 2. Deschide coperta groasă din piele cu scris auriu (1.4s)
+      introTimers.push(setTimeout(() => {
+        cover.classList.add('opened');
+      }, 1450));
+
+      // 3. Răsfoiește prima filă (2.4s)
+      introTimers.push(setTimeout(() => {
+        leaf1.classList.add('turned');
+      }, 2400));
+
+      // 4. Răsfoiește a doua filă (3.0s)
+      introTimers.push(setTimeout(() => {
+        leaf2.classList.add('turned');
+      }, 3050));
+
+      // 5. Răsfoiește a treia filă și dezvăluie citatul (3.7s)
+      introTimers.push(setTimeout(() => {
+        leaf3.classList.add('turned');
+      }, 3700));
+
+      // 6. Tranziție lină (zoom-in în hârtia învechită) către site (5.1s)
+      introTimers.push(setTimeout(() => {
+        finishBookIntro();
+      }, 5150));
     }
 
     function finishBookIntro() {
@@ -816,6 +904,9 @@
       runBookIntroAnimation();
     }
 
+    /* ========================================================================
+       SECȚIUNEA A: DATELE EXPOZIȚIEI (AICI ÎNLOCUIȚI POZELE, POEMELE ȘI MP3-URILE)
+       ======================================================================== */
     const EXHIBITS_DATA = [
       {
         id: 1,
@@ -851,6 +942,7 @@
       }
     ];
 
+    // Completăm automat până la 20 de exponate (înlocuiți cu datele voastre reale)
     for (let i = 5; i <= 20; i++) {
       EXHIBITS_DATA.push({
         id: i,
@@ -904,6 +996,8 @@
         desc: "Ești idealist(ă), introspectiv(ă) și cauți sensuri dincolo de aparențe. Te atrag legăturile profunde, întrebările mari și ideea că unele întâlniri sau căutări pot schimba o viață."
       }
     ];
+
+    const CHARACTER_PROFILES = QUIZ_CHARACTERS;
 
     const QUIZ_QUESTIONS = [
       {
@@ -1013,12 +1107,69 @@
     ];
 
     const FLASHCARDS_DATA = [
-      { cat: "biografie", front: "Când și unde s-a născut Liviu Rebreanu?", back: "S-a născut pe 27 noiembrie 1885, în satul Târlișua (județul Bistrița-Năsăud), fiind primul dintre cei 14 copii ai învățătorului Vasile Rebreanu." },
-      { cat: "opere", front: "Cum i-a venit ideea romanului „Ion”?", back: "A pornit de la trei scene reale văzute în satul Prislop: un țăran care a sărutat pământul ca pe o ibovnică, o fată bogată bătută de tatăl ei și povestea lui Ion Boldijar." },
-      { cat: "biografie", front: "Cum lucra Rebreanu noaptea?", back: "Scria aproape exclusiv noaptea, în liniște deplină, fumând mult și bând cafea tare, rescriind fiecare pagină de zeci de ori până atingea perfecțiunea." },
-      { cat: "opere", front: "Ce tragedie personală a inspirat „Pădurea spânzuraților”?", back: "Execuția fratelui său, Emil Rebreanu, ofițer în armata austro-ungară, spânzurat în 1917 la Ghimeș pentru că a încercat să treacă de partea armatei române." },
-      { cat: "biografie", front: "Ce funcții culturale importante a deținut?", back: "A fost director al Teatrului Național din București, președinte al Societății Scriitorilor Români și membru titular al Academiei Române (din 1939)." },
-      { cat: "opere", front: "De ce este considerat creatorul romanului românesc modern?", back: "Prin „Ion” (1920), a înlocuit idilismul sămănătorist cu realismul obiectiv, dur și psihologic, construit cu o arhitectură narativă circulară impecabilă." }
+      {
+        cat: "ritualuri",
+        tag: "Ritualuri de Scris",
+        front: "Program exclusiv nocturn",
+        sub: "Cum își organiza Rebreanu orele de creație?",
+        back: "Scriitorul nu putea crea ziua, așa că se așeza la birou în jurul orei 21:00 și lucra neîntrerupt până la 6:00 sau 7:00 dimineața. În acest interval nocturn reușea să scrie, în medie, între 4 și 5 pagini pe noapte."
+      },
+      {
+        cat: "ritualuri",
+        tag: "Ritualuri de Scris",
+        front: "Consum uriaș de cafea și tutun",
+        sub: "Ce tabieturi intense îi stimulau concentrarea?",
+        back: "Pentru a-și induce starea de concentrare, Rebreanu avea mereu lângă birou o măsuță orientală cu serviciu de cafea și consuma între 2 și 3 litri de cafea pe noapte. Biroul său era permanent învăluit într-un nor dens de fum, deoarece fuma chiar și peste cinci pachete de țigări pe zi."
+      },
+      {
+        cat: "ritualuri",
+        tag: "Ritualuri de Scris",
+        front: "Lampa de gaz și izolarea",
+        sub: "În ce condiții refuza orice vacanță de creație?",
+        back: "Prefera să scrie la lumina unei lămpi de gaz, într-o liniște deplină. Nu își lua niciodată „vacanțe de creație” și refuza categoric să se odihnească atunci când era prins în febra redactării unui roman."
+      },
+      {
+        cat: "ritualuri",
+        tag: "Ritualuri de Scris",
+        front: "Documentarea riguroasă și modelele reale",
+        sub: "De la ce scenă reală a pornit capodopera „Ion”?",
+        back: "Înainte de a așterne primul rând, strângea fișe detaliate și se inspira din realitatea imediată. Ideea romanului „Ion” a pornit de la gestul real al unui țăran pe care l-a văzut îngenunchind și sărutând pământul pe câmp."
+      },
+      {
+        cat: "biografie",
+        tag: "Viață Personală",
+        front: "Primul scriitor român cu automobil",
+        sub: "Cum și-a cumpărat Rebreanu mașinile din literatură?",
+        back: "Rebreanu a fost primul român care nu era politician sau om de afaceri și care și-a cumpărat mașină exclusiv din banii câștigați din literatură. A deținut mai multe autoturisme (Chevrolet 1926, Chevrolet 1928, Dodge 1930), iar pe unul dintre ele l-a închiriat chiar ca taxi."
+      },
+      {
+        cat: "biografie",
+        tag: "Viață Personală",
+        front: "Un tată adoptiv devotat",
+        sub: "Cine a fost Puia-Florica în familia scriitorului?",
+        back: "S-a căsătorit cu actrița Fanny Rădulescu în 1921. Din dragoste pentru Fanny, a recunoscut-o oficial și a crescut-o ca pe propriul copil pe Puia-Florica, fetița de trei ani pe care soția sa o avea dintr-o relație anterioară."
+      },
+      {
+        cat: "biografie",
+        tag: "Viață Personală",
+        front: "O fire superstițioasă și solitară",
+        sub: "Ce mărturisea în jurnalul său din 1927?",
+        back: "Apropiații îl descriau ca fiind un om foarte superstițios, dar și profund singuratic. În jurnalul său din 1927, mărturisea că omul este sortit să ducă o viață solitară și că adevărata comuniune sufletească cu ceilalți este doar o iluzie."
+      },
+      {
+        cat: "biografie",
+        tag: "Viață Personală",
+        front: "Refugiul de la Valea Mare",
+        sub: "Ce s-a întâmplat cu biroul scriitorului după moarte?",
+        back: "În 1930 a cumpărat o vie și o casă la Valea Mare (lângă Pitești), locul unde s-a retras pentru a scrie și unde s-a stins din viață în 1944. După moartea sa, localnicii au luat mai multe obiecte din casă drept suveniruri, iar soția sa a fost nevoită să își recupereze biroul de lucru cu ajutorul jandarmilor chiar din casa preotului din sat."
+      },
+      {
+        cat: "biografie",
+        tag: "Personalitate",
+        front: "„Ocnașul scrisului”",
+        sub: "Contrastul dintre ținuta sobră și munca de birou",
+        back: "Deși în societate afișa o prezență sobră și aristocratică, în spatele biroului Rebreanu era un adevărat „ocnaș al scrisului”, dominat de o disciplină strictă, ritualuri nocturne intense, tabieturi istovitoare și superstiții surprinzătoare."
+      }
     ];
 
     const PLAYLIST_DATA = [
@@ -1030,16 +1181,19 @@
 
     const CONTEST_CODES_DATA = [
       { code: 1, title: "Codul #1 — Pripas", question: "Cum se numește satul în care se petrece acțiunea principală a romanului „Ion”?", hint: "Verifică Tabloul #01 din galerie." },
-      { code: 2, title: "Codul #2 — Biografie", question: "Câți frați a avut Liviu Rebreanu în familia învățătorului Vasile Rebreanu?", hint: "Răspunsul se află în Flashcard-urile de la secțiunea Curiozități." },
+      { code: 2, title: "Codul #2 — Automobilul", question: "Ce scriitor român a fost primul care și-a cumpărat mașină exclusiv din banii câștigați din literatură?", hint: "Răspunsul se află în Flashcard-urile de la secțiunea Curiozități." },
       { code: 3, title: "Codul #3 — Muzică", question: "Ce compoziție de George Enescu se regăsește în Playlist-ul expoziției?", hint: "Ascultă secțiunea 05 • Playlist." },
       { code: 4, title: "Codul #4 — Pădurea spânzuraților", question: "Cine este personajul principal din romanul inspirat de drama fratelui său, Emil?", hint: "Poți afla și din Quiz-ul de personalitate." },
-      { code: 5, title: "Codul #5 — Anul de grație", question: "În ce an a fost publicat romanul „Ion”, marcând nașterea romanului românesc modern?", hint: "Caută în secțiunea Curiozități." },
+      { code: 5, title: "Codul #5 — Gestul real", question: "De la ce scenă reală văzută pe câmp a pornit ideea romanului „Ion”?", hint: "Caută în Flashcard-urile despre ritualurile de scris." },
       { code: 6, title: "Codul #6 — Animație", question: "Care este numele personajului din secțiunea de animații video ale expoziției?", hint: "Privește secțiunea 04 • Cinema." },
-      { code: 7, title: "Codul #7 — Academia", question: "În ce an a devenit Liviu Rebreanu membru titular al Academiei Române?", hint: "Răspunsul este pe unul dintre Flashcard-urile 3D." }
+      { code: 7, title: "Codul #7 — Tabieturi nocturne", question: "Câți litri de cafea consuma Liviu Rebreanu pe noapte în timpul orelor de creație?", hint: "Răspunsul este pe unul dintre Flashcard-urile 3D." }
     ];
 
+    /* ========================================================================
+       INIȚIALIZARE & LOGICĂ APLICAȚIE
+       ======================================================================== */
     let currentExhibitIndex = 0;
-    let currentQuizStep = -1;
+    let currentQuizStep = -1; // -1: ecran intro, 0..7: întrebări, 8: rezultat
     let quizPicks = Array(8).fill(null);
     let currentPick = null;
     let currentPlaylistIndex = 0;
@@ -1055,6 +1209,8 @@
       renderContestCodes();
       handleUrlParameters();
       setupEventListeners();
+
+      // Pornește animația de deschidere a cărții pe masă de lemn
       runBookIntroAnimation();
     });
 
@@ -1165,22 +1321,13 @@
       }
     });
 
-    async function shareCurrentExhibit() {
+    function copyCurrentExhibitLink() {
       const item = EXHIBITS_DATA[currentExhibitIndex];
-      const shareText = `Descoperă exponatul „${item.title}” în expoziția Universul Liviu Rebreanu!`;
-      const shareUrl = getPublicShareUrl('#galerie');
-      const lbl = document.getElementById('share-exhibit-label');
-
-      if (await tryNativeShare(item.title, shareText, shareUrl)) {
-        return;
-      }
-
-      copyTextToClipboard(`${shareText}${shareUrl ? ' ' + shareUrl : ''}`);
-      window.open(`https://wa.me/?text=${encodeURIComponent(shareText + (shareUrl ? ' ' + shareUrl : ''))}`, '_blank', 'noopener,noreferrer');
-      if (lbl) {
-        lbl.textContent = 'Deschis pe WhatsApp';
-        setTimeout(() => { lbl.textContent = 'Distribuie exponatul'; }, 2500);
-      }
+      const url = `${window.location.origin}${window.location.pathname}?exponat=${item.id}`;
+      navigator.clipboard.writeText(url);
+      const lbl = document.getElementById('copy-link-label');
+      lbl.textContent = 'Link copiat!';
+      setTimeout(() => lbl.textContent = 'Copiază link QR', 2000);
     }
 
     function formatTime(sec) {
@@ -1194,6 +1341,7 @@
       if (!box) return;
 
       if (currentQuizStep === -1) {
+        // Ecran Intro Quiz
         box.innerHTML = `
           <div class="text-center space-y-6">
             <div class="rounded-xl overflow-hidden border border-amber-900/15 dark:border-white/10 shadow-md">
@@ -1223,6 +1371,7 @@
       }
 
       if (currentQuizStep >= 0 && currentQuizStep < QUIZ_QUESTIONS.length) {
+        // Ecran Întrebare
         const qObj = QUIZ_QUESTIONS[currentQuizStep];
         const pct = Math.round((currentQuizStep / QUIZ_QUESTIONS.length) * 100);
         const selPick = quizPicks[currentQuizStep] !== null ? quizPicks[currentQuizStep] : currentPick;
@@ -1280,6 +1429,7 @@
         return;
       }
 
+      // Ecran Rezultat
       showQuizResult(box);
     }
 
@@ -1346,8 +1496,19 @@
       renderQuiz();
     }
 
+    function resetQuiz() {
+      restartQuiz();
+    }
+
+    function answerQuiz(charKey) {
+      // Compatibilitate dacă este apelat dintr-un handler vechi
+      if (typeof charKey === 'number') {
+        selectAndAdvanceQuiz(charKey);
+      }
+    }
+
     /* ========================================================================
-       SHARE CU ICONIȚE, WHATSAPP STARE, INSTAGRAM STARE, FACEBOOK & FALLBACK
+       SHARE CU ICONIȚE, WHATSAPP STARE, INSTAGRAM STARE, FACEBOOK & SOCIAL MEDIA
        ======================================================================== */
     function escapeAttr(str) {
       return String(str)
@@ -1481,6 +1642,10 @@
       copyTextToClipboard(combined);
       window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(combined)}`, '_blank', 'noopener,noreferrer');
       setShareFeedback('more-share-label', 'Copiat • Deschis X');
+    }
+
+    function shareQuizResult(name, work) {
+      shareMoreApps(name, work);
     }
 
     const BRAND_SVGS = {
@@ -1631,25 +1796,37 @@
       const grid = document.getElementById('flashcards-grid');
       const filtered = category === 'toate' ? FLASHCARDS_DATA : FLASHCARDS_DATA.filter(f => f.cat === category);
       grid.innerHTML = filtered.map(fc => `
-        <div onclick="this.querySelector('.fc-inner').classList.toggle('rotate-y-180')" class="h-64 perspective-1000 cursor-pointer group">
+        <div onclick="this.querySelector('.fc-inner').classList.toggle('rotate-y-180')" class="h-72 sm:h-80 perspective-1000 cursor-pointer group">
           <div class="fc-inner relative w-full h-full transition-transform duration-500 transform-style-3d">
-            <div class="absolute inset-0 backface-hidden rounded-2xl p-6 paper-card shadow-sm group-hover:border-terracotta flex flex-col justify-between">
-              <span class="text-[11px] font-bold uppercase tracking-widest text-terracotta">${fc.cat}</span>
-              <h3 class="font-serif text-xl font-bold leading-snug">${fc.front}</h3>
-              <span class="text-xs opacity-60 flex items-center gap-1">
-                <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
-                <span>Atinge pentru răspuns</span>
+            <div class="absolute inset-0 backface-hidden rounded-2xl p-6 paper-card shadow-sm group-hover:border-terracotta flex flex-col justify-between border border-amber-900/15 dark:border-white/10">
+              <div>
+                <span class="inline-block px-2.5 py-0.5 rounded-full bg-terracotta/10 text-terracotta text-[10px] font-bold uppercase tracking-wider mb-3">
+                  ${fc.tag || (fc.cat === 'ritualuri' ? 'Ritualuri de Scris' : 'Viață Personală')}
+                </span>
+                <h3 class="font-serif text-lg sm:text-xl font-bold leading-snug">${fc.front}</h3>
+                ${fc.sub ? `<p class="text-xs sm:text-sm opacity-75 mt-2.5 italic leading-relaxed">${fc.sub}</p>` : ''}
+              </div>
+              <span class="text-xs opacity-60 flex items-center gap-1.5 pt-3 border-t border-amber-900/10 dark:border-white/10">
+                <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-terracotta"></i>
+                <span>Atinge pentru a descoperi povestea</span>
               </span>
             </div>
             <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-2xl p-6 bg-terracotta text-white shadow-lg flex flex-col justify-between">
-              <span class="text-[11px] font-bold uppercase tracking-widest text-white/75">Curiozitate Rebreanu</span>
-              <p class="text-sm sm:text-base leading-relaxed font-medium">${fc.back}</p>
-              <span class="text-xs text-white/70">Atinge pentru a reveni</span>
+              <div class="overflow-y-auto pr-1">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-white/75 block mb-2">
+                  ${fc.tag || 'Curiozitate Rebreanu'}
+                </span>
+                <p class="text-xs sm:text-sm leading-relaxed font-medium opacity-95">${fc.back}</p>
+              </div>
+              <span class="text-xs text-white/75 flex items-center gap-1 pt-2 border-t border-white/15 shrink-0">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                <span>Atinge pentru a reveni</span>
+              </span>
             </div>
           </div>
         </div>
       `).join('');
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
     }
 
     const playlistAudio = document.getElementById('playlist-audio-element');
