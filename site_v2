@@ -30,15 +30,15 @@
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
           },
           colors: {
-            parchment: '#D1C4B2',
-            parchmentCard: '#C7B8A3',
-            parchmentDeep: '#B5A38D',
-            charcoal: '#8E735B',
-            charcoalCard: '#B8A58C',
-            terracotta: '#8E735B',
-            terracottaHover: '#B8A58C',
-            gold: '#B8A58C',
-            goldLight: '#D1C4B2',
+            parchment: '#F3ECE0',
+            parchmentCard: '#FAF5EB',
+            parchmentDeep: '#E7DEC8',
+            charcoal: '#141210',
+            charcoalCard: '#1E1B18',
+            terracotta: '#9E2A2B',
+            terracottaHover: '#7D1E1F',
+            gold: '#C59B27',
+            goldLight: '#E8C565',
             woodDark: '#1C1008',
             leather: '#4A1811',
             leatherDark: '#2A0C08'
@@ -53,16 +53,16 @@
        TEXTURĂ AUTENTICĂ DE HÂRTIE ÎNVECHITĂ (SVG NOISE + FIBRE + VIGNETTE)
        ========================================================================== */
     :root {
-      --bg-primary: #D1C4B2;
-      --bg-card: #C7B8A3;
+      --bg-primary: #F3ECE0;
+      --bg-card: #FAF5EB;
       --text-primary: #241D18;
       --text-secondary: #5A4F45;
       --border-color: rgba(139, 108, 72, 0.25);
     }
 
     html.dark {
-      --bg-primary: #8E735B;
-      --bg-card: #B8A58C;
+      --bg-primary: #141210;
+      --bg-card: #1E1B18;
       --text-primary: #F4EFE6;
       --text-secondary: #A69F95;
       --border-color: rgba(244, 239, 230, 0.12);
@@ -107,7 +107,6 @@
       justify-content: center;
       perspective: 2200px;
       overflow: hidden;
-      /* Textură bogată de masă din lemn vechi de stejar */
       background:
         radial-gradient(circle at center, rgba(62, 36, 18, 0.35) 0%, rgba(14, 7, 3, 0.92) 100%),
         repeating-linear-gradient(
@@ -121,7 +120,6 @@
       transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    /* Fibra lemnului generată cu SVG */
     #book-intro-stage::before {
       content: "";
       position: absolute;
@@ -137,7 +135,6 @@
       pointer-events: none;
     }
 
-    /* Cartea 3D */
     .ancient-book {
       position: relative;
       width: min(86vw, 390px);
@@ -160,7 +157,6 @@
       }
     }
 
-    /* Coperta spate + blocul gros de file */
     .book-back-board {
       position: absolute;
       inset: 0;
@@ -171,7 +167,6 @@
       transform: translateZ(-14px);
     }
 
-    /* Muchia filelor (grosimea cărții) */
     .book-pages-block {
       position: absolute;
       top: 10px;
@@ -197,7 +192,6 @@
       color: #2E2218;
     }
 
-    /* Fiecare filă care se răsfoiește */
     .flipping-leaf {
       position: absolute;
       top: 10px;
@@ -221,7 +215,6 @@
       transform: rotateY(-176deg);
     }
 
-    /* Coperta față din piele veche + ornament auriu */
     .book-front-cover {
       position: absolute;
       inset: 0;
@@ -248,7 +241,6 @@
       transform: rotateY(-178deg);
     }
 
-    /* Cotorul cărții (nervuri în relief) */
     .book-spine-ridges {
       position: absolute;
       left: 0;
@@ -272,7 +264,6 @@
       box-shadow: 0 2px 3px rgba(0,0,0,0.7);
     }
 
-    /* Chenar auriu embosat pe copertă */
     .gold-emboss-frame {
       position: relative;
       width: calc(100% - 18px);
@@ -314,7 +305,6 @@
     .eq-playing .eq-bar-3 { animation: eqBar 0.85s ease-in-out infinite 0.3s; }
     .eq-playing .eq-bar-4 { animation: eqBar 0.65s ease-in-out infinite 0.1s; }
 
-    /* Stil subtil de margine de hârtie pentru carduri */
     .paper-card {
       background-color: var(--bg-card);
       border: 1px solid var(--border-color);
@@ -348,10 +338,8 @@
        ======================================================================== -->
   <div id="book-intro-stage" role="dialog" aria-label="Introducere Liviu Rebreanu">
     <div id="ancient-book" class="ancient-book">
-      <!-- Coperta spate -->
       <div class="book-back-board"></div>
 
-      <!-- Blocul de file (Pagina finală de gardă înainte de tranziția în site) -->
       <div class="book-pages-block font-literary">
         <div class="text-center border-b border-amber-900/25 pb-3">
           <p class="text-[11px] uppercase tracking-[0.28em] text-amber-900/70">Arhivă Literară &amp; Expoziție Digitală</p>
@@ -368,7 +356,6 @@
         </div>
       </div>
 
-      <!-- Fila 3 care se răsfoiește -->
       <div id="leaf-3" class="flipping-leaf font-literary text-stone-800 flex flex-col justify-between" style="z-index: 12;">
         <div class="flex justify-between text-[10px] uppercase tracking-widest text-amber-900/60 border-b border-amber-900/20 pb-2">
           <span>Capitolul III</span>
@@ -381,7 +368,6 @@
         <div class="text-right text-[11px] italic text-amber-900/60">III</div>
       </div>
 
-      <!-- Fila 2 care se răsfoiește -->
       <div id="leaf-2" class="flipping-leaf font-literary text-stone-800 flex flex-col justify-between" style="z-index: 14;">
         <div class="flex justify-between text-[10px] uppercase tracking-widest text-amber-900/60 border-b border-amber-900/20 pb-2">
           <span>Manuscris Original</span>
@@ -395,7 +381,6 @@
         <div class="text-right text-[11px] italic text-amber-900/60">II</div>
       </div>
 
-      <!-- Fila 1 (Pagina de titlu interioară) -->
       <div id="leaf-1" class="flipping-leaf font-literary text-stone-800 flex flex-col justify-between" style="z-index: 16;">
         <div class="text-center pt-2">
           <span class="text-[10px] uppercase tracking-[0.3em] text-amber-900/70">Ediție Specială</span>
@@ -410,7 +395,6 @@
         </div>
       </div>
 
-      <!-- Coperta față din piele cu scris auriu LIVIU REBREANU -->
       <div id="book-front-cover" class="book-front-cover">
         <div class="book-spine-ridges" aria-hidden="true">
           <span></span><span></span><span></span><span></span><span></span>
@@ -422,7 +406,6 @@
           </div>
 
           <div class="my-auto space-y-3">
-            <!-- Ornament literar SVG -->
             <svg class="w-10 h-10 mx-auto text-amber-300/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
               <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
             </svg>
@@ -442,7 +425,6 @@
       </div>
     </div>
 
-    <!-- Buton discret pentru a sări animația dacă cineva revine des pe site -->
     <button onclick="finishBookIntro()" class="fixed bottom-6 right-6 z-50 px-4 py-2 rounded-full bg-black/50 hover:bg-black/75 text-amber-100/85 text-xs uppercase tracking-widest border border-amber-300/30 backdrop-blur-sm transition">
       Intră direct în expoziție →
     </button>
@@ -454,9 +436,8 @@
   <div id="main-site-wrapper" class="relative z-10 transition-opacity duration-700">
 
     <!-- BARA DE NAVIGARE -->
-    <header class="sticky top-0 z-30 backdrop-blur-md bg-[#D1C4B2]/90 dark:bg-[#8E735B]/90 border-b border-amber-900/15 dark:border-white/10 transition-colors">
+    <header class="sticky top-0 z-30 backdrop-blur-md bg-[#F3ECE0]/90 dark:bg-[#141210]/90 border-b border-amber-900/15 dark:border-white/10 transition-colors">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
-        <!-- Logo + Buton rejucare animație carte -->
         <div class="flex items-center gap-3">
           <a href="#" class="flex items-center gap-2.5 group">
             <span class="w-9 h-9 rounded-lg bg-terracotta text-parchment flex items-center justify-center font-serif font-bold text-lg shadow-sm group-hover:scale-105 transition-transform">
@@ -469,7 +450,6 @@
           </a>
         </div>
 
-        <!-- Link-uri Desktop -->
         <nav class="hidden lg:flex items-center gap-6 text-sm font-medium">
           <a href="#galerie" class="hover:text-terracotta transition-colors">Galerie (20)</a>
           <a href="#quiz-personaj" class="hover:text-terracotta transition-colors">Tu ce personaj ai fi?</a>
@@ -481,7 +461,6 @@
           </a>
         </nav>
 
-        <!-- Acțiuni dreapta -->
         <div class="flex items-center gap-2">
           <button onclick="replayBookIntro()" title="Revezi deschiderea cărții" class="p-2 rounded-full border border-amber-900/20 dark:border-white/15 hover:bg-amber-900/10 dark:hover:bg-white/10 transition-colors" aria-label="Revezi animația cărții">
             <i data-lucide="book-open" class="w-4 h-4 text-terracotta"></i>
@@ -498,8 +477,7 @@
         </div>
       </div>
 
-      <!-- Meniu Mobil -->
-      <div id="mobile-menu" class="hidden lg:hidden px-4 pt-2 pb-5 space-y-2 border-t border-amber-900/15 dark:border-white/10 bg-[#D1C4B2] dark:bg-[#8E735B]">
+      <div id="mobile-menu" class="hidden lg:hidden px-4 pt-2 pb-5 space-y-2 border-t border-amber-900/15 dark:border-white/10 bg-[#F3ECE0] dark:bg-[#141210]">
         <a href="#galerie" class="mobile-nav-link block py-2 font-medium hover:text-terracotta">1. Galerie Foto + Audio (20)</a>
         <a href="#quiz-personaj" class="mobile-nav-link block py-2 font-medium hover:text-terracotta">2. Quiz: Tu ce personaj ai fi?</a>
         <a href="#flashcards" class="mobile-nav-link block py-2 font-medium hover:text-terracotta">3. Curiozități (Flashcard-uri)</a>
@@ -563,7 +541,7 @@
     <!-- ======================================================================
          2. QUIZ DE PERSONALITATE: TU CE PERSONAJ AI FI? (LIVIU REBREANU)
          ====================================================================== -->
-    <section id="quiz-personaj" class="py-16 sm:py-24 bg-[#B5A38D]/65 dark:bg-white/[0.02] border-y border-amber-900/15 dark:border-white/10">
+    <section id="quiz-personaj" class="py-16 sm:py-24 bg-[#EAE0CE]/65 dark:bg-white/[0.02] border-y border-amber-900/15 dark:border-white/10">
       <div class="max-w-3xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-8">
           <span class="text-xs font-bold uppercase tracking-widest text-terracotta">02 • Test Interactiv</span>
@@ -600,7 +578,7 @@
     <!-- ======================================================================
          4. CINEMA & POVESTIRE (O POVESTIRE + ANIMAȚII "ION")
          ====================================================================== -->
-    <section id="cinema" class="py-16 sm:py-24 bg-[#B5A38D]/65 dark:bg-white/[0.02] border-y border-amber-900/15 dark:border-white/10">
+    <section id="cinema" class="py-16 sm:py-24 bg-[#EAE0CE]/65 dark:bg-white/[0.02] border-y border-amber-900/15 dark:border-white/10">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-10">
           <span class="text-xs font-bold uppercase tracking-widest text-terracotta">04 • Proiecții Speciale</span>
@@ -650,7 +628,7 @@
         </a>
       </div>
 
-      <div class="rounded-2xl bg-[#8E735B] text-[#F4EFE6] p-5 sm:p-8 shadow-2xl border border-white/10">
+      <div class="rounded-2xl bg-[#181614] text-[#F4EFE6] p-5 sm:p-8 shadow-2xl border border-white/10">
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5 pb-6 border-b border-white/10">
           <div class="w-20 h-20 rounded-xl bg-gradient-to-br from-terracotta to-amber-900 flex items-center justify-center shrink-0 shadow-lg">
             <i data-lucide="disc-3" class="w-10 h-10 text-gold"></i>
@@ -674,7 +652,7 @@
         </div>
 
         <div id="playlist-tracks" class="divide-y divide-white/5 mt-2"></div>
-        <audio id="playlist-audio-element" preload="none"></audio>
+        <audio id="playlist-audio-element" preload="metadata"></audio>
       </div>
     </section>
 
@@ -738,7 +716,7 @@
        MODAL EXPONAT (FOTO HD + POEM + PLAYER AUDIO)
        ======================================================================== -->
   <div id="exhibit-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-    <div class="relative w-full max-w-4xl rounded-2xl bg-[#C7B8A3] dark:bg-[#B8A58C] text-[#241D18] dark:text-[#F4EFE6] shadow-2xl border border-amber-900/20 dark:border-white/15 overflow-hidden my-auto">
+    <div class="relative w-full max-w-4xl rounded-2xl bg-[#FAF5EB] dark:bg-[#1E1B18] text-[#241D18] dark:text-[#F4EFE6] shadow-2xl border border-amber-900/20 dark:border-white/15 overflow-hidden my-auto">
       <button onclick="closeExhibitModal()" aria-label="Închide" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/60 text-white hover:bg-terracotta flex items-center justify-center transition">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
@@ -836,9 +814,6 @@
        JAVASCRIPT: ANIMAȚIA CĂRȚII + DATELE ȘI LOGICA SITE-ULUI
        ======================================================================== -->
   <script>
-    /* ========================================================================
-       LOGICA ANIMAȚIEI DE DESCHIDERE A CĂRȚII PE MASĂ DE LEMN
-       ======================================================================== */
     let introTimers = [];
 
     function runBookIntroAnimation() {
@@ -849,7 +824,6 @@
       const leaf2 = document.getElementById('leaf-2');
       const leaf3 = document.getElementById('leaf-3');
 
-      // Reset stare inițială
       introTimers.forEach(clearTimeout);
       introTimers = [];
       stage.classList.remove('intro-zoom-out');
@@ -860,35 +834,12 @@
       leaf2.classList.remove('turned');
       leaf3.classList.remove('turned');
 
-      // 1. Îndreaptă cartea pe masa de lemn (0.6s)
-      introTimers.push(setTimeout(() => {
-        book.classList.add('book-centered');
-      }, 650));
-
-      // 2. Deschide coperta groasă din piele cu scris auriu (1.4s)
-      introTimers.push(setTimeout(() => {
-        cover.classList.add('opened');
-      }, 1450));
-
-      // 3. Răsfoiește prima filă (2.4s)
-      introTimers.push(setTimeout(() => {
-        leaf1.classList.add('turned');
-      }, 2400));
-
-      // 4. Răsfoiește a doua filă (3.0s)
-      introTimers.push(setTimeout(() => {
-        leaf2.classList.add('turned');
-      }, 3050));
-
-      // 5. Răsfoiește a treia filă și dezvăluie citatul (3.7s)
-      introTimers.push(setTimeout(() => {
-        leaf3.classList.add('turned');
-      }, 3700));
-
-      // 6. Tranziție lină (zoom-in în hârtia învechită) către site (5.1s)
-      introTimers.push(setTimeout(() => {
-        finishBookIntro();
-      }, 5150));
+      introTimers.push(setTimeout(() => book.classList.add('book-centered'), 650));
+      introTimers.push(setTimeout(() => cover.classList.add('opened'), 1450));
+      introTimers.push(setTimeout(() => leaf1.classList.add('turned'), 2400));
+      introTimers.push(setTimeout(() => leaf2.classList.add('turned'), 3050));
+      introTimers.push(setTimeout(() => leaf3.classList.add('turned'), 3700));
+      introTimers.push(setTimeout(() => finishBookIntro(), 5150));
     }
 
     function finishBookIntro() {
@@ -904,16 +855,13 @@
       runBookIntroAnimation();
     }
 
-    /* ========================================================================
-       SECȚIUNEA A: DATELE EXPOZIȚIEI (AICI ÎNLOCUIȚI POZELE, POEMELE ȘI MP3-URILE)
-       ======================================================================== */
     const EXHIBITS_DATA = [
       {
         id: 1,
         title: "Glasul Pământului — Pripas",
         subtitle: "Tablou I • Început de drum",
         image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=900&q=80",
-        audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        audio: "./piesa-1.mp3",
         poem: "Din huma grea a satului uitat,\nSe naște dorul vechi și neîmpăcat,\nIar drumul alb ce urcă spre Pripas\nPăstrează-n colb al vremii aprig pas."
       },
       {
@@ -921,7 +869,7 @@
         title: "Sărutul Gliei",
         subtitle: "Tablou II • Patima",
         image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80",
-        audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+        audio: "./piesa-2.mp3",
         poem: "Îngenuncheat în fața brazdei reci,\nSimțea cum lutul îi pătrunde-n vene,\nO dragoste mai tare decât vecii,\nȘi-un vis aprins sub grelele sprâncene."
       },
       {
@@ -929,7 +877,7 @@
         title: "Hora din Sat",
         subtitle: "Tablou III • Destine împletite",
         image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=900&q=80",
-        audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+        audio: "./piesa-3.mp3",
         poem: "În ritmul viu al strunei de vioară,\nSe-nvârte viața-n cerc amețitor,\nPriviri se caută și se-nfioară\nSub cerul cald al satului de dor."
       },
       {
@@ -937,19 +885,18 @@
         title: "Tăcerea Anei",
         subtitle: "Tablou IV • Suflet frânt",
         image: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=900&q=80",
-        audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        audio: "./piesa-1.mp3",
         poem: "O lacrimă ascunsă sub maramă,\nO inimă ce bate în zadar,\nIubirea ei tăcută, fără seamă,\nS-a stins ca o lumină pe altar."
       }
     ];
 
-    // Completăm automat până la 20 de exponate (înlocuiți cu datele voastre reale)
     for (let i = 5; i <= 20; i++) {
       EXHIBITS_DATA.push({
         id: i,
         title: `Tablou Literar #${String(i).padStart(2, '0')}`,
         subtitle: `Exponat ${i} din 20 • Colecția Rebreanu`,
         image: `https://picsum.photos/seed/rebreanu${i}/800/1000`,
-        audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+        audio: `./piesa-${((i - 1) % 3) + 1}.mp3`,
         poem: `Versuri dedicate exponatului #${i}:\n\nÎn file vechi cu miros de cerneală,\nTrăiesc povești ce nu se vor uita,\nIar glasul nostru-n taină le dezleagă\nSpre a le duce-n inima ta.`
       });
     }
@@ -996,8 +943,6 @@
         desc: "Ești idealist(ă), introspectiv(ă) și cauți sensuri dincolo de aparențe. Te atrag legăturile profunde, întrebările mari și ideea că unele întâlniri sau căutări pot schimba o viață."
       }
     ];
-
-    const CHARACTER_PROFILES = QUIZ_CHARACTERS;
 
     const QUIZ_QUESTIONS = [
       {
@@ -1172,56 +1117,46 @@
       }
     ];
 
+    // Înlocuiește fișierele audio locale din același folder cu numele exacte ale fișierelor tale MP3
     const PLAYLIST_DATA = [
       {
-        id: "la-danza",
         title: "La danza",
-        composer: "Gioachino Rossini — interpretat de Beniamino Gigli",
-        duration: "03:18",
-        src: "",
-        synthKey: "la_danza"
+        composer: "compus de Gioachino Rossini, interpretat de Beniamino Gigli",
+        duration: "--:--",
+        src: "./piesa-4.mp3"
       },
       {
-        id: "georgia-on-my-mind",
         title: "Georgia on my mind",
-        composer: "Kurt Hohenberger",
-        duration: "02:39",
-        src: "",
-        synthKey: "georgia"
+        composer: "compus de Kurt Hohenberger",
+        duration: "--:--",
+        src: "./piesa-3.mp3"
       },
       {
-        id: "ciuleandra",
         title: "Ciuleandra",
-        composer: "Maria Tănase",
-        duration: "03:19",
-        src: "",
-        synthKey: "ciuleandra"
+        composer: "compus de Maria Tănase",
+        duration: "--:--",
+        src: "./piesa-1.mp3"
       },
       {
-        id: "por-una-cabeza",
         title: "Por una cabeza",
-        composer: "Carlos Gardel",
-        duration: "02:25",
-        src: "",
-        synthKey: "por_una_cabeza"
+        composer: "compus de Carlos Gardel",
+        duration: "--:--",
+        src: "./piesa-2.mp3"
       }
     ];
 
     const CONTEST_CODES_DATA = [
       { code: 1, title: "Codul #1 — Pripas", question: "Cum se numește satul în care se petrece acțiunea principală a romanului „Ion”?", hint: "Verifică Tabloul #01 din galerie." },
       { code: 2, title: "Codul #2 — Automobilul", question: "Ce scriitor român a fost primul care și-a cumpărat mașină exclusiv din banii câștigați din literatură?", hint: "Răspunsul se află în Flashcard-urile de la secțiunea Curiozități." },
-      { code: 3, title: "Codul #3 — Muzică", question: "Ce piesă românească celebră interpretată de Maria Tănase se regăsește în Playlist-ul expoziției?", hint: "Ascultă secțiunea 05 • Playlist." },
+      { code: 3, title: "Codul #3 — Muzică", question: "Ce piesă celebră cântată de Maria Tănase se regăsește în Playlist-ul expoziției?", hint: "Ascultă secțiunea 05 • Playlist." },
       { code: 4, title: "Codul #4 — Pădurea spânzuraților", question: "Cine este personajul principal din romanul inspirat de drama fratelui său, Emil?", hint: "Poți afla și din Quiz-ul de personalitate." },
       { code: 5, title: "Codul #5 — Gestul real", question: "De la ce scenă reală văzută pe câmp a pornit ideea romanului „Ion”?", hint: "Caută în Flashcard-urile despre ritualurile de scris." },
       { code: 6, title: "Codul #6 — Animație", question: "Care este numele personajului din secțiunea de animații video ale expoziției?", hint: "Privește secțiunea 04 • Cinema." },
       { code: 7, title: "Codul #7 — Tabieturi nocturne", question: "Câți litri de cafea consuma Liviu Rebreanu pe noapte în timpul orelor de creație?", hint: "Răspunsul este pe unul dintre Flashcard-urile 3D." }
     ];
 
-    /* ========================================================================
-       INIȚIALIZARE & LOGICĂ APLICAȚIE
-       ======================================================================== */
     let currentExhibitIndex = 0;
-    let currentQuizStep = -1; // -1: ecran intro, 0..7: întrebări, 8: rezultat
+    let currentQuizStep = -1;
     let quizPicks = Array(8).fill(null);
     let currentPick = null;
     let currentPlaylistIndex = 0;
@@ -1237,8 +1172,6 @@
       renderContestCodes();
       handleUrlParameters();
       setupEventListeners();
-
-      // Pornește animația de deschidere a cărții pe masă de lemn
       runBookIntroAnimation();
     });
 
@@ -1318,7 +1251,7 @@
 
     function toggleExhibitAudio() {
       if (exhibitAudio.paused) {
-        exhibitAudio.play();
+        exhibitAudio.play().catch(() => {});
         updateModalPlayUI(true);
       } else {
         exhibitAudio.pause();
@@ -1359,6 +1292,7 @@
     }
 
     function formatTime(sec) {
+      if (!Number.isFinite(sec) || sec < 0) return '0:00';
       const m = Math.floor(sec / 60);
       const s = Math.floor(sec % 60);
       return `${m}:${String(s).padStart(2, '0')}`;
@@ -1369,7 +1303,6 @@
       if (!box) return;
 
       if (currentQuizStep === -1) {
-        // Ecran Intro Quiz
         box.innerHTML = `
           <div class="text-center space-y-6">
             <div class="rounded-xl overflow-hidden border border-amber-900/15 dark:border-white/10 shadow-md">
@@ -1399,7 +1332,6 @@
       }
 
       if (currentQuizStep >= 0 && currentQuizStep < QUIZ_QUESTIONS.length) {
-        // Ecran Întrebare
         const qObj = QUIZ_QUESTIONS[currentQuizStep];
         const pct = Math.round((currentQuizStep / QUIZ_QUESTIONS.length) * 100);
         const selPick = quizPicks[currentQuizStep] !== null ? quizPicks[currentQuizStep] : currentPick;
@@ -1457,7 +1389,6 @@
         return;
       }
 
-      // Ecran Rezultat
       showQuizResult(box);
     }
 
@@ -1524,20 +1455,6 @@
       renderQuiz();
     }
 
-    function resetQuiz() {
-      restartQuiz();
-    }
-
-    function answerQuiz(charKey) {
-      // Compatibilitate dacă este apelat dintr-un handler vechi
-      if (typeof charKey === 'number') {
-        selectAndAdvanceQuiz(charKey);
-      }
-    }
-
-    /* ========================================================================
-       SHARE CU ICONIȚE, WHATSAPP STARE, INSTAGRAM STARE, FACEBOOK & SOCIAL MEDIA
-       ======================================================================== */
     function escapeAttr(str) {
       return String(str)
         .replace(/&/g, "&amp;")
@@ -1670,10 +1587,6 @@
       copyTextToClipboard(combined);
       window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(combined)}`, '_blank', 'noopener,noreferrer');
       setShareFeedback('more-share-label', 'Copiat • Deschis X');
-    }
-
-    function shareQuizResult(name, work) {
-      shareMoreApps(name, work);
     }
 
     const BRAND_SVGS = {
@@ -1858,92 +1771,19 @@
     }
 
     const playlistAudio = document.getElementById('playlist-audio-element');
-    let audioCtx = null;
-    let synthTimer = null;
-    let synthStep = 0;
-
-    const MELODY_PATTERNS = {
-      la_danza: {
-        tempoMs: 190,
-        notes: [659.25, 783.99, 880.00, 783.99, 659.25, 587.33, 659.25, 523.25, 587.33, 659.25, 783.99, 659.25]
-      },
-      georgia: {
-        tempoMs: 360,
-        notes: [261.63, 329.63, 392.00, 440.00, 392.00, 349.23, 329.63, 293.66, 261.63, 293.66, 329.63, 261.63]
-      },
-      ciuleandra: {
-        tempoMs: 210,
-        notes: [440.00, 493.88, 523.25, 659.25, 587.33, 523.25, 493.88, 440.00, 523.25, 587.33, 659.25, 523.25]
-      },
-      por_una_cabeza: {
-        tempoMs: 240,
-        notes: [440.00, 523.25, 659.25, 587.33, 523.25, 493.88, 440.00, 392.00, 440.00, 523.25, 587.33, 440.00]
-      }
-    };
-
-    function ensureAudioContext() {
-      const Ctx = window.AudioContext || window.webkitAudioContext;
-      if (!Ctx) return null;
-      if (!audioCtx) audioCtx = new Ctx();
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume().catch(() => {});
-      }
-      return audioCtx;
-    }
-
-    function playTone(freq, durationSec) {
-      const ctx = ensureAudioContext();
-      if (!ctx || !freq) return;
-      const now = ctx.currentTime;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, now);
-      gain.gain.setValueAtTime(0.001, now);
-      gain.gain.exponentialRampToValueAtTime(0.12, now + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0008, now + durationSec);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(now);
-      osc.stop(now + durationSec + 0.02);
-    }
-
-    function stopSynthPlayback() {
-      if (synthTimer) {
-        clearInterval(synthTimer);
-        synthTimer = null;
-      }
-    }
-
-    function startSynthPlayback(track) {
-      stopSynthPlayback();
-      const pattern = MELODY_PATTERNS[track.synthKey] || MELODY_PATTERNS.la_danza;
-      synthStep = 0;
-      playTone(pattern.notes[synthStep % pattern.notes.length], (pattern.tempoMs / 1000) * 0.9);
-      synthStep++;
-      synthTimer = setInterval(() => {
-        if (!isPlaylistPlaying) {
-          stopSynthPlayback();
-          return;
-        }
-        const freq = pattern.notes[synthStep % pattern.notes.length];
-        playTone(freq, (pattern.tempoMs / 1000) * 0.9);
-        synthStep++;
-      }, pattern.tempoMs);
-    }
 
     function renderPlaylist() {
       const list = document.getElementById('playlist-tracks');
       list.innerHTML = PLAYLIST_DATA.map((track, idx) => `
-        <button onclick="playPlaylistTrack(${idx})" class="w-full py-3.5 px-3 rounded-xl hover:bg-white/10 flex items-center justify-between gap-4 text-left transition ${idx === currentPlaylistIndex && isPlaylistPlaying ? 'bg-white/15 text-gold font-semibold' : ''}">
+        <button onclick="playPlaylistTrack(${idx})" class="w-full py-3.5 px-3 rounded-xl hover:bg-white/5 flex items-center justify-between gap-4 text-left transition ${idx === currentPlaylistIndex && isPlaylistPlaying ? 'bg-white/10 text-gold' : ''}">
           <div class="flex items-center gap-3.5 min-w-0">
-            <span class="w-6 text-xs font-mono opacity-75">${idx + 1}</span>
+            <span class="w-6 text-xs font-mono opacity-60">${idx + 1}</span>
             <div class="truncate">
               <p class="font-semibold text-sm truncate">${track.title}</p>
-              <p class="text-xs opacity-75 truncate">${track.composer}</p>
+              <p class="text-xs text-white/60 truncate">${track.composer}</p>
             </div>
           </div>
-          <span class="text-xs font-mono opacity-75 shrink-0">${track.duration}</span>
+          <span class="text-xs font-mono opacity-60 shrink-0">${track.duration}</span>
         </button>
       `).join('');
     }
@@ -1951,31 +1791,44 @@
     function playPlaylistTrack(idx) {
       currentPlaylistIndex = idx;
       const track = PLAYLIST_DATA[idx];
-      stopSynthPlayback();
-      playlistAudio.pause();
-
-      if (track.src) {
-        playlistAudio.src = track.src;
-        playlistAudio.play().catch(() => startSynthPlayback(track));
-      } else {
-        startSynthPlayback(track);
+      playlistAudio.src = track.src;
+      playlistAudio.load();
+      const p = playlistAudio.play();
+      if (p !== undefined) {
+        p.then(() => {
+          isPlaylistPlaying = true;
+          document.getElementById('playlist-now-playing').textContent = `Acum rulează: ${track.title} (${track.src})`;
+          updatePlaylistMainBtn();
+          renderPlaylist();
+        }).catch(() => {
+          isPlaylistPlaying = false;
+          document.getElementById('playlist-now-playing').textContent = `Nu s-a putut reda ${track.src}. Verifică numele fișierului MP3 în același folder.`;
+          updatePlaylistMainBtn();
+          renderPlaylist();
+        });
       }
-
-      isPlaylistPlaying = true;
-      document.getElementById('playlist-now-playing').textContent = `Acum rulează: ${track.title} — ${track.composer}`;
-      updatePlaylistMainBtn();
-      renderPlaylist();
     }
 
     function togglePlaylistPlay() {
-      const track = PLAYLIST_DATA[currentPlaylistIndex] || PLAYLIST_DATA[0];
-      if (!isPlaylistPlaying) {
+      if (!playlistAudio.src) {
         playPlaylistTrack(currentPlaylistIndex);
+        return;
+      }
+      if (playlistAudio.paused) {
+        playlistAudio.play().then(() => {
+          isPlaylistPlaying = true;
+          const track = PLAYLIST_DATA[currentPlaylistIndex];
+          document.getElementById('playlist-now-playing').textContent = `Acum rulează: ${track.title} (${track.src})`;
+          updatePlaylistMainBtn();
+          renderPlaylist();
+        }).catch(() => {
+          isPlaylistPlaying = false;
+          document.getElementById('playlist-now-playing').textContent = `Fișierul ${PLAYLIST_DATA[currentPlaylistIndex].src} nu a fost găsit în folder.`;
+          updatePlaylistMainBtn();
+        });
       } else {
-        isPlaylistPlaying = false;
         playlistAudio.pause();
-        stopSynthPlayback();
-        document.getElementById('playlist-now-playing').textContent = `Pauză: ${track.title} — ${track.composer}`;
+        isPlaylistPlaying = false;
         updatePlaylistMainBtn();
         renderPlaylist();
       }
@@ -2109,6 +1962,17 @@
         document.getElementById('concurs').classList.toggle('hidden', !active);
         document.getElementById('nav-concurs-link').classList.toggle('hidden', !active);
         document.getElementById('mobile-concurs-link').classList.toggle('hidden', !active);
+      });
+
+      playlistAudio.addEventListener('loadedmetadata', () => {
+        if (Number.isFinite(playlistAudio.duration)) {
+          PLAYLIST_DATA[currentPlaylistIndex].duration = formatTime(playlistAudio.duration);
+          renderPlaylist();
+        }
+      });
+
+      playlistAudio.addEventListener('ended', () => {
+        nextPlaylistTrack();
       });
     }
   </script>
