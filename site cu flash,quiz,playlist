@@ -1120,22 +1120,28 @@
     // Înlocuiește fișierele audio locale din același folder cu numele exacte ale fișierelor tale MP3
     const PLAYLIST_DATA = [
       {
-        title: "Piesa 1 — Din arhiva expoziției",
-        composer: "Fișier local în același director (./piesa-1.mp3)",
+        title: "La danza",
+        composer: "compus de Gioachino Rossini, interpretat de Beniamino Gigli",
+        duration: "--:--",
+        src: "./piesa-4.mp3"
+      },
+      {
+        title: "Georgia on my mind",
+        composer: "compus de Kurt Hohenberger",
+        duration: "--:--",
+        src: "./piesa-3.mp3"
+      },
+      {
+        title: "Ciuleandra",
+        composer: "compus de Maria Tănase",
         duration: "--:--",
         src: "./piesa-1.mp3"
       },
       {
-        title: "Piesa 2 — Din arhiva expoziției",
-        composer: "Fișier local în același director (./piesa-2.mp3)",
+        title: "Por una cabeza",
+        composer: "compus de Carlos Gardel",
         duration: "--:--",
         src: "./piesa-2.mp3"
-      },
-      {
-        title: "Piesa 3 — Din arhiva expoziției",
-        composer: "Fișier local în același director (./piesa-3.mp3)",
-        duration: "--:--",
-        src: "./piesa-3.mp3"
       }
     ];
 
