@@ -1,1151 +1,1487 @@
 <!DOCTYPE html>
 <html lang="ro" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universul Liviu Rebreanu — Expoziție Interactivă Phygital</title>
-    <meta name="description" content="Expoziție culturală interactivă dedicată lui Liviu Rebreanu: 20 de exponate foto-poetice cu ghid audio, quiz de personalitate, flashcard-uri 3D, cinema și vânătoare de coduri QR.">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Universul Liviu Rebreanu — Expoziție Digitală Interactivă</title>
 
-    <!-- Google Fonts: Playfair Display (Editorial/Literar) & Plus Jakarta Sans (UI Modern) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts: Playfair Display, Cormorant Garamond & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Lucide Icons CDN -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- QRCode.js CDN (pentru generarea reală a codurilor QR gata de printat pentru sala de expoziție) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- QRCode.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-    <!-- Configurare Tailwind & Variabile de Temă -->
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        serif: ['"Playfair Display"', 'Georgia', 'serif'],
-                        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
-                    },
-                    colors: {
-                        parchment: {
-                            50: '#FAF8F5',
-                            100: '#F6F3EC',
-                            200: '#EAE3D5',
-                            300: '#D8CCB8',
-                            800: '#2A2622',
-                            900: '#1C1917',
-                        },
-                        obsidian: {
-                            900: '#111111',
-                            800: '#1A1918',
-                            700: '#262422',
-                        },
-                        terracotta: {
-                            DEFAULT: '#9E2A2B',
-                            light: '#B83B3C',
-                            dark: '#7A1E1F',
-                        },
-                        gold: {
-                            DEFAULT: '#C59B27',
-                            light: '#DFB645',
-                            dark: '#9E7918',
-                        }
-                    }
-                }
-            }
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            literary: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            parchment: '#F3ECE0',
+            parchmentCard: '#FAF5EB',
+            parchmentDeep: '#E7DEC8',
+            charcoal: '#141210',
+            charcoalCard: '#1E1B18',
+            terracotta: '#9E2A2B',
+            terracottaHover: '#7D1E1F',
+            gold: '#C59B27',
+            goldLight: '#E8C565',
+            woodDark: '#1C1008',
+            leather: '#4A1811',
+            leatherDark: '#2A0C08'
+          }
         }
-    </script>
+      }
+    }
+  </script>
 
-    <style>
-        /* ==========================================================================
-           STILURI PERSONALIZATE — ESTETICĂ MUZEU DIGITAL / EDITORIAL DE ARTĂ
-           ========================================================================== */
-        :root {
-            --bg-primary: #F6F3EC;
-            --bg-card: #FAF8F5;
-            --text-primary: #1C1917;
-            --text-secondary: #57534E;
-            --border-color: #E2D9C8;
-            --accent-red: #9E2A2B;
-            --accent-gold: #C59B27;
-        }
+  <style>
+    /* ==========================================================================
+       TEXTURĂ AUTENTICĂ DE HÂRTIE ÎNVECHITĂ (SVG NOISE + FIBRE + VIGNETTE)
+       ========================================================================== */
+    :root {
+      --bg-primary: #F3ECE0;
+      --bg-card: #FAF5EB;
+      --text-primary: #241D18;
+      --text-secondary: #5A4F45;
+      --border-color: rgba(139, 108, 72, 0.25);
+    }
 
-        html.dark {
-            --bg-primary: #111111;
-            --bg-card: #1A1918;
-            --text-primary: #F4EFE6;
-            --text-secondary: #A8A29E;
-            --border-color: #2E2B28;
-            --accent-red: #C84647;
-            --accent-gold: #DFB645;
-        }
+    html.dark {
+      --bg-primary: #141210;
+      --bg-card: #1E1B18;
+      --text-primary: #F4EFE6;
+      --text-secondary: #A69F95;
+      --border-color: rgba(244, 239, 230, 0.12);
+    }
 
-        body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            transition: background-color 0.35s ease, color 0.35s ease;
-            overflow-x: hidden;
-        }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      transition: background-color 0.45s ease, color 0.45s ease;
+      overflow-x: hidden;
+    }
 
-        /* Textură subtilă de hârtie de muzeu */
-        .paper-texture {
-            background-image: radial-gradient(rgba(158, 42, 43, 0.04) 1px, transparent 0);
-            background-size: 24px 24px;
-        }
+    /* Strat permanent de textură de hârtie învechită peste tot site-ul */
+    .aged-paper-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 40;
+      opacity: 0.48;
+      mix-blend-mode: multiply;
+      background-image:
+        radial-gradient(circle at 18% 22%, rgba(166, 124, 72, 0.14) 0%, transparent 45%),
+        radial-gradient(circle at 82% 78%, rgba(138, 98, 52, 0.16) 0%, transparent 50%),
+        radial-gradient(ellipse at center, transparent 55%, rgba(112, 78, 42, 0.18) 100%),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0  0 0.95 0 0 0  0 0 0.85 0 0  0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperNoise)'/%3E%3C/svg%3E");
+    }
 
-        /* Stiluri pentru Flashcard-uri 3D */
-        .perspective-1000 {
-            perspective: 1000px;
-        }
-        .transform-style-3d {
-            transform-style: preserve-3d;
-            transition: transform 0.65s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-        .backface-hidden {
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-        }
-        .rotate-y-180 {
-            transform: rotateY(180deg);
-        }
-        .flashcard.flipped .transform-style-3d {
-            transform: rotateY(180deg);
-        }
+    html.dark .aged-paper-overlay {
+      opacity: 0.18;
+      mix-blend-mode: screen;
+    }
 
-        /* Animație undă sonoră pentru Audio Player */
-        @keyframes soundWave {
-            0%, 100% { transform: scaleY(0.25); }
-            50% { transform: scaleY(1); }
-        }
-        .wave-bar {
-            transform-origin: bottom;
-            transition: transform 0.2s ease;
-        }
-        .playing .wave-bar {
-            animation: soundWave 0.9s ease-in-out infinite;
-        }
-        .playing .wave-bar:nth-child(2n) { animation-delay: 0.15s; }
-        .playing .wave-bar:nth-child(3n) { animation-delay: 0.3s; }
-        .playing .wave-bar:nth-child(4n) { animation-delay: 0.45s; }
-        .playing .wave-bar:nth-child(5n) { animation-delay: 0.2s; }
+    /* ==========================================================================
+       ANIMAȚIE INTRODUCTIVĂ 3D: CARTE VECHE PE LEMN + RĂSFOIRE FILE
+       ========================================================================== */
+    #book-intro-stage {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 2200px;
+      overflow: hidden;
+      /* Textură bogată de masă din lemn vechi de stejar */
+      background:
+        radial-gradient(circle at center, rgba(62, 36, 18, 0.35) 0%, rgba(14, 7, 3, 0.92) 100%),
+        repeating-linear-gradient(
+          90deg,
+          #26150A 0px,
+          #2E1A0D 18px,
+          #1F1108 36px,
+          #2B180C 58px,
+          #1B0E06 80px
+        );
+      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
 
-        /* Scrollbar elegant */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-primary);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #9E2A2B88;
-            border-radius: 9999px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #9E2A2B;
-        }
+    /* Fibra lemnului generată cu SVG */
+    #book-intro-stage::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.35;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='woodGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.015 0.25' numOctaves='3' seed='8'/%3E%3CfeColorMatrix type='matrix' values='0.4 0 0 0 0.08  0 0.25 0 0 0.04  0 0 0.12 0 0.01  0 0 0 0.8 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23woodGrain)'/%3E%3C/svg%3E");
+    }
 
-        /* Toast Notification */
-        #toast-container {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            pointer-events: none;
-        }
-    </style>
+    #book-intro-stage.intro-zoom-out {
+      opacity: 0;
+      transform: scale(1.22);
+      pointer-events: none;
+    }
+
+    /* Cartea 3D */
+    .ancient-book {
+      position: relative;
+      width: min(86vw, 390px);
+      height: min(74vh, 530px);
+      transform-style: preserve-3d;
+      transform: rotateX(14deg) rotateY(-6deg) rotateZ(-1deg);
+      transition: transform 1.2s cubic-bezier(0.25, 1, 0.35, 1);
+      box-shadow:
+        -22px 32px 55px rgba(0, 0, 0, 0.85),
+        -6px 10px 18px rgba(0, 0, 0, 0.65);
+    }
+
+    .ancient-book.book-centered {
+      transform: rotateX(4deg) rotateY(0deg) rotateZ(0deg) scale(1.04);
+    }
+
+    @media (min-width: 768px) {
+      .ancient-book.book-centered {
+        transform: translateX(25%) rotateX(4deg) rotateY(0deg) rotateZ(0deg) scale(1.06);
+      }
+    }
+
+    /* Coperta spate + blocul gros de file */
+    .book-back-board {
+      position: absolute;
+      inset: 0;
+      border-radius: 4px 14px 14px 4px;
+      background: linear-gradient(135deg, #3D120C 0%, #240905 100%);
+      border: 2px solid #5C2218;
+      box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.8);
+      transform: translateZ(-14px);
+    }
+
+    /* Muchia filelor (grosimea cărții) */
+    .book-pages-block {
+      position: absolute;
+      top: 10px;
+      bottom: 10px;
+      left: 6px;
+      right: 10px;
+      border-radius: 2px 10px 10px 2px;
+      background: #EFE4CE;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        #EFE4CE 0px,
+        #E2D2B5 2px,
+        #F5ECD9 4px
+      );
+      box-shadow:
+        inset -6px 0 12px rgba(92, 64, 32, 0.35),
+        inset 12px 0 22px rgba(48, 30, 14, 0.45);
+      transform: translateZ(-4px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 28px 24px;
+      color: #2E2218;
+    }
+
+    /* Fiecare filă care se răsfoiește */
+    .flipping-leaf {
+      position: absolute;
+      top: 10px;
+      bottom: 10px;
+      left: 6px;
+      right: 10px;
+      transform-origin: left center;
+      transform-style: preserve-3d;
+      border-radius: 2px 10px 10px 2px;
+      background: linear-gradient(90deg, #DFCFAE 0%, #F4EBDA 14%, #EFE3CC 88%, #DECBA8 100%);
+      box-shadow:
+        inset 10px 0 18px rgba(65, 42, 18, 0.25),
+        0 4px 12px rgba(0, 0, 0, 0.22);
+      transition: transform 1.15s cubic-bezier(0.645, 0.045, 0.355, 1);
+      padding: 26px 22px;
+      backface-visibility: visible;
+      overflow: hidden;
+    }
+
+    .flipping-leaf.turned {
+      transform: rotateY(-176deg);
+    }
+
+    /* Coperta față din piele veche + ornament auriu */
+    .book-front-cover {
+      position: absolute;
+      inset: 0;
+      transform-origin: left center;
+      transform-style: preserve-3d;
+      border-radius: 4px 14px 14px 4px;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(120, 42, 28, 0.45) 0%, transparent 60%),
+        linear-gradient(145deg, #541B12 0%, #370F09 55%, #230804 100%);
+      border: 2px solid #6E281B;
+      box-shadow:
+        inset 14px 0 24px rgba(0, 0, 0, 0.65),
+        inset -2px 0 6px rgba(232, 197, 101, 0.25);
+      transition: transform 1.45s cubic-bezier(0.645, 0.045, 0.355, 1);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 22px;
+    }
+
+    .book-front-cover.opened {
+      transform: rotateY(-178deg);
+    }
+
+    /* Cotorul cărții (nervuri în relief) */
+    .book-spine-ridges {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 24px;
+      background: linear-gradient(90deg, #1E0704 0%, #4A1810 50%, #240905 100%);
+      border-right: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 4px 0 0 4px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      padding: 24px 0;
+    }
+
+    .book-spine-ridges span {
+      display: block;
+      height: 5px;
+      width: 100%;
+      background: linear-gradient(to bottom, rgba(232,197,101,0.35), rgba(0,0,0,0.6));
+      box-shadow: 0 2px 3px rgba(0,0,0,0.7);
+    }
+
+    /* Chenar auriu embosat pe copertă */
+    .gold-emboss-frame {
+      position: relative;
+      width: calc(100% - 18px);
+      height: 100%;
+      margin-left: 16px;
+      border: 1.5px solid rgba(218, 178, 76, 0.65);
+      outline: 1px solid rgba(218, 178, 76, 0.28);
+      outline-offset: -6px;
+      border-radius: 2px 8px 8px 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 16px;
+      text-align: center;
+    }
+
+    .gold-foil-text {
+      background: linear-gradient(180deg, #F7E199 0%, #D4A438 48%, #9C721C 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.85));
+    }
+
+    /* ==========================================================================
+       RESTUL STILURILOR SITE-ULUI (FLASHCARD 3D, PLAYER AUDIO, ETC.)
+       ========================================================================== */
+    .perspective-1000 { perspective: 1000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+    .backface-hidden { backface-visibility: hidden; }
+    .rotate-y-180 { transform: rotateY(180deg); }
+
+    @keyframes eqBar {
+      0%, 100% { height: 22%; }
+      50% { height: 95%; }
+    }
+    .eq-playing .eq-bar-1 { animation: eqBar 0.75s ease-in-out infinite; }
+    .eq-playing .eq-bar-2 { animation: eqBar 0.55s ease-in-out infinite 0.15s; }
+    .eq-playing .eq-bar-3 { animation: eqBar 0.85s ease-in-out infinite 0.3s; }
+    .eq-playing .eq-bar-4 { animation: eqBar 0.65s ease-in-out infinite 0.1s; }
+
+    /* Stil subtil de margine de hârtie pentru carduri */
+    .paper-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 6px 24px -8px rgba(68, 46, 22, 0.14);
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      #qr-print-area, #qr-print-area * { visibility: visible; }
+      #qr-print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+        color: black !important;
+      }
+    }
+  </style>
 </head>
-<body class="font-sans antialiased paper-texture selection:bg-terracotta selection:text-white">
+<body class="font-sans antialiased selection:bg-terracotta selection:text-white">
 
-    <!-- ==========================================================================
-         1. BARA DE NAVIGAȚIE (STICKY HEADER + MENIU MOBIL)
-         ========================================================================== -->
-    <header class="sticky top-0 z-40 backdrop-blur-md bg-[#F6F3EC]/90 dark:bg-[#111111]/90 border-b border-[#E2D9C8] dark:border-[#2E2B28] transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16 sm:h-20">
-                <!-- Logo / Titlu Expoziție -->
-                <a href="#acasa" class="flex items-center gap-3 group">
-                    <div class="w-10 h-10 rounded-xl bg-terracotta text-white flex items-center justify-center font-serif font-bold text-xl shadow-md group-hover:scale-105 transition-transform">
-                        LR
-                    </div>
-                    <div>
-                        <span class="font-serif font-bold text-base sm:text-lg tracking-tight block leading-none">LIVIU REBREANU</span>
-                        <span class="text-[11px] uppercase tracking-[0.2em] text-terracotta dark:text-gold font-semibold">Muzeu Digital Phygital</span>
-                    </div>
-                </a>
+  <!-- Textură permanentă de hârtie învechită peste tot site-ul -->
+  <div class="aged-paper-overlay" aria-hidden="true"></div>
 
-                <!-- Link-uri Navigație Desktop -->
-                <nav class="hidden lg:flex items-center gap-6 text-sm font-medium">
-                    <a href="#galerie" class="hover:text-terracotta dark:hover:text-gold transition-colors">Galerie (20)</a>
-                    <a href="#quiz" class="hover:text-terracotta dark:hover:text-gold transition-colors">Quiz Personaj</a>
-                    <a href="#flashcarduri" class="hover:text-terracotta dark:hover:text-gold transition-colors">Curiozități 3D</a>
-                    <a href="#cinema" class="hover:text-terracotta dark:hover:text-gold transition-colors">Cinema & Animații</a>
-                    <a href="#playlist" class="hover:text-terracotta dark:hover:text-gold transition-colors">Playlist</a>
-                    <a href="#concurs" id="nav-concurs-link" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-terracotta/10 text-terracotta dark:bg-gold/15 dark:text-gold font-semibold hover:bg-terracotta hover:text-white transition-all">
-                        <span class="w-2 h-2 rounded-full bg-terracotta dark:bg-gold animate-pulse"></span>
-                        Concurs 7 QR
-                    </a>
-                    <button onclick="openTeamGuideModal()" class="hover:text-terracotta dark:hover:text-gold transition-colors">Ghid Echipă</button>
-                </nav>
+  <!-- ========================================================================
+       ANIMAȚIE DE DESCHIDERE FULL-SCREEN: CARTE VECHE PE MASĂ DE LEMN
+       ======================================================================== -->
+  <div id="book-intro-stage" role="dialog" aria-label="Introducere Liviu Rebreanu">
+    <div id="ancient-book" class="ancient-book">
+      <!-- Coperta spate -->
+      <div class="book-back-board"></div>
 
-                <!-- Acțiuni Dreapta: Toggle Temă + Buton QR + Meniu Mobil -->
-                <div class="flex items-center gap-2 sm:gap-3">
-                    <button onclick="openQrSimulator()" title="Simulează scanarea unui cod QR din sală" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-[#D8CCB8] dark:border-[#2E2B28] text-xs font-semibold hover:border-terracotta dark:hover:border-gold transition-colors">
-                        <i data-lucide="qr-code" class="w-4 h-4 text-terracotta dark:text-gold"></i>
-                        <span>Scan QR</span>
-                    </button>
+      <!-- Blocul de file (Pagina finală de gardă înainte de tranziția în site) -->
+      <div class="book-pages-block font-literary">
+        <div class="text-center border-b border-amber-900/25 pb-3">
+          <p class="text-[11px] uppercase tracking-[0.28em] text-amber-900/70">Arhivă Literară &amp; Expoziție Digitală</p>
+          <p class="font-serif italic text-lg text-terracotta mt-1">„Glasul pământului și al iubirii”</p>
+        </div>
+        <div class="my-auto text-center px-2 space-y-3">
+          <p class="text-base sm:text-lg italic leading-relaxed text-stone-800">
+            „Nu frumosul, o născocire omenească, interesează în artă, ci pulsația vieții. Când ai reușit să închizi în cuvinte câteva clipe de viață adevărată, ai realizat o operă mai prețioasă decât toate frazele frumoase din lume.”
+          </p>
+          <p class="font-serif font-bold text-xs uppercase tracking-[0.25em] text-amber-950">— Liviu Rebreanu</p>
+        </div>
+        <div class="text-center border-t border-amber-900/20 pt-2">
+          <span class="text-[11px] tracking-[0.2em] uppercase text-amber-900/60">Se deschide expoziția...</span>
+        </div>
+      </div>
 
-                    <!-- Comutator Pergament Cald / Dark Mode -->
-                    <button id="theme-toggle" onclick="toggleTheme()" aria-label="Schimbă tema vizuală" class="p-2.5 rounded-xl border border-[#D8CCB8] dark:border-[#2E2B28] bg-white/60 dark:bg-[#1A1918] hover:border-terracotta dark:hover:border-gold transition-all">
-                        <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-stone-800"></i>
-                        <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-gold"></i>
-                    </button>
+      <!-- Fila 3 care se răsfoiește -->
+      <div id="leaf-3" class="flipping-leaf font-literary text-stone-800 flex flex-col justify-between" style="z-index: 12;">
+        <div class="flex justify-between text-[10px] uppercase tracking-widest text-amber-900/60 border-b border-amber-900/20 pb-2">
+          <span>Capitolul III</span>
+          <span>1920 — 1932</span>
+        </div>
+        <div class="space-y-2.5 text-sm italic leading-relaxed opacity-85">
+          <p>„Satul Pripas dormea dus în căldura amiezii. Ulița mare se încolăcea printre casele bătrânești ca o panglică albă, prăfuită...”</p>
+          <p class="text-xs not-italic text-amber-950/75 border-l-2 border-terracotta pl-2.5">20 de tablouri fotografice, poeme rostite, curiozități și personaje nemuritoare.</p>
+        </div>
+        <div class="text-right text-[11px] italic text-amber-900/60">III</div>
+      </div>
 
-                    <!-- Buton Meniu Mobil -->
-                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Deschide meniul" class="lg:hidden p-2.5 rounded-xl border border-[#D8CCB8] dark:border-[#2E2B28] bg-white/60 dark:bg-[#1A1918]">
-                        <i data-lucide="menu" class="w-5 h-5"></i>
-                    </button>
-                </div>
+      <!-- Fila 2 care se răsfoiește -->
+      <div id="leaf-2" class="flipping-leaf font-literary text-stone-800 flex flex-col justify-between" style="z-index: 14;">
+        <div class="flex justify-between text-[10px] uppercase tracking-widest text-amber-900/60 border-b border-amber-900/20 pb-2">
+          <span>Manuscris Original</span>
+          <span>Târlișua • Prislop</span>
+        </div>
+        <div class="my-auto text-center space-y-2">
+          <p class="font-serif text-xl font-bold text-amber-950">ION • PĂDUREA SPÂNZURAȚILOR • RĂSCOALA</p>
+          <div class="w-16 h-[1px] bg-terracotta/50 mx-auto"></div>
+          <p class="text-sm italic text-stone-700">O incursiune vizuală și sonoră în universul creatorului romanului românesc modern.</p>
+        </div>
+        <div class="text-right text-[11px] italic text-amber-900/60">II</div>
+      </div>
+
+      <!-- Fila 1 (Pagina de titlu interioară) -->
+      <div id="leaf-1" class="flipping-leaf font-literary text-stone-800 flex flex-col justify-between" style="z-index: 16;">
+        <div class="text-center pt-2">
+          <span class="text-[10px] uppercase tracking-[0.3em] text-amber-900/70">Ediție Specială</span>
+        </div>
+        <div class="text-center space-y-3 my-auto">
+          <p class="text-xs uppercase tracking-[0.25em] text-terracotta font-semibold">Expoziție Interactivă</p>
+          <h2 class="font-serif text-3xl font-bold text-stone-900 tracking-wide">LIVIU REBREANU</h2>
+          <p class="text-sm italic text-stone-600">1885 — 1944</p>
+        </div>
+        <div class="text-center text-[11px] uppercase tracking-[0.22em] text-amber-900/60 pb-1">
+          Colecție Digitală
+        </div>
+      </div>
+
+      <!-- Coperta față din piele cu scris auriu LIVIU REBREANU -->
+      <div id="book-front-cover" class="book-front-cover">
+        <div class="book-spine-ridges" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="gold-emboss-frame">
+          <div class="space-y-1.5">
+            <p class="text-[10px] uppercase tracking-[0.32em] text-amber-200/75 font-sans">Arhivă Literară</p>
+            <div class="w-12 h-[1px] bg-amber-300/40 mx-auto"></div>
+          </div>
+
+          <div class="my-auto space-y-3">
+            <!-- Ornament literar SVG -->
+            <svg class="w-10 h-10 mx-auto text-amber-300/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+              <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
+            </svg>
+            <h1 class="font-serif text-3xl sm:text-4xl font-extrabold tracking-[0.14em] uppercase gold-foil-text leading-tight">
+              LIVIU<br/>REBREANU
+            </h1>
+            <div class="w-20 h-[1px] bg-amber-300/45 mx-auto"></div>
+            <p class="font-literary italic text-base text-amber-100/85 tracking-wide">
+              Opere, Glasuri &amp; Destine
+            </p>
+          </div>
+
+          <div class="space-y-1">
+            <p class="text-[10px] uppercase tracking-[0.28em] text-amber-200/65 font-sans">Ediție de Colecție</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buton discret pentru a sări animația dacă cineva revine des pe site -->
+    <button onclick="finishBookIntro()" class="fixed bottom-6 right-6 z-50 px-4 py-2 rounded-full bg-black/50 hover:bg-black/75 text-amber-100/85 text-xs uppercase tracking-widest border border-amber-300/30 backdrop-blur-sm transition">
+      Intră direct în expoziție →
+    </button>
+  </div>
+
+  <!-- ========================================================================
+       CONȚINUTUL PRINCIPAL AL SITE-ULUI (CU TEXTURĂ DE HÂRTIE ÎNVECHITĂ)
+       ======================================================================== -->
+  <div id="main-site-wrapper" class="relative z-10 transition-opacity duration-700">
+
+    <!-- BARA DE NAVIGARE -->
+    <header class="sticky top-0 z-30 backdrop-blur-md bg-[#F3ECE0]/90 dark:bg-[#141210]/90 border-b border-amber-900/15 dark:border-white/10 transition-colors">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
+        <!-- Logo + Buton rejucare animație carte -->
+        <div class="flex items-center gap-3">
+          <a href="#" class="flex items-center gap-2.5 group">
+            <span class="w-9 h-9 rounded-lg bg-terracotta text-parchment flex items-center justify-center font-serif font-bold text-lg shadow-sm group-hover:scale-105 transition-transform">
+              LR
+            </span>
+            <div class="leading-tight">
+              <span class="font-serif font-bold text-base sm:text-lg tracking-tight block">Universul Rebreanu</span>
+              <span class="text-[11px] uppercase tracking-widest opacity-70 hidden sm:block">Expoziție Digitală</span>
             </div>
+          </a>
         </div>
 
-        <!-- Meniu Dropdown Mobil -->
-        <div id="mobile-menu" class="hidden lg:hidden border-t border-[#E2D9C8] dark:border-[#2E2B28] bg-[#FAF8F5] dark:bg-[#161514] px-4 pt-3 pb-6 space-y-2 shadow-xl">
-            <a href="#galerie" onclick="toggleMobileMenu()" class="block px-4 py-3 rounded-xl font-medium hover:bg-terracotta/10">1. Galeria Interactivă (20 Exponate)</a>
-            <a href="#quiz" onclick="toggleMobileMenu()" class="block px-4 py-3 rounded-xl font-medium hover:bg-terracotta/10">2. Quiz: Ce personaj Rebreanu ești?</a>
-            <a href="#flashcarduri" onclick="toggleMobileMenu()" class="block px-4 py-3 rounded-xl font-medium hover:bg-terracotta/10">3. Curiozități — Flashcard-uri 3D</a>
-            <a href="#cinema" onclick="toggleMobileMenu()" class="block px-4 py-3 rounded-xl font-medium hover:bg-terracotta/10">4. Cinema & Animații „Ion”</a>
-            <a href="#playlist" onclick="toggleMobileMenu()" class="block px-4 py-3 rounded-xl font-medium hover:bg-terracotta/10">5. Playlist Rebreanu</a>
-            <a href="#concurs" id="mobile-concurs-link" onclick="toggleMobileMenu()" class="block px-4 py-3 rounded-xl font-semibold text-terracotta dark:text-gold bg-terracotta/10 dark:bg-gold/10">6. Concurs Live: Vânătoarea celor 7 Coduri QR</a>
-            <button onclick="toggleMobileMenu(); openTeamGuideModal();" class="w-full text-left px-4 py-3 rounded-xl font-medium hover:bg-terracotta/10">7. Ghid Rapid pentru Echipă (GitHub / Vercel)</button>
-            <button onclick="toggleMobileMenu(); openQrSimulator();" class="w-full mt-2 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-stone-900 dark:bg-stone-800 text-white font-semibold text-sm">
-                <i data-lucide="qr-code" class="w-4 h-4"></i>
-                Simulează Scanare Cod QR din Sală
-            </button>
+        <!-- Link-uri Desktop -->
+        <nav class="hidden lg:flex items-center gap-6 text-sm font-medium">
+          <a href="#galerie" class="hover:text-terracotta transition-colors">Galerie (20)</a>
+          <a href="#quiz-personaj" class="hover:text-terracotta transition-colors">Ce personaj ești?</a>
+          <a href="#flashcards" class="hover:text-terracotta transition-colors">Curiozități</a>
+          <a href="#cinema" class="hover:text-terracotta transition-colors">Cinema &amp; Animații</a>
+          <a href="#playlist" class="hover:text-terracotta transition-colors">Playlist</a>
+          <a href="#concurs" id="nav-concurs-link" class="px-3 py-1 rounded-full bg-terracotta/15 text-terracotta font-semibold hover:bg-terracotta hover:text-white transition-all">
+            Concurs QR
+          </a>
+        </nav>
+
+        <!-- Acțiuni dreapta -->
+        <div class="flex items-center gap-2">
+          <button onclick="replayBookIntro()" title="Revezi deschiderea cărții" class="p-2 rounded-full border border-amber-900/20 dark:border-white/15 hover:bg-amber-900/10 dark:hover:bg-white/10 transition-colors" aria-label="Revezi animația cărții">
+            <i data-lucide="book-open" class="w-4 h-4 text-terracotta"></i>
+          </button>
+
+          <button id="theme-toggle" aria-label="Schimbă tema" class="p-2 rounded-full border border-amber-900/20 dark:border-white/15 hover:bg-amber-900/10 dark:hover:bg-white/10 transition-colors">
+            <i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i>
+            <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-gold"></i>
+          </button>
+
+          <button id="mobile-menu-btn" aria-label="Meniu" class="lg:hidden p-2 rounded-lg border border-amber-900/20 dark:border-white/15">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
         </div>
+      </div>
+
+      <!-- Meniu Mobil -->
+      <div id="mobile-menu" class="hidden lg:hidden px-4 pt-2 pb-5 space-y-2 border-t border-amber-900/15 dark:border-white/10 bg-[#F3ECE0] dark:bg-[#141210]">
+        <a href="#galerie" class="mobile-nav-link block py-2 font-medium hover:text-terracotta">1. Galerie Foto + Audio (20)</a>
+        <a href="#quiz-personaj" class="mobile-nav-link block py-2 font-medium hover:text-terracotta">2. Quiz: Ce personaj ești?</a>
+        <a href="#flashcards" class="mobile-nav-link block py-2 font-medium hover:text-terracotta">3. Curiozități (Flashcard-uri)</a>
+        <a href="#cinema" class="mobile-nav-link block py-2 font-medium hover:text-terracotta">4. Povestire &amp; Animații „Ion”</a>
+        <a href="#playlist" class="mobile-nav-link block py-2 font-medium hover:text-terracotta">5. Playlist Liviu Rebreanu</a>
+        <a href="#concurs" id="mobile-concurs-link" class="mobile-nav-link block py-2 font-semibold text-terracotta">6. Concursul celor 7 Coduri QR</a>
+      </div>
     </header>
 
-    <!-- ==========================================================================
-         2. SECȚIUNEA HERO & INTRODUCERE EXPOZIȚIE
-         ========================================================================== -->
-    <section id="acasa" class="relative pt-12 pb-16 sm:pt-20 sm:pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <!-- Elemente decorative subtile -->
-        <div class="absolute top-10 right-0 w-72 h-72 bg-terracotta/10 dark:bg-terracotta/15 rounded-full blur-3xl -z-10"></div>
-        <div class="absolute bottom-0 left-10 w-80 h-80 bg-gold/10 dark:bg-gold/10 rounded-full blur-3xl -z-10"></div>
-
-        <div class="max-w-7xl mx-auto">
-            <div class="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-                <!-- Coloana Text -->
-                <div class="lg:col-span-7 space-y-6">
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-terracotta/10 dark:bg-gold/15 border border-terracotta/20 dark:border-gold/30 text-terracotta dark:text-gold text-xs font-bold uppercase tracking-wider">
-                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                        Expoziție Culturală Interactivă • Fizic & Digital
-                    </div>
-
-                    <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1]">
-                        UNIVERSUL <span class="text-terracotta dark:text-gold italic">LIVIU REBREANU</span> — Expoziție Interactivă
-                    </h1>
-
-                    <p class="text-base sm:text-lg text-stone-600 dark:text-stone-300 leading-relaxed max-w-2xl">
-                        O punte între pământul literaturii clasice și tehnologia contemporană. Scanează codurile QR din sala de expoziție sau explorează online cele <strong>20 de tablouri foto-poetice</strong> însoțite de înregistrări audio, animații, curiozități și provocări interactive.
-                    </p>
-
-                    <!-- Butoane Principale -->
-                    <div class="flex flex-col sm:flex-row gap-3.5 pt-2">
-                        <a href="#galerie" class="inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl bg-terracotta hover:bg-terracotta-dark text-white font-semibold text-sm sm:text-base shadow-lg shadow-terracotta/25 transition-all hover:-translate-y-0.5">
-                            <i data-lucide="images" class="w-5 h-5"></i>
-                            Explorează Galeria (20 Exponate)
-                        </a>
-                        <button onclick="openQrSimulator()" class="inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl bg-white dark:bg-[#1A1918] border-2 border-[#D8CCB8] dark:border-[#2E2B28] hover:border-terracotta dark:hover:border-gold font-semibold text-sm sm:text-base transition-all hover:-translate-y-0.5">
-                            <i data-lucide="qr-code" class="w-5 h-5 text-terracotta dark:text-gold"></i>
-                            Scanează / Simulează Cod QR
-                        </button>
-                    </div>
-
-                    <!-- Statistici Rapide Expoziție -->
-                    <div class="grid grid-cols-3 gap-4 pt-6 border-t border-[#E2D9C8] dark:border-[#2E2B28] max-w-lg">
-                        <div>
-                            <span class="font-serif text-2xl sm:text-3xl font-bold text-terracotta dark:text-gold">20</span>
-                            <p class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">Exponate Foto + Audio</p>
-                        </div>
-                        <div>
-                            <span class="font-serif text-2xl sm:text-3xl font-bold text-terracotta dark:text-gold">5</span>
-                            <p class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">Arhetipuri în Quiz</p>
-                        </div>
-                        <div>
-                            <span class="font-serif text-2xl sm:text-3xl font-bold text-terracotta dark:text-gold">7</span>
-                            <p class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">Coduri QR Concurs</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Coloana Card Editorial / Exponatul Vedetă -->
-                <div class="lg:col-span-5">
-                    <div class="relative rounded-3xl overflow-hidden bg-[#FAF8F5] dark:bg-[#1A1918] border border-[#E2D9C8] dark:border-[#2E2B28] shadow-2xl p-5 sm:p-6">
-                        <div class="relative rounded-2xl overflow-hidden aspect-[4/3] mb-5 group cursor-pointer" onclick="openExhibitModal(1)">
-                            <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=900&q=80" alt="Glasul Pământului - Exponat 01" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://placehold.co/800x600/9E2A2B/F6F3EC?text=Exponat+%2301'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
-                            <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-xs font-semibold">
-                                Exponat #01 • Ghid Audio Activ
-                            </span>
-                            <div class="absolute bottom-4 left-4 right-4 text-white">
-                                <p class="text-xs uppercase tracking-widest text-gold-light font-semibold">Bistrița-Năsăud • Prislop</p>
-                                <h3 class="font-serif text-xl font-bold mt-0.5">Glasul Pământului și al Iubirii</h3>
-                            </div>
-                        </div>
-
-                        <blockquote class="font-serif italic text-stone-700 dark:text-stone-300 text-sm sm:text-base border-l-2 border-terracotta dark:border-gold pl-4 py-1 mb-5">
-                            „Pământul e un uriaș care te cheamă, te leagă și nu-ți mai dă drumul niciodată...”
-                        </blockquote>
-
-                        <div class="flex items-center justify-between gap-3">
-                            <button onclick="openExhibitModal(1)" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-stone-900 dark:bg-gold text-white dark:text-stone-950 font-semibold text-sm hover:opacity-90 transition-opacity">
-                                <i data-lucide="headphones" class="w-4 h-4"></i>
-                                Ascultă Exponatul #01
-                            </button>
-                            <button onclick="openExhibitModal(1, true)" title="Vezi Codul QR de printat" class="p-3 rounded-xl border border-[#D8CCB8] dark:border-[#2E2B28] hover:border-terracotta dark:hover:border-gold transition-colors">
-                                <i data-lucide="qr-code" class="w-5 h-5 text-terracotta dark:text-gold"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- HERO SECTION -->
+    <section class="relative overflow-hidden py-14 sm:py-20 lg:py-24 border-b border-amber-900/15 dark:border-white/10">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest bg-terracotta/10 text-terracotta border border-terracotta/25">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          <span>Arhivă Culturală &amp; Expoziție Interactivă</span>
         </div>
+
+        <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.12]">
+          Glasul pământului și al iubirii: <span class="italic text-terracotta font-normal">Universul lui Liviu Rebreanu</span>
+        </h1>
+
+        <p class="max-w-2xl mx-auto text-base sm:text-lg opacity-85 leading-relaxed font-literary text-xl sm:text-2xl">
+          Explorează cele 20 de tablouri fotografice însoțite de poeme rostite, descoperă cu ce personaj semeni și parcurge curiozitățile din viața creatorului romanului românesc modern.
+        </p>
+
+        <div class="pt-3 flex flex-wrap items-center justify-center gap-3.5">
+          <a href="#galerie" class="px-6 py-3.5 rounded-xl bg-terracotta hover:bg-terracottaHover text-white font-semibold shadow-lg shadow-terracotta/25 transition-all flex items-center gap-2">
+            <i data-lucide="headphones" class="w-4 h-4"></i>
+            <span>Explorează Expoziția</span>
+          </a>
+          <a href="#quiz-personaj" class="px-6 py-3.5 rounded-xl paper-card hover:border-terracotta font-semibold transition-all flex items-center gap-2">
+            <i data-lucide="user-check" class="w-4 h-4 text-terracotta"></i>
+            <span>Ce personaj ești?</span>
+          </a>
+        </div>
+      </div>
     </section>
 
-    <!-- ==========================================================================
-         3. GALERIA INTERACTIVĂ (TOATE CELE 20 DE EXPONATE: FOTO + POEM + AUDIO)
-         ========================================================================== -->
-    <section id="galerie" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-[#E2D9C8] dark:border-[#2E2B28]">
-        <div class="max-w-7xl mx-auto">
-            <!-- Header Secțiune -->
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
-                <div>
-                    <span class="text-xs font-bold uppercase tracking-[0.2em] text-terracotta dark:text-gold">Colecția Permanentă • 20 Stații</span>
-                    <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-2">Galeria Foto-Poetică & Audio</h2>
-                    <p class="text-stone-600 dark:text-stone-400 mt-2 max-w-2xl text-sm sm:text-base">
-                        Selectează orice exponat pentru a citi poemul complet, a asculta înregistrarea vocală sau a genera codul QR dedicat pentru sala de expoziție.
-                    </p>
-                </div>
-
-                <!-- Căutare & Filtrare Rapidă -->
-                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                    <div class="relative flex-1 sm:w-64">
-                        <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400"></i>
-                        <input type="text" id="gallery-search" oninput="filterGallery()" placeholder="Caută exponat (ex: #05, Ion, Pământ)..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-[#1A1918] border border-[#D8CCB8] dark:border-[#2E2B28] text-sm focus:outline-none focus:border-terracotta dark:focus:border-gold">
-                    </div>
-                    <select id="gallery-filter" onchange="filterGallery()" class="px-4 py-2.5 rounded-xl bg-white dark:bg-[#1A1918] border border-[#D8CCB8] dark:border-[#2E2B28] text-sm font-medium focus:outline-none focus:border-terracotta dark:focus:border-gold">
-                        <option value="all">Toate cele 20 exponate</option>
-                        <option value="ion">Tema: Ion & Pământul (#01–#07)</option>
-                        <option value="padurea">Tema: Pădurea Spânzuraților (#08–#14)</option>
-                        <option value="viata">Tema: Viața & Destinul (#15–#20)</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Gridul cu cele 20 de exponate (generat dinamic din JS) -->
-            <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Cardurile sunt injectate de renderGallery() -->
-            </div>
+    <!-- ======================================================================
+         1. GALERIA INTERACTIVĂ (20 EXPONATE: FOTO + POEM + AUDIO)
+         ====================================================================== -->
+    <section id="galerie" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-terracotta">01 • Colecția Vizuală și Sonoră</span>
+          <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-1">Galeria Exponatelor (1 – 20)</h2>
+          <p class="opacity-80 mt-2 max-w-2xl text-sm sm:text-base">
+            Apasă pe orice tablou pentru a citi poemul dedicat și pentru a asculta înregistrarea audio. În sala de expoziție, fiecare lucrare are propriul cod QR.
+          </p>
         </div>
+
+        <div class="relative w-full md:w-72">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 opacity-50"></i>
+          <input id="exhibit-search" type="text" placeholder="Caută exponat (ex: Ion, 04)..." class="w-full pl-10 pr-4 py-2.5 rounded-xl paper-card text-sm focus:outline-none focus:border-terracotta" />
+        </div>
+      </div>
+
+      <div id="exhibits-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
     </section>
 
-    <!-- ==========================================================================
-         4. QUIZ INTERACTIV: "CE PERSONAJ DIN ROMANELE LUI REBREANU EȘTI?"
-         ========================================================================== -->
-    <section id="quiz" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#EFE9DD]/70 dark:bg-[#161514] border-t border-[#E2D9C8] dark:border-[#2E2B28]">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-10">
-                <span class="text-xs font-bold uppercase tracking-[0.2em] text-terracotta dark:text-gold">Test Psihologic & Literar</span>
-                <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-2">Ce personaj din romanele lui Rebreanu ești?</h2>
-                <p class="text-stone-600 dark:text-stone-400 mt-2 text-sm sm:text-base max-w-xl mx-auto">
-                    Răspunde sincer la 6 dileme morale și descoperă arhetipul literar care îți oglindește cel mai bine sufletul.
-                </p>
-            </div>
-
-            <!-- Container Quiz -->
-            <div id="quiz-container" class="rounded-3xl bg-[#FAF8F5] dark:bg-[#1A1918] border border-[#E2D9C8] dark:border-[#2E2B28] shadow-xl p-6 sm:p-10">
-                <!-- Ecran Intro Quiz -->
-                <div id="quiz-start" class="text-center py-6 space-y-6">
-                    <div class="w-16 h-16 rounded-2xl bg-terracotta/10 dark:bg-gold/15 text-terracotta dark:text-gold flex items-center justify-center mx-auto">
-                        <i data-lucide="compass" class="w-8 h-8"></i>
-                    </div>
-                    <div class="space-y-2 max-w-md mx-auto">
-                        <h3 class="font-serif text-2xl font-bold">Ești pregătit să îți afli destinul literar?</h3>
-                        <p class="text-sm text-stone-600 dark:text-stone-400">
-                            7 întrebări despre pasiunea pământului, datoria conștiinței, iubirea tăcută, spiritul creator și independență.
-                        </p>
-                    </div>
-                    <button onclick="startQuiz()" class="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-terracotta hover:bg-terracotta-dark text-white font-semibold shadow-lg shadow-terracotta/20 transition-all">
-                        Începe Testul (7 Întrebări)
-                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </button>
-                </div>
-
-                <!-- Ecran Întrebări Quiz -->
-                <div id="quiz-questions" class="hidden space-y-6">
-                    <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-stone-500">
-                        <span id="quiz-progress-text">Întrebarea 1 din 6</span>
-                        <span id="quiz-percent-text">16%</span>
-                    </div>
-                    <div class="w-full h-2 rounded-full bg-[#E2D9C8] dark:bg-[#2E2B28] overflow-hidden">
-                        <div id="quiz-progress-bar" class="h-full bg-terracotta dark:bg-gold transition-all duration-500" style="width: 16.6%"></div>
-                    </div>
-
-                    <h3 id="quiz-question-title" class="font-serif text-xl sm:text-2xl font-bold pt-2"></h3>
-
-                    <div id="quiz-options" class="grid gap-3 pt-2">
-                        <!-- Opțiunile sunt generate dinamic -->
-                    </div>
-                </div>
-
-                <!-- Ecran Rezultat Vizual Quiz -->
-                <div id="quiz-result" class="hidden">
-                    <!-- Cardul de rezultat este injectat dinamic -->
-                </div>
-            </div>
+    <!-- ======================================================================
+         2. QUIZ DE PERSONALITATE: CE PERSONAJ DIN REBREANU EȘTI?
+         ====================================================================== -->
+    <section id="quiz-personaj" class="py-16 sm:py-24 bg-[#EAE0CE]/65 dark:bg-white/[0.02] border-y border-amber-900/15 dark:border-white/10">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-10">
+          <span class="text-xs font-bold uppercase tracking-widest text-terracotta">02 • Test Interactiv</span>
+          <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-1">Cu ce personaj din romanele lui Rebreanu semeni?</h2>
+          <p class="opacity-80 mt-2 text-sm sm:text-base">Răspunde la 7 întrebări scurte și află ce destin literar ți se potrivește.</p>
         </div>
+
+        <div id="quiz-container" class="paper-card rounded-2xl p-6 sm:p-10 shadow-xl">
+          <!-- Injectat prin JS -->
+        </div>
+      </div>
     </section>
 
-    <!-- ==========================================================================
-         5. FLASHCARD-URI 3D — CURIOZITĂȚI DESPRE LIVIU REBREANU
-         ========================================================================== -->
-    <section id="flashcarduri" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-[#E2D9C8] dark:border-[#2E2B28]">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-                <div>
-                    <span class="text-xs font-bold uppercase tracking-[0.2em] text-terracotta dark:text-gold">Arhiva Secretă • Carduri Interactive</span>
-                    <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-2">Curiozități din viața lui Liviu Rebreanu</h2>
-                    <p class="text-stone-600 dark:text-stone-400 mt-2 text-sm sm:text-base">
-                        Atinge sau dă click pe orice card pentru a-l întoarce în 3D și a descoperi povestea din spatele operei.
-                    </p>
-                </div>
-                <button onclick="resetAllFlashcards()" class="self-start md:self-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#D8CCB8] dark:border-[#2E2B28] text-xs font-semibold hover:border-terracotta dark:hover:border-gold transition-colors">
-                    <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-                    Resetează toate cardurile
-                </button>
-            </div>
-
-            <!-- Filtrare Flashcard-uri pe Categorii -->
-            <div class="flex flex-wrap gap-2 mb-8" id="flashcard-filters">
-                <button data-fc-filter="all" onclick="filterFlashcards('all')" class="fc-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-terracotta text-white transition-all">Toate (9)</button>
-                <button data-fc-filter="biografie" onclick="filterFlashcards('biografie')" class="fc-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-[#1A1918] border border-[#D8CCB8] dark:border-[#2E2B28] hover:border-terracotta transition-all">Biografie & Prislop</button>
-                <button data-fc-filter="creatie" onclick="filterFlashcards('creatie')" class="fc-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-[#1A1918] border border-[#D8CCB8] dark:border-[#2E2B28] hover:border-terracotta transition-all">Manuscrise & Ritualuri</button>
-                <button data-fc-filter="romane" onclick="filterFlashcards('romane')" class="fc-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-[#1A1918] border border-[#D8CCB8] dark:border-[#2E2B28] hover:border-terracotta transition-all">Romane Iconice</button>
-            </div>
-
-            <!-- Grid Flashcard-uri 3D -->
-            <div id="flashcards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Injectate dinamic din JS -->
-            </div>
+    <!-- ======================================================================
+         3. FLASHCARD-URI INTERACTIVE: CURIOZITĂȚI DESPRE REBREANU
+         ====================================================================== -->
+    <section id="flashcards" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-terracotta">03 • Știai că?</span>
+          <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-1">Curiozități — Flashcard-uri 3D</h2>
+          <p class="opacity-80 mt-2 text-sm sm:text-base">Atinge orice card pentru a-l întoarce și a descoperi povestea din spatele lui.</p>
         </div>
+        <div class="flex flex-wrap gap-2" id="flashcard-filters">
+          <button data-cat="toate" class="fc-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-terracotta text-white">Toate</button>
+          <button data-cat="biografie" class="fc-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold paper-card hover:border-terracotta">Biografie</button>
+          <button data-cat="opere" class="fc-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold paper-card hover:border-terracotta">Opere</button>
+        </div>
+      </div>
+
+      <div id="flashcards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- ==========================================================================
-         6. CINEMA & ANIMAȚII ("O POVESTIRE" & ANIMAȚII "ION" / "IONEL")
-         ========================================================================== -->
-    <section id="cinema" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#181615] text-[#F4EFE6] border-t border-[#2E2B28]">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
-                <div>
-                    <span class="text-xs font-bold uppercase tracking-[0.2em] text-gold">Sala de Proiecție Digitală</span>
-                    <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-2 text-white">Cinema & Animații Literare</h2>
-                    <p class="text-stone-400 mt-2 text-sm sm:text-base max-w-xl">
-                        Materiale video originale realizate pentru expoziție: ecranizarea unei povestiri și animațiile dedicate universului „Ion” (Ionel).
-                    </p>
-                </div>
-
-                <!-- Selector Proiecție -->
-                <div class="inline-flex p-1.5 rounded-2xl bg-[#252220] border border-[#383430]">
-                    <button id="tab-video-1" onclick="switchCinemaTab(0)" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-terracotta text-white shadow transition-all">
-                        1. O povestire (Audio + Video)
-                    </button>
-                    <button id="tab-video-2" onclick="switchCinemaTab(1)" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-stone-300 hover:text-white transition-all">
-                        2. Animații „Ion” (Ionel)
-                    </button>
-                </div>
-            </div>
-
-            <!-- Player Cinema -->
-            <div class="grid lg:grid-cols-12 gap-8 items-center bg-[#211E1C] border border-[#332F2C] rounded-3xl p-5 sm:p-8 shadow-2xl">
-                <div class="lg:col-span-7">
-                    <div id="cinema-screen" class="relative aspect-video rounded-2xl overflow-hidden bg-black border border-stone-800 shadow-inner">
-                        <!-- Conținutul player-ului este gestionat de switchCinemaTab() -->
-                    </div>
-                </div>
-                <div class="lg:col-span-5 space-y-4">
-                    <span id="cinema-badge" class="inline-block px-3 py-1 rounded-full bg-gold/20 text-gold text-xs font-bold uppercase tracking-wider">
-                        Proiecția #01 • Scurtmetraj
-                    </span>
-                    <h3 id="cinema-title" class="font-serif text-2xl font-bold text-white">
-                        O povestire — Adaptare Audio-Vizuală
-                    </h3>
-                    <p id="cinema-desc" class="text-sm text-stone-300 leading-relaxed">
-                        O incursiune atmosferică în proza scurtă a lui Liviu Rebreanu, unde tensiunea psihologică și realismul crud prind viață prin imagine și lectură expresivă.
-                    </p>
-
-                    <!-- Capitole / Scena Curentă (Mod Combinat Audio + Vizual) -->
-                    <div id="cinema-chapters" class="space-y-1.5 pt-1"></div>
-
-                    <div class="pt-3 border-t border-stone-800 space-y-2 text-xs text-stone-400">
-                        <div class="flex justify-between">
-                            <span>Format:</span>
-                            <span class="text-stone-200 font-medium" id="cinema-format">HD 1080p • Narațiune & Coloană Sonoră</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Durată estimată:</span>
-                            <span class="text-stone-200 font-medium" id="cinema-duration">04:35 min</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- ======================================================================
+         4. CINEMA & POVESTIRE (O POVESTIRE + ANIMAȚII "ION")
+         ====================================================================== -->
+    <section id="cinema" class="py-16 sm:py-24 bg-[#EAE0CE]/65 dark:bg-white/[0.02] border-y border-amber-900/15 dark:border-white/10">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-10">
+          <span class="text-xs font-bold uppercase tracking-widest text-terracotta">04 • Proiecții Speciale</span>
+          <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-1">Povestire Audio-Video &amp; Animații „Ion”</h2>
+          <p class="opacity-80 mt-2 text-sm sm:text-base">Materiale multimedia realizate în cadrul proiectului.</p>
         </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="paper-card rounded-2xl overflow-hidden shadow-md">
+            <div class="aspect-video bg-black relative">
+              <iframe class="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Liviu Rebreanu - O povestire" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="p-6">
+              <span class="text-xs font-bold uppercase tracking-wider text-terracotta">Audio + Video</span>
+              <h3 class="font-serif text-xl font-bold mt-1">Liviu Rebreanu — O povestire</h3>
+              <p class="text-sm opacity-80 mt-2">Lectură dramatizată însoțită de ilustrații și atmosferă sonoră de epocă.</p>
+            </div>
+          </div>
+
+          <div class="paper-card rounded-2xl overflow-hidden shadow-md">
+            <div class="aspect-video bg-black relative">
+              <iframe class="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Animații Ion - Ionel" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="p-6">
+              <span class="text-xs font-bold uppercase tracking-wider text-gold">Animație Originală</span>
+              <h3 class="font-serif text-xl font-bold mt-1">Animații „Ion” (Ionel)</h3>
+              <p class="text-sm opacity-80 mt-2">Secvențe cheie din romanul „Ion” transpuse într-o formă vizuală animată.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- ==========================================================================
-         7. PLAYLIST REBREANU (STIL SPOTIFY EDITORIAL)
-         ========================================================================== -->
-    <section id="playlist" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-[#E2D9C8] dark:border-[#2E2B28]">
-        <div class="max-w-5xl mx-auto">
-            <div class="text-center mb-10">
-                <span class="text-xs font-bold uppercase tracking-[0.2em] text-terracotta dark:text-gold">Atmosferă Sonoră & Radio România Cultural</span>
-                <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-2">Playlist-ul lui Liviu Rebreanu</h2>
-                <p class="text-stone-600 dark:text-stone-400 mt-2 text-sm sm:text-base max-w-xl mx-auto">
-                    Selecție muzicală inspirată din epoca și preferințele scriitorului: de la muzică simfonică clasică la folclor autentic din zona Năsăudului.
-                        <div class="pt-2 flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
-                            <button onclick="prevPlaylistTrack()" title="Piesa anterioară" class="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all">
-                                <i data-lucide="skip-back" class="w-4 h-4"></i>
-                            </button>
-                            <button onclick="togglePlaylistPlay()" id="playlist-main-btn" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gold hover:bg-gold-light text-stone-950 font-bold text-sm transition-all">
-                                <i data-lucide="play" class="w-4 h-4 fill-current"></i>
-                                <span>Ascultă Playlist</span>
-                            </button>
-                            <button onclick="nextPlaylistTrack()" title="Piesa următoare" class="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all">
-                                <i data-lucide="skip-forward" class="w-4 h-4"></i>
-                            </button>
-                            <div class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-black/30 border border-white/10 text-xs">
-                                <i data-lucide="volume-2" class="w-3.5 h-3.5 text-gold"></i>
-                                <input id="playlist-volume" type="range" min="0" max="100" value="65" oninput="updateMasterVolume(this.value)" aria-label="Volum Playlist" class="w-20 accent-gold cursor-pointer">
-                            </div>
-                            <a href="https://www.radioromaniacultural.ro/sectiuni-articole/literatura/playlist-de-scriitor-liviu-rebreanu-id25892.html" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-xs font-semibold transition-colors">
-                                <span>Radio România Cultural</span>
-                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                            </a>
-                        </div>
-                        <div class="pt-1 max-w-md">
-                            <div onclick="seekPlaylistTrack(event)" class="w-full h-1.5 rounded-full bg-white/15 cursor-pointer overflow-hidden">
-                                <div id="playlist-progress-bar" class="h-full bg-gold w-0 transition-all duration-200"></div>
-                            </div>
-                            <div class="flex justify-between text-[11px] font-mono text-stone-300 mt-1">
-                                <span id="playlist-current-label">Nicio piesă selectată</span>
-                                <span id="playlist-time-label">00:00 / 00:00</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Lista Pieselor -->
-                <div id="playlist-tracks" class="divide-y divide-white/10 p-2 sm:p-4">
-                    <!-- Piesele sunt injectate dinamic din JS -->
-                </div>
-            </div>
+    <!-- ======================================================================
+         5. PLAYLIST REBREANU
+         ====================================================================== -->
+    <section id="playlist" class="py-16 sm:py-24 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-terracotta">05 • Atmosferă Sonoră</span>
+          <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-1">Playlist-ul lui Liviu Rebreanu</h2>
+          <p class="opacity-80 mt-2 text-sm sm:text-base">Piese și compoziții care au însoțit scrisul și epoca marelui romancier.</p>
         </div>
+        <a href="https://www.radioromaniacultural.ro/sectiuni-articole/literatura/playlist-de-scriitor-liviu-rebreanu-id25892.html" target="_blank" rel="noopener" class="text-xs font-semibold text-terracotta hover:underline flex items-center gap-1">
+          <span>Sursă: Radio România Cultural</span>
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+
+      <div class="rounded-2xl bg-[#181614] text-[#F4EFE6] p-5 sm:p-8 shadow-2xl border border-white/10">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5 pb-6 border-b border-white/10">
+          <div class="w-20 h-20 rounded-xl bg-gradient-to-br from-terracotta to-amber-900 flex items-center justify-center shrink-0 shadow-lg">
+            <i data-lucide="disc-3" class="w-10 h-10 text-gold"></i>
+          </div>
+          <div class="flex-1">
+            <span class="text-[11px] uppercase tracking-widest text-gold font-semibold">Colecție Muzicală</span>
+            <h3 class="font-serif text-2xl font-bold mt-0.5">În atelierul de creație al lui Rebreanu</h3>
+            <p class="text-xs text-white/70 mt-1" id="playlist-now-playing">Selectează o piesă din listă pentru audiție</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="prevPlaylistTrack()" aria-label="Piesa anterioară" class="p-2.5 rounded-full bg-white/10 hover:bg-white/20 transition">
+              <i data-lucide="skip-back" class="w-4 h-4"></i>
+            </button>
+            <button id="playlist-main-play" onclick="togglePlaylistPlay()" aria-label="Redă sau pune pauză" class="w-12 h-12 rounded-full bg-terracotta hover:bg-terracottaHover text-white flex items-center justify-center shadow-lg transition">
+              <i data-lucide="play" class="w-5 h-5 ml-0.5" id="playlist-main-icon"></i>
+            </button>
+            <button onclick="nextPlaylistTrack()" aria-label="Piesa următoare" class="p-2.5 rounded-full bg-white/10 hover:bg-white/20 transition">
+              <i data-lucide="skip-forward" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="playlist-tracks" class="divide-y divide-white/5 mt-2"></div>
+        <audio id="playlist-audio-element" preload="none"></audio>
+      </div>
     </section>
 
-    <!-- ==========================================================================
-         8. ZONA DE CONCURS — "VÂNĂTOAREA CELOR 7 CODURI QR" (EVENIMENT LIVE)
-         ========================================================================== -->
-    <section id="concurs" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#EFE9DD]/80 dark:bg-[#161514] border-t border-[#E2D9C8] dark:border-[#2E2B28] transition-all">
-        <div class="max-w-5xl mx-auto">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                <div>
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-terracotta text-white text-xs font-bold uppercase tracking-wider mb-2">
-                        <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
-                        Activitate Live • Ziua Expoziției
-                    </div>
-                    <h2 class="font-serif text-3xl sm:text-4xl font-bold">Vânătoarea celor 7 Coduri QR</h2>
-                    <p class="text-stone-600 dark:text-stone-400 mt-1 text-sm sm:text-base">
-                        Găsește cele 7 coduri QR ascunse în sala de expoziție, introdu codul secret de pe fiecare afiș și răspunde la provocare!
-                    </p>
-                </div>
-
-                <!-- Scor Concurs -->
-                <div class="px-5 py-3 rounded-2xl bg-[#FAF8F5] dark:bg-[#1A1918] border border-[#D8CCB8] dark:border-[#2E2B28] text-center shrink-0">
-                    <span class="text-xs uppercase tracking-wider text-stone-500 block">Stații Deblocate</span>
-                    <span id="contest-score-display" class="font-serif text-2xl font-extrabold text-terracotta dark:text-gold">0 / 7</span>
-                </div>
+    <!-- ======================================================================
+         6. CONCURSUL DIN ZIUA EXPOZIȚIEI (CELE 7 CODURI QR DIFERITE)
+         ====================================================================== -->
+    <section id="concurs" class="py-16 sm:py-24 bg-terracotta/5 border-t border-terracotta/20">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-terracotta text-white text-xs font-bold uppercase tracking-wider mb-2">
+              <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+              <span>Activ doar în ziua expoziției</span>
             </div>
-
-            <!-- Gridul celor 7 Stații -->
-            <div id="contest-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Cele 7 stații sunt generate dinamic -->
-            </div>
-
-            <!-- Banner Câștigător (apare când toate cele 7 sunt rezolvate) -->
-            <div id="contest-winner-banner" class="hidden mt-8 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-terracotta to-amber-800 text-white text-center shadow-2xl space-y-4">
-                <div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mx-auto">
-                    <i data-lucide="award" class="w-9 h-9 text-gold-light"></i>
-                </div>
-                <h3 class="font-serif text-2xl sm:text-3xl font-bold">Felicitări! Ai deblocat toate cele 7 Coduri QR!</h3>
-                <p class="text-sm sm:text-base text-white/90 max-w-lg mx-auto">
-                    Introdu numele tău mai jos pentru a genera un cod unic de validare și arată-l organizatorilor la standul expoziției!
-                </p>
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5 max-w-md mx-auto">
-                    <input type="text" id="contest-participant-name" placeholder="Numele și prenumele tău..." oninput="updateContestValidationCode()" class="w-full sm:flex-1 px-4 py-2.5 rounded-xl bg-white text-stone-900 text-sm font-medium focus:outline-none">
-                    <button onclick="copyContestValidation()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-stone-950/70 hover:bg-stone-950 text-white text-xs font-bold">
-                        Copiază Dovada
-                    </button>
-                </div>
-                <div id="contest-validation-badge" class="inline-block px-4 py-2 rounded-xl bg-black/30 font-mono text-xs sm:text-sm tracking-widest">
-                    COD VALIDARE: REBREANU-7QR-VIP
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==========================================================================
-         9. SUBSOL (FOOTER) + COMUTATOR MOD ADMIN / ZIUA EVENIMENTULUI
-         ========================================================================== -->
-    <footer class="py-12 px-4 sm:px-6 lg:px-8 border-t border-[#E2D9C8] dark:border-[#2E2B28] bg-[#FAF8F5] dark:bg-[#0D0C0C]">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="text-center md:text-left">
-                <p class="font-serif font-bold text-lg">Universul Liviu Rebreanu — Expoziție Digitală</p>
-                <p class="text-xs text-stone-500 dark:text-stone-400 mt-1">
-                    Arhivă culturală permanentă • Optimizat pentru dispozitive mobile și coduri QR.
-                </p>
-            </div>
-
-            <!-- Comutator Mod Admin (pentru a ascunde concursul după ziua evenimentului) -->
-            <div class="flex flex-wrap items-center justify-center gap-3">
-                <label class="inline-flex items-center gap-2.5 px-4 py-2 rounded-xl bg-[#F6F3EC] dark:bg-[#1A1918] border border-[#D8CCB8] dark:border-[#2E2B28] cursor-pointer text-xs font-semibold select-none">
-                    <input type="checkbox" id="event-mode-toggle" checked onchange="toggleEventMode()" class="accent-terracotta w-4 h-4 rounded">
-                    <span>Mod Ziua Evenimentului (Concurs Activ)</span>
-                </label>
-
-                <button onclick="openTeamGuideModal()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-[#D8CCB8] dark:border-[#2E2B28] text-xs font-semibold hover:border-terracotta dark:hover:border-gold transition-colors">
-                    <i data-lucide="book-marked" class="w-3.5 h-3.5 text-terracotta dark:text-gold"></i>
-                    Ghid Echipă
-                </button>
-
-                <button onclick="openAllQrSheet()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-stone-900 dark:bg-stone-800 text-white text-xs font-semibold hover:opacity-90 transition-opacity">
-                    <i data-lucide="printer" class="w-3.5 h-3.5"></i>
-                    Toate Codurile QR (Print)
-                </button>
-            </div>
-        </div>
-    </footer>
-
-    <!-- ==========================================================================
-         MODAL 1: EXPONAT DETALIAT (FOTO + POEM COMPLET + AUDIO PLAYER + COD QR)
-         ========================================================================== -->
-    <div id="exhibit-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto">
-        <div class="relative w-full max-w-4xl rounded-3xl bg-[#FAF8F5] dark:bg-[#1A1918] border border-[#E2D9C8] dark:border-[#2E2B28] shadow-2xl overflow-hidden my-auto">
-            <!-- Bară superioară modal -->
-            <div class="flex items-center justify-between px-5 py-4 border-b border-[#E2D9C8] dark:border-[#2E2B28]">
-                <div class="flex items-center gap-2.5">
-                    <span id="modal-exhibit-num" class="px-3 py-1 rounded-full bg-terracotta text-white text-xs font-bold">EXPONAT #01</span>
-                    <span id="modal-exhibit-category" class="text-xs font-semibold uppercase tracking-wider text-stone-500">Tema: Pământul</span>
-                </div>
-                <button onclick="closeExhibitModal()" aria-label="Închide fereastra" class="p-2 rounded-xl hover:bg-stone-200/60 dark:hover:bg-stone-800 transition-colors">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <!-- Conținut Modal -->
-            <div class="grid md:grid-cols-12 max-h-[82vh] overflow-y-auto">
-                <!-- Coloana Stânga: Fotografie + Cod QR Printabil -->
-                <div class="md:col-span-5 bg-stone-900 relative flex flex-col justify-between">
-                    <div class="relative aspect-[4/3] md:aspect-auto md:h-full min-h-[260px]">
-                        <img id="modal-exhibit-img" src="" alt="Fotografie exponat" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
-                        <div class="absolute bottom-4 left-4 right-4">
-                            <button onclick="toggleModalQrBox()" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md text-white text-xs font-semibold border border-white/20 transition-all">
-                                <i data-lucide="qr-code" class="w-4 h-4 text-gold-light"></i>
-                                <span id="modal-qr-btn-text">Generează Cod QR pentru acest exponat</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Zona Cod QR Generat Live -->
-                    <div id="modal-qr-box" class="hidden p-5 bg-white text-stone-900 text-center border-t border-stone-200 space-y-2">
-                        <p class="text-xs font-bold uppercase tracking-wider text-terracotta">Scanează în Sala de Expoziție</p>
-                        <div id="modal-qrcode-canvas" class="flex justify-center py-2"></div>
-                        <p id="modal-qr-url" class="text-[11px] font-mono text-stone-500 break-all"></p>
-                    </div>
-                </div>
-
-                <!-- Coloana Dreapta: Titlu + Audio Player + Poem -->
-                <div class="md:col-span-7 p-6 sm:p-8 flex flex-col justify-between space-y-6">
-                    <div class="space-y-5">
-                        <div>
-                            <h3 id="modal-exhibit-title" class="font-serif text-2xl sm:text-3xl font-bold leading-tight"></h3>
-                            <p id="modal-exhibit-subtitle" class="text-xs text-stone-500 dark:text-stone-400 mt-1"></p>
-                        </div>
-
-                        <!-- AUDIO PLAYER INTERACTIV (WEB AUDIO API + BARĂ PROGRES + UNDĂ SONORĂ) -->
-                        <div id="exhibit-audio-player" class="p-4 rounded-2xl bg-[#F6F3EC] dark:bg-[#111111] border border-[#E2D9C8] dark:border-[#2E2B28] space-y-3">
-                            <div class="flex items-center justify-between gap-3">
-                                <button id="audio-play-btn" onclick="toggleExhibitAudio()" class="w-12 h-12 rounded-full bg-terracotta hover:bg-terracotta-dark text-white flex items-center justify-center shadow-md shrink-0 transition-transform active:scale-95">
-                                    <i data-lucide="play" id="audio-play-icon" class="w-5 h-5 fill-current ml-0.5"></i>
-                                </button>
-
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex items-center justify-between text-xs font-semibold mb-1">
-                                        <span class="truncate text-terracotta dark:text-gold">Înregistrare Audio & Lectură Poem</span>
-                                        <span id="audio-time-display" class="font-mono text-stone-500">00:00 / 00:45</span>
-                                    </div>
-                                    <!-- Bară de progres interactivă -->
-                                    <div onclick="seekExhibitAudio(event)" class="w-full h-2 rounded-full bg-[#D8CCB8] dark:bg-[#2E2B28] cursor-pointer overflow-hidden">
-                                        <div id="audio-progress-bar" class="h-full bg-terracotta dark:bg-gold w-0 transition-all duration-150"></div>
-                                    </div>
-                                </div>
-
-                                <!-- Vizualizator Undă Sonoră -->
-                                <div class="hidden sm:flex items-end gap-1 h-7 px-2" aria-hidden="true">
-                                    <span class="wave-bar w-1 h-3 bg-terracotta dark:bg-gold rounded-full"></span>
-                                    <span class="wave-bar w-1 h-6 bg-terracotta dark:bg-gold rounded-full"></span>
-                                    <span class="wave-bar w-1 h-4 bg-terracotta dark:bg-gold rounded-full"></span>
-                                    <span class="wave-bar w-1 h-7 bg-terracotta dark:bg-gold rounded-full"></span>
-                                    <span class="wave-bar w-1 h-5 bg-terracotta dark:bg-gold rounded-full"></span>
-                                </div>
-                            </div>
-                            <p class="text-[11px] text-stone-500 dark:text-stone-400">
-                                * Mod demonstrativ activ (sunet ambiental sintetizat). Când adăugați fișierele <code>.mp3</code> reale, player-ul le va reda automat.
-                            </p>
-                        </div>
-
-                        <!-- Textul Complet al Poemului -->
-                        <div class="space-y-2">
-                            <span class="text-[11px] font-bold uppercase tracking-widest text-stone-400">Textul Poemului</span>
-                            <div id="modal-exhibit-poem" class="font-serif text-base sm:text-lg leading-relaxed whitespace-pre-line text-stone-800 dark:text-stone-200 bg-white/60 dark:bg-black/20 p-4 sm:p-5 rounded-2xl border border-[#E2D9C8]/70 dark:border-[#2E2B28]"></div>
-                        </div>
-                    </div>
-
-                    <!-- Navigare Exponatul Anterior / Următor -->
-                    <div class="flex items-center justify-between gap-3 pt-4 border-t border-[#E2D9C8] dark:border-[#2E2B28]">
-                        <button onclick="navigateExhibit(-1)" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#D8CCB8] dark:border-[#2E2B28] text-xs sm:text-sm font-semibold hover:border-terracotta dark:hover:border-gold transition-colors">
-                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
-                            Anterior
-                        </button>
-                        <button onclick="closeExhibitModal()" class="text-xs font-semibold text-stone-500 hover:text-terracotta">
-                            Vezi toată galeria
-                        </button>
-                        <button onclick="navigateExhibit(1)" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-stone-900 dark:bg-gold text-white dark:text-stone-950 text-xs sm:text-sm font-semibold hover:opacity-90 transition-opacity">
-                            Următor
-                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==========================================================================
-         MODAL 2: SIMULATOR SCANARE QR / PANOU CODURI PRINTABILE
-         ========================================================================== -->
-    <div id="qr-simulator-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-        <div class="w-full max-w-lg rounded-3xl bg-[#FAF8F5] dark:bg-[#1A1918] border border-[#E2D9C8] dark:border-[#2E2B28] p-6 sm:p-8 shadow-2xl space-y-6">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                    <i data-lucide="qr-code" class="w-6 h-6 text-terracotta dark:text-gold"></i>
-                    <h3 class="font-serif text-xl font-bold">Simulator Scanare Cod QR</h3>
-                </div>
-                <button onclick="closeQrSimulator()" class="p-2 rounded-xl hover:bg-stone-200/60 dark:hover:bg-stone-800">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <p class="text-sm text-stone-600 dark:text-stone-400">
-                În sala de expoziție, fiecare dintre cele 20 de fotografii are un cod QR care deschide direct pagina sa (ex: <code>?exponat=3</code>). Alege un număr mai jos pentru a testa exact ce vede un vizitator pe telefon:
+            <h2 class="font-serif text-3xl sm:text-4xl font-bold">Vânătoarea celor 7 Coduri QR</h2>
+            <p class="opacity-80 mt-2 max-w-2xl text-sm sm:text-base">
+              Găsește cele 7 coduri QR ascunse în spațiul expoziției! Fiecare cod îți dezvăluie o întrebare despre activitățile proiectului.
             </p>
+          </div>
 
-            <div class="grid grid-cols-5 gap-2">
-                <!-- Butoane rapide #01 - #20 generate din JS -->
-                <div id="qr-sim-buttons" class="col-span-5 grid grid-cols-5 gap-2"></div>
-            </div>
+          <a href="https://kahoot.it" target="_blank" rel="noopener" class="px-5 py-3 rounded-xl bg-[#46178F] hover:bg-[#381272] text-white font-bold text-sm shadow-md flex items-center gap-2 shrink-0 self-start">
+            <i data-lucide="trophy" class="w-4 h-4"></i>
+            <span>Intră în Kahoot Live</span>
+          </a>
         </div>
-    </div>
 
-    <!-- ==========================================================================
-         MODAL 3: FOAIE DE PRINT CU TOATE CELE 20 DE CODURI QR
-         ========================================================================== -->
-    <div id="all-qr-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-        <div class="w-full max-w-5xl rounded-3xl bg-white text-stone-900 p-6 sm:p-8 shadow-2xl my-auto max-h-[90vh] overflow-y-auto space-y-6">
-            <div class="flex flex-wrap items-center justify-between gap-4 border-b pb-4">
-                <div>
-                    <h3 class="font-serif text-2xl font-bold">Etichete QR pentru Sala de Expoziție (20 Exponate + 7 Concurs)</h3>
-                    <p class="text-xs text-stone-500">Fiecare cod QR conține link-ul unic către exponatul sau stația de concurs. Apasă „Printează” pentru a le scoate la imprimantă.</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-terracotta text-white text-xs font-semibold">
-                        <i data-lucide="printer" class="w-4 h-4"></i> Printează Etichetele
-                    </button>
-                    <button onclick="document.getElementById('all-qr-modal').classList.add('hidden'); document.getElementById('all-qr-modal').classList.remove('flex');" class="p-2 rounded-xl hover:bg-stone-100">
-                        <i data-lucide="x" class="w-5 h-5"></i>
-                    </button>
-                </div>
-            </div>
-            <div id="all-qr-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-4"></div>
-            <div class="pt-4 border-t">
-                <h4 class="font-serif text-lg font-bold mb-3">Cele 7 Coduri QR pentru Concursul din Sala de Expoziție</h4>
-                <div id="contest-qr-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-4"></div>
-            </div>
+        <div id="contest-codes-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+
+        <div id="contest-question-box" class="hidden mt-8 p-6 sm:p-8 rounded-2xl paper-card border-2 border-terracotta shadow-xl">
+          <!-- Injectat prin JS -->
         </div>
-    </div>
+      </div>
+    </section>
 
-    <!-- ==========================================================================
-         MODAL 4: GHID RAPID PENTRU ECHIPĂ (ÎNLOCUIRE MATERIALE & PUBLICARE)
-         ========================================================================== -->
-    <div id="team-guide-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-        <div class="w-full max-w-2xl rounded-3xl bg-[#FAF8F5] dark:bg-[#1A1918] border border-[#E2D9C8] dark:border-[#2E2B28] p-6 sm:p-8 shadow-2xl my-auto space-y-5">
-            <div class="flex items-center justify-between border-b border-[#E2D9C8] dark:border-[#2E2B28] pb-4">
-                <div class="flex items-center gap-2.5">
-                    <i data-lucide="compass" class="w-6 h-6 text-terracotta dark:text-gold"></i>
-                    <h3 class="font-serif text-2xl font-bold">Ghid Rapid pentru Echipa de Proiect</h3>
+    <!-- ======================================================================
+         SUBSOL & PANOU ORGANIZATORI (QR PRINT + TOGGLE ZIUA EVENIMENTULUI)
+         ====================================================================== -->
+    <footer class="py-12 border-t border-amber-900/15 dark:border-white/10 text-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div>
+          <p class="font-serif font-bold text-lg">Universul Liviu Rebreanu</p>
+          <p class="opacity-70 text-xs mt-1">Expoziție culturală interactivă • Arhivă digitală permanentă</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <button onclick="openQrPrintModal()" class="px-4 py-2 rounded-xl paper-card hover:border-terracotta font-semibold text-xs flex items-center gap-2 transition">
+            <i data-lucide="qr-code" class="w-4 h-4 text-terracotta"></i>
+            <span>Generează Codurile QR (Print)</span>
+          </button>
+
+          <label class="inline-flex items-center gap-2 px-4 py-2 rounded-xl paper-card cursor-pointer text-xs font-semibold">
+            <input type="checkbox" id="toggle-event-day" checked class="accent-terracotta w-4 h-4" />
+            <span>Mod Ziua Evenimentului (Concurs Activ)</span>
+          </label>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ========================================================================
+       MODAL EXPONAT (FOTO HD + POEM + PLAYER AUDIO)
+       ======================================================================== -->
+  <div id="exhibit-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="relative w-full max-w-4xl rounded-2xl bg-[#FAF5EB] dark:bg-[#1E1B18] text-[#241D18] dark:text-[#F4EFE6] shadow-2xl border border-amber-900/20 dark:border-white/15 overflow-hidden my-auto">
+      <button onclick="closeExhibitModal()" aria-label="Închide" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/60 text-white hover:bg-terracotta flex items-center justify-center transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="grid grid-cols-1 md:grid-cols-2">
+        <div class="bg-black flex items-center justify-center min-h-[280px] sm:min-h-[420px]">
+          <img id="modal-img" src="" alt="" class="w-full h-full object-cover max-h-[520px]" />
+        </div>
+
+        <div class="p-6 sm:p-8 flex flex-col justify-between space-y-6">
+          <div>
+            <div class="flex items-center justify-between gap-2">
+              <span id="modal-badge" class="text-xs font-bold uppercase tracking-widest text-terracotta">Exponat #01</span>
+              <button onclick="copyCurrentExhibitLink()" class="text-xs opacity-75 hover:opacity-100 flex items-center gap-1 underline">
+                <i data-lucide="link" class="w-3 h-3"></i>
+                <span id="copy-link-label">Copiază link QR</span>
+              </button>
+            </div>
+            <h3 id="modal-title" class="font-serif text-2xl sm:text-3xl font-bold mt-1">Titlu Exponat</h3>
+
+            <div class="mt-4 p-4 rounded-xl bg-amber-900/[0.06] dark:bg-white/5 border border-amber-900/15 dark:border-white/10 max-h-52 overflow-y-auto">
+              <p id="modal-poem" class="font-literary italic text-lg sm:text-xl leading-relaxed whitespace-pre-line"></p>
+            </div>
+          </div>
+
+          <!-- Player Audio dedicat -->
+          <div class="p-4 rounded-xl bg-terracotta/10 border border-terracotta/25 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-terracotta flex items-center gap-1.5">
+                <i data-lucide="volume-2" class="w-4 h-4"></i>
+                <span>Înregistrare Audio Poem</span>
+              </span>
+              <div id="modal-eq" class="flex items-end gap-0.5 h-3.5">
+                <span class="eq-bar-1 w-1 bg-terracotta rounded-full h-1"></span>
+                <span class="eq-bar-2 w-1 bg-terracotta rounded-full h-2"></span>
+                <span class="eq-bar-3 w-1 bg-terracotta rounded-full h-1.5"></span>
+                <span class="eq-bar-4 w-1 bg-terracotta rounded-full h-2.5"></span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <button id="modal-play-btn" onclick="toggleExhibitAudio()" class="w-11 h-11 rounded-full bg-terracotta hover:bg-terracottaHover text-white flex items-center justify-center shrink-0 shadow transition">
+                <i data-lucide="play" class="w-5 h-5 ml-0.5" id="modal-play-icon"></i>
+              </button>
+              <div class="flex-1 space-y-1">
+                <input id="modal-progress" type="range" min="0" max="100" value="0" class="w-full accent-terracotta h-1.5 bg-amber-900/20 dark:bg-white/20 rounded-lg cursor-pointer" />
+                <div class="flex justify-between text-[11px] opacity-70 font-mono">
+                  <span id="modal-time-current">0:00</span>
+                  <span id="modal-time-duration">0:00</span>
                 </div>
-                <button onclick="closeTeamGuideModal()" class="p-2 rounded-xl hover:bg-stone-200/60 dark:hover:bg-stone-800">
-                    <i data-lucide="x" class="w-5 h-5"></i>
+              </div>
+            </div>
+            <audio id="exhibit-audio-player" preload="metadata"></audio>
+          </div>
+
+          <div class="flex items-center justify-between pt-2 border-t border-amber-900/15 dark:border-white/10">
+            <button onclick="navigateExhibit(-1)" class="px-4 py-2 rounded-lg text-xs font-semibold hover:bg-amber-900/10 dark:hover:bg-white/10 flex items-center gap-1.5 transition">
+              <i data-lucide="arrow-left" class="w-4 h-4"></i>
+              <span>Anterior</span>
+            </button>
+            <button onclick="navigateExhibit(1)" class="px-4 py-2 rounded-lg text-xs font-semibold hover:bg-amber-900/10 dark:hover:bg-white/10 flex items-center gap-1.5 transition">
+              <span>Următor</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL PRINTARE CODURI QR (20 EXPONATE + 7 CONCURS)
+       ======================================================================== -->
+  <div id="qr-print-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white text-black w-full max-w-5xl rounded-2xl p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-black/15">
+        <div>
+          <h3 class="font-serif text-2xl font-bold">Etichete QR pentru Sala de Expoziție</h3>
+          <p class="text-xs text-black/70 mt-1">Conține toate cele 20 de coduri pentru tablouri + cele 7 coduri pentru concurs. Apasă „Printează”.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-terracotta text-white text-xs font-bold flex items-center gap-1.5">
+            <i data-lucide="printer" class="w-4 h-4"></i>
+            <span>Printează PDF / Hârtie</span>
+          </button>
+          <button onclick="closeQrPrintModal()" class="px-3 py-2 rounded-xl bg-black/10 text-xs font-bold">Închide</button>
+        </div>
+      </div>
+
+      <div id="qr-print-area" class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6"></div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       JAVASCRIPT: ANIMAȚIA CĂRȚII + DATELE ȘI LOGICA SITE-ULUI
+       ======================================================================== -->
+  <script>
+    /* ========================================================================
+       LOGICA ANIMAȚIEI DE DESCHIDERE A CĂRȚII PE MASĂ DE LEMN
+       ======================================================================== */
+    let introTimers = [];
+
+    function runBookIntroAnimation() {
+      const stage = document.getElementById('book-intro-stage');
+      const book = document.getElementById('ancient-book');
+      const cover = document.getElementById('book-front-cover');
+      const leaf1 = document.getElementById('leaf-1');
+      const leaf2 = document.getElementById('leaf-2');
+      const leaf3 = document.getElementById('leaf-3');
+
+      // Reset stare inițială
+      introTimers.forEach(clearTimeout);
+      introTimers = [];
+      stage.classList.remove('intro-zoom-out');
+      stage.style.display = 'flex';
+      book.classList.remove('book-centered');
+      cover.classList.remove('opened');
+      leaf1.classList.remove('turned');
+      leaf2.classList.remove('turned');
+      leaf3.classList.remove('turned');
+
+      // 1. Îndreaptă cartea pe masa de lemn (0.6s)
+      introTimers.push(setTimeout(() => {
+        book.classList.add('book-centered');
+      }, 650));
+
+      // 2. Deschide coperta groasă din piele cu scris auriu (1.4s)
+      introTimers.push(setTimeout(() => {
+        cover.classList.add('opened');
+      }, 1450));
+
+      // 3. Răsfoiește prima filă (2.4s)
+      introTimers.push(setTimeout(() => {
+        leaf1.classList.add('turned');
+      }, 2400));
+
+      // 4. Răsfoiește a doua filă (3.0s)
+      introTimers.push(setTimeout(() => {
+        leaf2.classList.add('turned');
+      }, 3050));
+
+      // 5. Răsfoiește a treia filă și dezvăluie citatul (3.7s)
+      introTimers.push(setTimeout(() => {
+        leaf3.classList.add('turned');
+      }, 3700));
+
+      // 6. Tranziție lină (zoom-in în hârtia învechită) către site (5.1s)
+      introTimers.push(setTimeout(() => {
+        finishBookIntro();
+      }, 5150));
+    }
+
+    function finishBookIntro() {
+      introTimers.forEach(clearTimeout);
+      const stage = document.getElementById('book-intro-stage');
+      stage.classList.add('intro-zoom-out');
+      setTimeout(() => {
+        stage.style.display = 'none';
+      }, 950);
+    }
+
+    function replayBookIntro() {
+      runBookIntroAnimation();
+    }
+
+    /* ========================================================================
+       SECȚIUNEA A: DATELE EXPOZIȚIEI (AICI ÎNLOCUIȚI POZELE, POEMELE ȘI MP3-URILE)
+       ======================================================================== */
+    const EXHIBITS_DATA = [
+      {
+        id: 1,
+        title: "Glasul Pământului — Pripas",
+        subtitle: "Tablou I • Început de drum",
+        image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=900&q=80",
+        audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        poem: "Din huma grea a satului uitat,\nSe naște dorul vechi și neîmpăcat,\nIar drumul alb ce urcă spre Pripas\nPăstrează-n colb al vremii aprig pas."
+      },
+      {
+        id: 2,
+        title: "Sărutul Gliei",
+        subtitle: "Tablou II • Patima",
+        image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80",
+        audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+        poem: "Îngenuncheat în fața brazdei reci,\nSimțea cum lutul îi pătrunde-n vene,\nO dragoste mai tare decât vecii,\nȘi-un vis aprins sub grelele sprâncene."
+      },
+      {
+        id: 3,
+        title: "Hora din Sat",
+        subtitle: "Tablou III • Destine împletite",
+        image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=900&q=80",
+        audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+        poem: "În ritmul viu al strunei de vioară,\nSe-nvârte viața-n cerc amețitor,\nPriviri se caută și se-nfioară\nSub cerul cald al satului de dor."
+      },
+      {
+        id: 4,
+        title: "Tăcerea Anei",
+        subtitle: "Tablou IV • Suflet frânt",
+        image: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=900&q=80",
+        audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        poem: "O lacrimă ascunsă sub maramă,\nO inimă ce bate în zadar,\nIubirea ei tăcută, fără seamă,\nS-a stins ca o lumină pe altar."
+      }
+    ];
+
+    // Completăm automat până la 20 de exponate (înlocuiți cu datele voastre reale)
+    for (let i = 5; i <= 20; i++) {
+      EXHIBITS_DATA.push({
+        id: i,
+        title: `Tablou Literar #${String(i).padStart(2, '0')}`,
+        subtitle: `Exponat ${i} din 20 • Colecția Rebreanu`,
+        image: `https://picsum.photos/seed/rebreanu${i}/800/1000`,
+        audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+        poem: `Versuri dedicate exponatului #${i}:\n\nÎn file vechi cu miros de cerneală,\nTrăiesc povești ce nu se vor uita,\nIar glasul nostru-n taină le dezleagă\nSpre a le duce-n inima ta.`
+      });
+    }
+
+    const QUIZ_QUESTIONS = [
+      {
+        q: "1. Ce te motivează cel mai puternic atunci când îți propui un obiectiv mare?",
+        options: [
+          { text: "Dorința de a avea stabilitate, statut și ceva concret al meu.", char: "ion" },
+          { text: "Adevărul moral și liniștea propriei conștiințe.", char: "bologa" },
+          { text: "Nevoia de a fi iubit(ă) sincer și de a-mi proteja familia.", char: "ana" },
+          { text: "Curiozitatea intelectuală și dorința de a schimba lumea prin idei.", char: "titu" }
+        ]
+      },
+      {
+        q: "2. Cum reacționezi în fața unei nedreptăți?",
+        options: [
+          { text: "Lupt cu încăpățânare, chiar dacă trebuie să-mi asum riscuri mari.", char: "ion" },
+          { text: "Analizez profund situația și aleg ce este drept, indiferent de preț.", char: "bologa" },
+          { text: "Suport în tăcere, dar sufletul meu nu uită niciodată.", char: "ana" },
+          { text: "Scriu, vorbesc și încerc să îi trezesc și pe ceilalți.", char: "titu" }
+        ]
+      },
+      {
+        q: "3. Ce peisaj ți se potrivește cel mai bine?",
+        options: [
+          { text: "Un câmp întins, bogat, la răsăritul soarelui.", char: "ion" },
+          { text: "O pădure liniștită, învăluită în ceață și mister.", char: "bologa" },
+          { text: "O grădină primăvara, plină de flori și liniște.", char: "ana" },
+          { text: "O cafenea literară sau un tren spre un oraș nou.", char: "titu" }
+        ]
+      },
+      {
+        q: "4. Care este cea mai mare calitate a ta?",
+        options: [
+          { text: "Ambiția și forța de muncă.", char: "ion" },
+          { text: "Integritatea și profunzimea gândirii.", char: "bologa" },
+          { text: "Devotamentul și sensibilitatea.", char: "ana" },
+          { text: "Entuziasmul și creativitatea.", char: "titu" }
+        ]
+      },
+      {
+        q: "5. Ce te poate destabiliza cel mai ușor?",
+        options: [
+          { text: "Să simt că pierd controlul asupra muncii mele.", char: "ion" },
+          { text: "Conflictul dintre datorie și ceea ce simt cu adevărat.", char: "bologa" },
+          { text: "Indiferența oamenilor la care țin.", char: "ana" },
+          { text: "Rutina și lipsa de inspirație.", char: "titu" }
+        ]
+      },
+      {
+        q: "6. Cum te văd prietenii tăi?",
+        options: [
+          { text: "Hotărât(ă), puternic(ă) și greu de oprit.", char: "ion" },
+          { text: "Serios(oasă), reflexiv(ă) și demn(ă) de încredere.", char: "bologa" },
+          { text: "Blând(ă), empatic(ă) și mereu gata să ajute.", char: "ana" },
+          { text: "Visător(oare), plin(ă) de povești și mereu în mișcare.", char: "titu" }
+        ]
+      },
+      {
+        q: "7. Ce moto ți se potrivește?",
+        options: [
+          { text: "„Cine muncește și nu se lasă, stăpânește lumea.”", char: "ion" },
+          { text: "„Lumina adevărată se aprinde în interiorul omului.”", char: "bologa" },
+          { text: "„Iubirea adevărată dăruiește totul fără să ceară.”", char: "ana" },
+          { text: "„Cuvântul scris poate schimba destine.”", char: "titu" }
+        ]
+      }
+    ];
+
+    const CHARACTER_PROFILES = {
+      ion: {
+        name: "Ion al Glanetașului",
+        work: "Romanul „Ion” (1920)",
+        desc: "Ești o forță a naturii: ambițios, pragmatic și extrem de hotărât atunci când îți dorești ceva. Ai o energie uriașă, dar trebuie să ai grijă ca ambiția să nu lase în urmă oamenii care te iubesc."
+      },
+      bologa: {
+        name: "Apostol Bologa",
+        work: "Romanul „Pădurea spânzuraților” (1922)",
+        desc: "Ai o conștiință profundă și o verticalitate morală rară. Nu accepți compromisurile ușoare, cauți sensul autentic al lucrurilor și ai curajul să îți urmezi propriile principii."
+      },
+      ana: {
+        name: "Ana Baciu",
+        work: "Romanul „Ion” (1920)",
+        desc: "Ești un suflet cald, loial și profund empatic. Iubești cu toată ființa și pui armonia celor dragi pe primul loc. Lecția ta este să îți faci vocea auzită și să îți prețuiești propria valoare."
+      },
+      titu: {
+        name: "Titu Herdelea",
+        work: "„Ion” & „Răscoala”",
+        desc: "Ești spiritul liber, creativ și idealist! Îți place să observi lumea, să scrii, să explorezi idei noi și să fii puntea de legătură între oameni și cultură."
+      }
+    };
+
+    const FLASHCARDS_DATA = [
+      { cat: "biografie", front: "Când și unde s-a născut Liviu Rebreanu?", back: "S-a născut pe 27 noiembrie 1885, în satul Târlișua (județul Bistrița-Năsăud), fiind primul dintre cei 14 copii ai învățătorului Vasile Rebreanu." },
+      { cat: "opere", front: "Cum i-a venit ideea romanului „Ion”?", back: "A pornit de la trei scene reale văzute în satul Prislop: un țăran care a sărutat pământul ca pe o ibovnică, o fată bogată bătută de tatăl ei și povestea lui Ion Boldijar." },
+      { cat: "biografie", front: "Cum lucra Rebreanu noaptea?", back: "Scria aproape exclusiv noaptea, în liniște deplină, fumând mult și bând cafea tare, rescriind fiecare pagină de zeci de ori până atingea perfecțiunea." },
+      { cat: "opere", front: "Ce tragedie personală a inspirat „Pădurea spânzuraților”?", back: "Execuția fratelui său, Emil Rebreanu, ofițer în armata austro-ungară, spânzurat în 1917 la Ghimeș pentru că a încercat să treacă de partea armatei române." },
+      { cat: "biografie", front: "Ce funcții culturale importante a deținut?", back: "A fost director al Teatrului Național din București, președinte al Societății Scriitorilor Români și membru titular al Academiei Române (din 1939)." },
+      { cat: "opere", front: "De ce este considerat creatorul romanului românesc modern?", back: "Prin „Ion” (1920), a înlocuit idilismul sămănătorist cu realismul obiectiv, dur și psihologic, construit cu o arhitectură narativă circulară impecabilă." }
+    ];
+
+    const PLAYLIST_DATA = [
+      { title: "Simfonia a V-a — Adagietto", composer: "Gustav Mahler", duration: "04:12", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+      { title: "Nocturna în Mi bemol major, Op. 9 Nr. 2", composer: "Frédéric Chopin", duration: "04:30", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+      { title: "Rapsodia Română nr. 1", composer: "George Enescu", duration: "05:18", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+      { title: "Sonata Lunii — Mișcarea I", composer: "Ludwig van Beethoven", duration: "05:45", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" }
+    ];
+
+    const CONTEST_CODES_DATA = [
+      { code: 1, title: "Codul #1 — Pripas", question: "Cum se numește satul în care se petrece acțiunea principală a romanului „Ion”?", hint: "Verifică Tabloul #01 din galerie." },
+      { code: 2, title: "Codul #2 — Biografie", question: "Câți frați a avut Liviu Rebreanu în familia învățătorului Vasile Rebreanu?", hint: "Răspunsul se află în Flashcard-urile de la secțiunea Curiozități." },
+      { code: 3, title: "Codul #3 — Muzică", question: "Ce compoziție de George Enescu se regăsește în Playlist-ul expoziției?", hint: "Ascultă secțiunea 05 • Playlist." },
+      { code: 4, title: "Codul #4 — Pădurea spânzuraților", question: "Cine este personajul principal din romanul inspirat de drama fratelui său, Emil?", hint: "Poți afla și din Quiz-ul de personalitate." },
+      { code: 5, title: "Codul #5 — Anul de grație", question: "În ce an a fost publicat romanul „Ion”, marcând nașterea romanului românesc modern?", hint: "Caută în secțiunea Curiozități." },
+      { code: 6, title: "Codul #6 — Animație", question: "Care este numele personajului din secțiunea de animații video ale expoziției?", hint: "Privește secțiunea 04 • Cinema." },
+      { code: 7, title: "Codul #7 — Academia", question: "În ce an a devenit Liviu Rebreanu membru titular al Academiei Române?", hint: "Răspunsul este pe unul dintre Flashcard-urile 3D." }
+    ];
+
+    /* ========================================================================
+       INIȚIALIZARE & LOGICĂ APLICAȚIE
+       ======================================================================== */
+    let currentExhibitIndex = 0;
+    let currentQuizStep = 0;
+    let quizScores = { ion: 0, bologa: 0, ana: 0, titu: 0 };
+    let currentPlaylistIndex = 0;
+    let isPlaylistPlaying = false;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      initTheme();
+      renderExhibits(EXHIBITS_DATA);
+      renderQuiz();
+      renderFlashcards('toate');
+      renderPlaylist();
+      renderContestCodes();
+      handleUrlParameters();
+      setupEventListeners();
+
+      // Pornește animația de deschidere a cărții pe masă de lemn
+      runBookIntroAnimation();
+    });
+
+    function initTheme() {
+      const saved = localStorage.getItem('rebreanu-theme');
+      if (saved === 'dark') document.documentElement.classList.add('dark');
+      document.getElementById('theme-toggle').addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('rebreanu-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      });
+    }
+
+    function renderExhibits(list) {
+      const grid = document.getElementById('exhibits-grid');
+      grid.innerHTML = list.map(item => `
+        <article onclick="openExhibitModal(${item.id})" class="group cursor-pointer rounded-2xl overflow-hidden paper-card hover:border-terracotta shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+          <div class="relative aspect-[4/5] overflow-hidden bg-black/10">
+            <img src="${item.image}" alt="${item.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/70 text-white text-xs font-mono font-bold backdrop-blur-sm">
+              #${String(item.id).padStart(2, '0')}
+            </div>
+            <div class="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-terracotta text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+              <i data-lucide="headphones" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="p-4 flex-1 flex flex-col justify-between">
+            <div>
+              <p class="text-[11px] uppercase tracking-wider text-terracotta font-semibold">${item.subtitle}</p>
+              <h3 class="font-serif text-lg font-bold mt-0.5 group-hover:text-terracotta transition-colors">${item.title}</h3>
+            </div>
+            <p class="text-xs opacity-70 mt-3 flex items-center gap-1 font-medium">
+              <span>Citește poemul &amp; ascultă</span>
+              <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+            </p>
+          </div>
+        </article>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    const exhibitAudio = document.getElementById('exhibit-audio-player');
+    const modalProgress = document.getElementById('modal-progress');
+
+    function openExhibitModal(id) {
+      const idx = EXHIBITS_DATA.findIndex(e => e.id === id);
+      if (idx === -1) return;
+      currentExhibitIndex = idx;
+      const item = EXHIBITS_DATA[idx];
+
+      document.getElementById('modal-badge').textContent = `Exponat #${String(item.id).padStart(2, '0')}`;
+      document.getElementById('modal-title').textContent = item.title;
+      document.getElementById('modal-img').src = item.image;
+      document.getElementById('modal-img').alt = item.title;
+      document.getElementById('modal-poem').textContent = item.poem;
+
+      exhibitAudio.pause();
+      exhibitAudio.src = item.audio;
+      modalProgress.value = 0;
+      document.getElementById('modal-time-current').textContent = '0:00';
+      updateModalPlayUI(false);
+
+      document.getElementById('exhibit-modal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeExhibitModal() {
+      exhibitAudio.pause();
+      updateModalPlayUI(false);
+      document.getElementById('exhibit-modal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    function navigateExhibit(dir) {
+      const next = (currentExhibitIndex + dir + EXHIBITS_DATA.length) % EXHIBITS_DATA.length;
+      openExhibitModal(EXHIBITS_DATA[next].id);
+    }
+
+    function toggleExhibitAudio() {
+      if (exhibitAudio.paused) {
+        exhibitAudio.play();
+        updateModalPlayUI(true);
+      } else {
+        exhibitAudio.pause();
+        updateModalPlayUI(false);
+      }
+    }
+
+    function updateModalPlayUI(playing) {
+      const icon = document.getElementById('modal-play-icon');
+      const eq = document.getElementById('modal-eq');
+      icon.setAttribute('data-lucide', playing ? 'pause' : 'play');
+      eq.classList.toggle('eq-playing', playing);
+      lucide.createIcons();
+    }
+
+    exhibitAudio.addEventListener('timeupdate', () => {
+      if (!exhibitAudio.duration) return;
+      modalProgress.value = (exhibitAudio.currentTime / exhibitAudio.duration) * 100;
+      document.getElementById('modal-time-current').textContent = formatTime(exhibitAudio.currentTime);
+      document.getElementById('modal-time-duration').textContent = formatTime(exhibitAudio.duration);
+    });
+
+    exhibitAudio.addEventListener('ended', () => updateModalPlayUI(false));
+
+    modalProgress.addEventListener('input', () => {
+      if (exhibitAudio.duration) {
+        exhibitAudio.currentTime = (modalProgress.value / 100) * exhibitAudio.duration;
+      }
+    });
+
+    function copyCurrentExhibitLink() {
+      const item = EXHIBITS_DATA[currentExhibitIndex];
+      const url = `${window.location.origin}${window.location.pathname}?exponat=${item.id}`;
+      navigator.clipboard.writeText(url);
+      const lbl = document.getElementById('copy-link-label');
+      lbl.textContent = 'Link copiat!';
+      setTimeout(() => lbl.textContent = 'Copiază link QR', 2000);
+    }
+
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m}:${String(s).padStart(2, '0')}`;
+    }
+
+    function renderQuiz() {
+      const box = document.getElementById('quiz-container');
+      if (currentQuizStep < QUIZ_QUESTIONS.length) {
+        const qObj = QUIZ_QUESTIONS[currentQuizStep];
+        const pct = Math.round((currentQuizStep / QUIZ_QUESTIONS.length) * 100);
+        box.innerHTML = `
+          <div class="space-y-6">
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs font-semibold opacity-70">
+                <span>Întrebarea ${currentQuizStep + 1} din ${QUIZ_QUESTIONS.length}</span>
+                <span>${pct}%</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-amber-900/15 dark:bg-white/10 overflow-hidden">
+                <div class="h-full bg-terracotta transition-all duration-300" style="width: ${pct}%"></div>
+              </div>
+            </div>
+            <h3 class="font-serif text-xl sm:text-2xl font-bold">${qObj.q}</h3>
+            <div class="space-y-3">
+              ${qObj.options.map(opt => `
+                <button onclick="answerQuiz('${opt.char}')" class="w-full text-left p-4 rounded-xl border border-amber-900/20 dark:border-white/15 hover:border-terracotta hover:bg-terracotta/5 transition-all text-sm sm:text-base font-medium">
+                  ${opt.text}
                 </button>
+              `).join('')}
             </div>
-
-            <div class="space-y-4 text-sm text-stone-700 dark:text-stone-300 leading-relaxed">
-                <div class="p-4 rounded-2xl bg-white dark:bg-[#111111] border border-[#E2D9C8] dark:border-[#2E2B28] space-y-1.5">
-                    <p class="font-bold text-terracotta dark:text-gold">1. Cum adăugați cele 20 de poze și 20 de fișiere audio (.mp3)</p>
-                    <p class="text-xs text-stone-600 dark:text-stone-400">
-                        Creați un folder <code>assets/</code> lângă <code>index.html</code>, puneți pozele (ex: <code>foto-01.jpg</code> ... <code>foto-20.jpg</code>) și audio-urile (<code>audio-01.mp3</code> ... <code>audio-20.mp3</code>), apoi actualizați câmpurile <code>image</code> și <code>audioUrl</code> în <code>EXHIBITS_DATA</code>.
-                    </p>
-                </div>
-
-                <div class="p-4 rounded-2xl bg-white dark:bg-[#111111] border border-[#E2D9C8] dark:border-[#2E2B28] space-y-1.5">
-                    <p class="font-bold text-terracotta dark:text-gold">2. Cum adăugați clipurile Video & Animațiile „Ion”</p>
-                    <p class="text-xs text-stone-600 dark:text-stone-400">
-                        Încărcați clipurile pe YouTube (ca <em>Unlisted / Nelistat</em>) și treceți codul video de după <code>?v=</code> în câmpul <code>youtubeId</code> din <code>CINEMA_DATA</code>.
-                    </p>
-                </div>
-
-                <div class="p-4 rounded-2xl bg-white dark:bg-[#111111] border border-[#E2D9C8] dark:border-[#2E2B28] space-y-1.5">
-                    <p class="font-bold text-terracotta dark:text-gold">3. Publicare gratuită „pe vecie” (GitHub Pages / Vercel)</p>
-                    <p class="text-xs text-stone-600 dark:text-stone-400">
-                        Încărcați <code>index.html</code> și folderul <code>assets/</code> într-un repository GitHub și activați <strong>GitHub Pages</strong> (sau conectați repo-ul pe <strong>Vercel</strong>). Link-ul va fi gratuit și accesibil permanent de pe orice telefon, iar opțional puteți conecta un domeniu <code>.ro</code>.
-                    </p>
-                </div>
-
-                <div class="p-4 rounded-2xl bg-white dark:bg-[#111111] border border-[#E2D9C8] dark:border-[#2E2B28] space-y-1.5">
-                    <p class="font-bold text-terracotta dark:text-gold">4. Arhivarea concursului după ziua expoziției</p>
-                    <p class="text-xs text-stone-600 dark:text-stone-400">
-                        La finalul zilei de expoziție, debifați <strong>„Mod Ziua Evenimentului (Concurs Activ)”</strong> din subsolul paginii — setarea se salvează automat în browser și ascunde concursul.
-                    </p>
-                </div>
+          </div>
+        `;
+      } else {
+        const winnerKey = Object.keys(quizScores).reduce((a, b) => quizScores[a] >= quizScores[b] ? a : b);
+        const profile = CHARACTER_PROFILES[winnerKey];
+        box.innerHTML = `
+          <div class="text-center space-y-5">
+            <span class="inline-block px-3.5 py-1 rounded-full bg-gold/20 text-amber-900 dark:text-gold text-xs font-bold uppercase tracking-widest">
+              Rezultatul tău literar
+            </span>
+            <h3 class="font-serif text-3xl sm:text-4xl font-bold text-terracotta">${profile.name}</h3>
+            <p class="text-xs font-semibold uppercase tracking-wider opacity-70">${profile.work}</p>
+            <p class="max-w-xl mx-auto text-sm sm:text-base leading-relaxed opacity-90">${profile.desc}</p>
+            <div class="pt-4 flex flex-wrap justify-center gap-3">
+              <button onclick="shareQuizResult('${profile.name}')" class="px-5 py-2.5 rounded-xl bg-terracotta text-white text-sm font-semibold flex items-center gap-2 hover:bg-terracottaHover transition">
+                <i data-lucide="share-2" class="w-4 h-4"></i>
+                <span id="share-quiz-btn">Copiază rezultatul</span>
+              </button>
+              <button onclick="resetQuiz()" class="px-5 py-2.5 rounded-xl border border-amber-900/25 dark:border-white/15 text-sm font-semibold hover:border-terracotta transition">
+                Reia testul
+              </button>
             </div>
+          </div>
+        `;
+        lucide.createIcons();
+      }
+    }
+
+    function answerQuiz(charKey) {
+      quizScores[charKey]++;
+      currentQuizStep++;
+      renderQuiz();
+    }
+
+    function resetQuiz() {
+      currentQuizStep = 0;
+      quizScores = { ion: 0, bologa: 0, ana: 0, titu: 0 };
+      renderQuiz();
+    }
+
+    function shareQuizResult(name) {
+      const text = `Am făcut quiz-ul „Universul Liviu Rebreanu” și semăn cel mai mult cu ${name}! Descoperă și tu ce personaj ești: ${window.location.origin}${window.location.pathname}#quiz-personaj`;
+      navigator.clipboard.writeText(text);
+      document.getElementById('share-quiz-btn').textContent = 'Copiat pentru WhatsApp / IG!';
+    }
+
+    function renderFlashcards(category) {
+      const grid = document.getElementById('flashcards-grid');
+      const filtered = category === 'toate' ? FLASHCARDS_DATA : FLASHCARDS_DATA.filter(f => f.cat === category);
+      grid.innerHTML = filtered.map(fc => `
+        <div onclick="this.querySelector('.fc-inner').classList.toggle('rotate-y-180')" class="h-64 perspective-1000 cursor-pointer group">
+          <div class="fc-inner relative w-full h-full transition-transform duration-500 transform-style-3d">
+            <div class="absolute inset-0 backface-hidden rounded-2xl p-6 paper-card shadow-sm group-hover:border-terracotta flex flex-col justify-between">
+              <span class="text-[11px] font-bold uppercase tracking-widest text-terracotta">${fc.cat}</span>
+              <h3 class="font-serif text-xl font-bold leading-snug">${fc.front}</h3>
+              <span class="text-xs opacity-60 flex items-center gap-1">
+                <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
+                <span>Atinge pentru răspuns</span>
+              </span>
+            </div>
+            <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-2xl p-6 bg-terracotta text-white shadow-lg flex flex-col justify-between">
+              <span class="text-[11px] font-bold uppercase tracking-widest text-white/75">Curiozitate Rebreanu</span>
+              <p class="text-sm sm:text-base leading-relaxed font-medium">${fc.back}</p>
+              <span class="text-xs text-white/70">Atinge pentru a reveni</span>
+            </div>
+          </div>
         </div>
-    </div>
+      `).join('');
+      lucide.createIcons();
+    }
 
-    <!-- Container Notificări Toast -->
-    <div id="toast-container"></div>
+    const playlistAudio = document.getElementById('playlist-audio-element');
 
-    <!-- ==========================================================================
-         LOGICA COMPLETĂ JAVASCRIPT (DATE + AUDIO ENGINE + QUIZ + QR + CONCURS)
-         ========================================================================== -->
-    <script>
-        /* ==========================================================================
-           SECȚIUNEA A: DATELE EXPOZIȚIEI
-           AICI ÎNLOCUIEȘTI CU POZELE, POEMELE ȘI FIȘIERELE VOASTRE REALE (.mp3 / .jpg)
-           ========================================================================== */
+    function renderPlaylist() {
+      const list = document.getElementById('playlist-tracks');
+      list.innerHTML = PLAYLIST_DATA.map((track, idx) => `
+        <button onclick="playPlaylistTrack(${idx})" class="w-full py-3.5 px-3 rounded-xl hover:bg-white/5 flex items-center justify-between gap-4 text-left transition ${idx === currentPlaylistIndex && isPlaylistPlaying ? 'bg-white/10 text-gold' : ''}">
+          <div class="flex items-center gap-3.5 min-w-0">
+            <span class="w-6 text-xs font-mono opacity-60">${idx + 1}</span>
+            <div class="truncate">
+              <p class="font-semibold text-sm truncate">${track.title}</p>
+              <p class="text-xs text-white/60 truncate">${track.composer}</p>
+            </div>
+          </div>
+          <span class="text-xs font-mono opacity-60 shrink-0">${track.duration}</span>
+        </button>
+      `).join('');
+    }
 
-        // 1. CELE 20 DE EXPONATE (FOTO + POEM + AUDIO)
-        // Sfat pentru echipă: Când aveți fișierele reale, puneți-le într-un folder "assets/"
-        // și înlocuiți `image` cu "assets/poza-1.jpg" și `audioUrl` cu "assets/audio-1.mp3".
-        const EXHIBITS_DATA = [
-            {
-                id: 1,
-                category: "ion",
-                categoryLabel: "Ion & Pământul",
-                title: "Glasul Pământului",
-                subtitle: "Prislop • Rădăcini și dor nestins",
-                image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "", // EX: "assets/audio-01.mp3" (dacă e gol, rulează sunetul ambiental demonstrativ)
-                duration: "00:48",
-                poem: "Sub talpa goală, lutul cald respiră,\nO chemare veche din adânc de veac,\nNu-i doar țărână — e destin și liră,\nPe care dorul nostru s-a-mbrăcat.\n\nCând brațul strânge brazda în tăcere,\nTot cerul cade-n palma unui om,\nȘi-n fiecare spic de grâu răsare\nPovestea vie a unui singur domn."
-            },
-            {
-                id: 2,
-                category: "ion",
-                categoryLabel: "Ion & Pământul",
-                title: "Hora din Pripas",
-                subtitle: "Duminica satului • Ritm și privire",
-                image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:42",
-                poem: "Se-nvârte hora-n colbul de duminică,\nViorile plâng dulce și aprins,\nÎn ochii lui, o patimă ridică\nUn vis pe care nimeni nu l-a stins.\n\nSub nucul bătrân, taina se rostește,\nUn pas spre Ana, gândul la hotar,\nIar satul întreg tace și privește\nCum soarta-și toarnă cupa de amar."
-            },
-            {
-                id: 3,
-                category: "ion",
-                categoryLabel: "Ion & Pământul",
-                title: "Sărutul Brazdei",
-                subtitle: "Primăvara • Legământul tăcut",
-                image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:51",
-                poem: "Îngenuncheat în fața dimineții,\nEl își lipește fruntea de pământ,\nSimțind cum bate inima vieții\nÎn fiecare bulgăre tăcut și sfânt.\n\nNu-i stăpânire — e o contopire,\nUn jurământ ce nu se poate frânge,\nCăci omul fără glie-i o umbrire,\nIar glia fără om în taină plânge."
-            },
-            {
-                id: 4,
-                category: "ion",
-                categoryLabel: "Ion & Pământul",
-                title: "Tăcerea Anei",
-                subtitle: "Lacrima nerostită • Destin feminin",
-                image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:45",
-                poem: "În colțul odăii, umbra se așterne,\nUn suflet blând ce-așteaptă un cuvânt,\nIubirea ei — o candelă eternă\nCe arde-ncet sub vântul de pământ.\n\nNu cere aur, nici hotare late,\nCi doar o vorbă caldă-n ceas târziu,\nDar inimile-s ziduri ferecate\nÎn satul unde dorul e pustiu."
-            },
-            {
-                id: 5,
-                category: "ion",
-                categoryLabel: "Ion & Pământul",
-                title: "Florica și Zâmbetul Verii",
-                subtitle: "Glasul Iubirii • Chemarea inimii",
-                image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:39",
-                poem: "Ca un mac roșu-n lanul de secară,\nRâsul ei limpede taie văzduhul,\nAduce-n suflet blânda primăvară\nȘi-aprinde-n piept, din nou, tot duhul.\n\nDar între inima ce cântă-n șoaptă\nȘi glasul rece-al lumii de afară,\nSe-așterne-o umbră lungă și deșteaptă\nCe-ntoarce visul dulce în povară."
-            },
-            {
-                id: 6,
-                category: "ion",
-                categoryLabel: "Ion & Pământul",
-                title: "Casa Învățătorului Herdelea",
-                subtitle: "Cărți, vise și demnitate",
-                image: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:44",
-                poem: "Pe masa veche, filele îngălbenite\nPăstrează visul unei lumi mai drepte,\nCuvinte scrise-n nopți neliniștite\nPe trepte de lumină înțelepte.\n\nAici se nasc speranțe și poeme,\nSub lampa ce veghează la fereastră,\nUn colț de spirit dincolo de vreme\nÎn inima Ardealului noastră."
-            },
-            {
-                id: 7,
-                category: "ion",
-                categoryLabel: "Ion & Pământul",
-                title: "Crucea de la Răscruce",
-                subtitle: "Unde se întâlnesc drumurile satului",
-                image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:40",
-                poem: "La marginea drumului prăfuit,\nO cruce veche stă de strajă-n vânt,\nPrivește spre apus și răsărit,\nMartor tăcut la fiecare gând.\n\nAici se-opresc drumeții să respire,\nAici se-mpart dureri și bucurii,\nUn semn de piatră-n veșnica rotire\nA anilor ce trec peste câmpii."
-            },
-            {
-                id: 8,
-                category: "padurea",
-                categoryLabel: "Pădurea Spânzuraților",
-                title: "Lumina din Întuneric",
-                subtitle: "Apostol Bologa • Conștiința trează",
-                image: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:53",
-                poem: "În codrul rece, printre crengi tăcute,\nO rază caută drumul spre pământ,\nÎntrebări grele, vechi și neștiute\nSe zbat în suflet ca o pasăre-n vânt.\n\nCe-i datoria când îți frânge neamul?\nCe-i legea scrisă fără de iubire?\nÎn noaptea-adâncă se aprinde geamul\nUnui destin ce-alege mântuire."
-            },
-            {
-                id: 9,
-                category: "padurea",
-                categoryLabel: "Pădurea Spânzuraților",
-                title: "Scrisoarea de Acasă",
-                subtitle: "Dorul de mamă și de Lunca",
-                image: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:47",
-                poem: "Pe foaia albă, literele tremur,\nPurtând parfum de busuioc și casă,\nUn glas de mamă peste mări și vremuri\nAduce pace-n noaptea-ntunecoasă.\n\n„Întoarce-te cu sufletul curat,\nAcolo unde clopotele sună,\nCăci niciun cer străin și-ndepărtat\nNu-ți poate da lumina noastră bună.”"
-            },
-            {
-                id: 10,
-                category: "padurea",
-                categoryLabel: "Pădurea Spânzuraților",
-                title: "Reflectorul din Noapte",
-                subtitle: "Lumina care dezvăluie adevărul",
-                image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:41",
-                poem: "Un fascicul alb brăzdează bezna rece,\nTăind tăcerea frontului pustiu,\nOrice minciună-n fața lui se trece\nȘi-adevărul rămâne singur, viu.\n\nNu poți ascunde umbra de lumină,\nNici gândul liber în tranșee reci,\nCând conștiința cheamă și alină,\nEa te conduce-n veșnicie-n veci."
-            },
-            {
-                id: 11,
-                category: "padurea",
-                categoryLabel: "Pădurea Spânzuraților",
-                title: "Ilona și Casa din Padina",
-                subtitle: "Refugiul iubirii simple",
-                image: "https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:46",
-                poem: "Fără cuvinte multe, doar privirea,\nCe-nțelege durerea fără glas,\nÎn casa mică s-a născut iubirea\nCa un liman în cel mai greu impas.\n\nO mână caldă ce alungă teama,\nUn zâmbet limpede ca un izvor,\nAcolo unde sufletul își cheamă\nLiniștea dulce-a unui nou decor."
-            },
-            {
-                id: 12,
-                category: "padurea",
-                categoryLabel: "Pădurea Spânzuraților",
-                title: "Cumpăna Conștiinței",
-                subtitle: "Alegerea supremă • Demnitate",
-                image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:49",
-                poem: "Între doi munți se-așterne o cărare,\nPe una-i frica, pe cealaltă-i cerul,\nSufletul bate aripi spre-nălțare\nȘi rupe-n două lanțul și misterul.\n\nNu moartea-nfrânge omul ce iubește,\nCi trădarea propriului crez,\nIar cel ce-n adevăr se regăsește\nPășește-n zori cu pasul luminos."
-            },
-            {
-                id: 13,
-                category: "padurea",
-                categoryLabel: "Pădurea Spânzuraților",
-                title: "Zorii de la Lunca",
-                subtitle: "Când ceața se ridică peste ape",
-                image: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:38",
-                poem: "Se-nalță ceața albă de pe râu,\nÎmbrățișând colinele tăcute,\nPeste ogoare aurii de grâu\nSe-aud din nou cântările știute.\n\nE pace-n zori și liniște-n văzduh,\nCa după-o lungă noapte de furtună,\nCând lumea-ntreagă-și reîncarcă duh\nSub binecuvântarea de lumină."
-            },
-            {
-                id: 14,
-                category: "padurea",
-                categoryLabel: "Pădurea Spânzuraților",
-                title: "Clopotul de Duminică",
-                subtitle: "Ecoul peste dealurile Năsăudului",
-                image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:43",
-                poem: "Un sunet grav plutește peste văi,\nChemând la rugă și la împăcare,\nSe-ntorc acasă fiii de pe căi\nCu fruntea sus și inima mai mare.\n\nBronzul bătrân vibrează în eter,\nLegând pământul de bolta senină,\nUn cântec sfânt ce urcă până-n cer\nȘi lasă-n urmă liniște deplină."
-            },
-            {
-                id: 15,
-                category: "viata",
-                categoryLabel: "Viața & Destinul",
-                title: "Răscoala — Glasul Mulțimii",
-                subtitle: "Freamătul istoriei • 1907",
-                image: "https://images.unsplash.com/photo-1509023464722-18d996393ca8?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:50",
-                poem: "Când răbdarea se frânge-n mii de glasuri,\nCâmpia fierbe ca un ocean viu,\nNu mai există ziduri, nici popasuri,\nCi doar un strigăt drept și timpuriu.\n\nO mare de priviri ce cer dreptate,\nUn val ce nu mai poate fi oprit,\nIstoria se scrie-n libertate\nDe cei ce-au ars și-au suferit."
-            },
-            {
-                id: 16,
-                category: "viata",
-                categoryLabel: "Viața & Destinul",
-                title: "Adam și Eva — Șapte Vieți",
-                subtitle: "Iubirea care străbate veacurile",
-                image: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:48",
-                poem: "În șapte lumi și-n șapte trupuri noi,\nAceleași două suflete se caută,\nPrin foc, prin nisipuri și prin ploi,\nUn dor etern ce nu se mai învață.\n\nO singură clipă de regăsire\nPlătește secole de rătăciri,\nCăci nu există moarte în iubire,\nCi doar un șir nesfârșit de treziri."
-            },
-            {
-                id: 17,
-                category: "viata",
-                categoryLabel: "Viața & Destinul",
-                title: "Ciuleandra — Vârtejul Patimii",
-                subtitle: "Dansul care accelerează destinul",
-                image: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:42",
-                poem: "Începe lent, ca un susur de apă,\nApoi se-aprinde-n pași tot mai grăbiți,\nUn cerc de foc din care nu se scapă,\nUn ritm ce-mbină sfinți și rătăciți.\n\nTot mai iute! Pământul se-nvârtește,\nÎn ochi scânteie flăcări de demult,\nIar sufletul în dans se-ntinerește\nÎn vârtejul nebun și tumult."
-            },
-            {
-                id: 18,
-                category: "viata",
-                categoryLabel: "Viața & Destinul",
-                title: "Masa de Scris din Valea Mare",
-                subtitle: "Atelierul creatorului • Nopți de veghe",
-                image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:46",
-                poem: "Un toc, o călimară și-o lumină,\nPe masa unde lumea prinde glas,\nFiecare frază-i o grădină\nSădită-n miez de noapte, pas cu pas.\n\nAici se nasc eroi ce nu apun,\nDin cerneala aprinsă de gândire,\nUn univers puternic și străbun\nCe-nvinge timpul prin nemurire."
-            },
-            {
-                id: 19,
-                category: "viata",
-                categoryLabel: "Viața & Destinul",
-                title: "Târlișua și Maieru — Cuibul Copilăriei",
-                subtitle: "Acolo unde a început povestea",
-                image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:44",
-                poem: "Munții Rodnei străjuiesc tăcuți\nValea în care-am învățat să văd,\nIzvoare reci și codri neîncepuți\nCe-mi poartă pașii încă pe prăpăd.\n\nOricât de sus m-ar duce-a lumii cale,\nÎn gând mă-ntorc mereu la acel prag,\nUnde copilăria-n munți și vale\nMi-a pus în suflet tot ce am mai drag."
-            },
-            {
-                id: 20,
-                category: "viata",
-                categoryLabel: "Viața & Destinul",
-                title: "Nemurirea Cuvântului",
-                subtitle: "Epilogul Expoziției • Liviu Rebreanu",
-                image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=800&q=80",
-                audioUrl: "",
-                duration: "00:55",
-                poem: "Trec anii peste filele deschise,\nDar glasul său rămâne neclintit,\nUn arhitect de suflete și vise\nCe-a dat literaturii răsărit.\n\nCât timp va fi un om să mai iubească\nPământul, adevărul și un vis,\nOpera lui va ști să dăinuiască\nCa un hotar spre veșnicie-ntins."
-            }
-        ];
+    function playPlaylistTrack(idx) {
+      currentPlaylistIndex = idx;
+      const track = PLAYLIST_DATA[idx];
+      playlistAudio.src = track.src;
+      playlistAudio.play();
+      isPlaylistPlaying = true;
+      document.getElementById('playlist-now-playing').textContent = `Acum rulează: ${track.title} — ${track.composer}`;
+      updatePlaylistMainBtn();
+      renderPlaylist();
+    }
 
-        // 2. ÎNTREBĂRILE QUIZ-ULUI DE PERSONALITATE ("CE PERSONAJ REBREANU EȘTI?")
-        const QUIZ_QUESTIONS = [
-            {
-                question: "1. Care este lucrul pentru care ai lupta până la capăt, indiferent de obstacole?",
-                options: [
-                    { text: "Stabilitatea, succesul și locul meu sub soare", character: "ion" },
-                    { text: "Adevărul interior și împăcarea cu propria conștiință", character: "apostol" },
-                    { text: "O iubire sinceră și liniștea sufletească", character: "ana" },
-                    { text: "Libertatea de a trăi clipa și de a crea", character: "titu" },
-                    { text: "Independența și trăirea intensă, fără tipare impuse", character: "nadina" }
-                ]
-            },
-            {
-                question: "2. Cum reacționezi atunci când cei din jur încearcă să îți impună o decizie?",
-                options: [
-                    { text: "Îmi urmez planul cu încăpățânare, chiar dacă trebuie să risc totul", character: "ion" },
-                    { text: "Analizez profund dacă e moral și refuz să fac compromisuri", character: "apostol" },
-                    { text: "Îmi doresc armonia și adesea pun fericirea altora înaintea mea", character: "ana" },
-                    { text: "Vin cu o idee nouă care schimbă perspectiva tuturor", character: "titu" },
-                    { text: "Păstrez distanța elegantă și aleg mereu propriul drum", character: "nadina" }
-                ]
-            },
-            {
-                question: "3. Ce peisaj îți aduce cea mai mare liniște?",
-                options: [
-                    { text: "Un câmp întins, scăldat în soarele dimineții", character: "ion" },
-                    { text: "O pădure deasă de munte, unde poți gândi în tăcere", character: "apostol" },
-                    { text: "O grădină liniștită la apus, departe de zgomot", character: "ana" },
-                    { text: "Un colț de lectură sau o cafenea plină de conversații vii", character: "titu" },
-                    { text: "Un loc deschis, luminos, cu orizont larg și libertate", character: "nadina" }
-                ]
-            },
-            {
-                question: "4. Care crezi că este cea mai mare slăbiciune a oamenilor?",
-                options: [
-                    { text: "Frica de a-și cere dreptul și lipsa de ambiție", character: "ion" },
-                    { text: "Supunerea oarbă fără a-și asculta inima", character: "apostol" },
-                    { text: "Răceala și incapacitatea de a prețui bunătatea", character: "ana" },
-                    { text: "Rutina lipsită de imaginație și curiozitate", character: "titu" },
-                    { text: "Ipocrizia și teama de a fi autentici", character: "nadina" }
-                ]
-            },
-            {
-                question: "5. Dacă ai scrie o carte, despre ce ar fi povestea ei?",
-                options: [
-                    { text: "Despre ambiție, luptă și puterea de a-ți schimba destinul", character: "ion" },
-                    { text: "Despre alegeri grele, onoare și căutarea sensului vieții", character: "apostol" },
-                    { text: "Despre devotament, speranță și puterea tăcută a inimii", character: "ana" },
-                    { text: "Despre artă, căutări interioare și puterea cuvântului", character: "titu" },
-                    { text: "Despre o personalitate liberă care își rescrie propriile reguli", character: "nadina" }
-                ]
-            },
-            {
-                question: "6. Ce cuvânt te definește cel mai bine într-o echipă?",
-                options: [
-                    { text: "Determinarea — nu mă las până nu reușesc", character: "ion" },
-                    { text: "Integritatea — fac mereu ceea ce simt că este drept", character: "apostol" },
-                    { text: "Empatia — simt imediat ce au nevoie ceilalți", character: "ana" },
-                    { text: "Inspirația — vin mereu cu idei și entuziasm", character: "titu" },
-                    { text: "Curajul — spun lucrurilor pe nume și îmi asum alegerile", character: "nadina" }
-                ]
-            },
-            {
-                question: "7. Ce rămâne cel mai puternic dincolo de trecerea timpului?",
-                options:
+    function togglePlaylistPlay() {
+      if (!playlistAudio.src) {
+        playPlaylistTrack(0);
+        return;
+      }
+      if (playlistAudio.paused) {
+        playlistAudio.play();
+        isPlaylistPlaying = true;
+      } else {
+        playlistAudio.pause();
+        isPlaylistPlaying = false;
+      }
+      updatePlaylistMainBtn();
+      renderPlaylist();
+    }
+
+    function prevPlaylistTrack() {
+      playPlaylistTrack((currentPlaylistIndex - 1 + PLAYLIST_DATA.length) % PLAYLIST_DATA.length);
+    }
+
+    function nextPlaylistTrack() {
+      playPlaylistTrack((currentPlaylistIndex + 1) % PLAYLIST_DATA.length);
+    }
+
+    function updatePlaylistMainBtn() {
+      document.getElementById('playlist-main-icon').setAttribute('data-lucide', isPlaylistPlaying ? 'pause' : 'play');
+      lucide.createIcons();
+    }
+
+    function renderContestCodes() {
+      const grid = document.getElementById('contest-codes-grid');
+      grid.innerHTML = CONTEST_CODES_DATA.map(c => `
+        <button onclick="openContestCode(${c.code})" class="p-4 rounded-2xl paper-card hover:border-terracotta text-left transition shadow-sm">
+          <span class="text-xs font-bold uppercase tracking-wider text-terracotta">QR #0${c.code}</span>
+          <h4 class="font-serif font-bold text-lg mt-1">${c.title}</h4>
+          <p class="text-xs opacity-70 mt-2">Apasă pentru întrebarea #${c.code} →</p>
+        </button>
+      `).join('');
+    }
+
+    function openContestCode(codeNum) {
+      const item = CONTEST_CODES_DATA.find(c => c.code === codeNum);
+      if (!item) return;
+      const box = document.getElementById('contest-question-box');
+      box.classList.remove('hidden');
+      box.innerHTML = `
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-terracotta">Provocarea QR #0${item.code}</span>
+            <h3 class="font-serif text-2xl font-bold mt-1">${item.question}</h3>
+            <p class="text-xs opacity-75 mt-3 italic">Indiciu: ${item.hint}</p>
+          </div>
+          <button onclick="document.getElementById('contest-question-box').classList.add('hidden')" class="p-2 rounded-lg hover:bg-amber-900/10">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      `;
+      lucide.createIcons();
+      box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function openQrPrintModal() {
+      const modal = document.getElementById('qr-print-modal');
+      const area = document.getElementById('qr-print-area');
+      area.innerHTML = '';
+      modal.classList.remove('hidden');
+
+      const baseUrl = `${window.location.origin}${window.location.pathname}`;
+
+      EXHIBITS_DATA.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'p-4 border border-black/20 rounded-xl flex flex-col items-center text-center break-inside-avoid';
+        const qrHolder = document.createElement('div');
+        new QRCode(qrHolder, { text: `${baseUrl}?exponat=${item.id}`, width: 120, height: 120 });
+        card.appendChild(qrHolder);
+        card.innerHTML += `<p class="font-serif font-bold text-sm mt-3">Exponat #${String(item.id).padStart(2, '0')}</p><p class="text-[11px] text-black/70">${item.title}</p>`;
+        area.appendChild(card);
+      });
+
+      CONTEST_CODES_DATA.forEach(c => {
+        const card = document.createElement('div');
+        card.className = 'p-4 border-2 border-dashed border-black/40 rounded-xl flex flex-col items-center text-center break-inside-avoid';
+        const qrHolder = document.createElement('div');
+        new QRCode(qrHolder, { text: `${baseUrl}?concurs=${c.code}`, width: 120, height: 120 });
+        card.appendChild(qrHolder);
+        card.innerHTML += `<p class="font-serif font-bold text-sm mt-3">CONCURS QR #0${c.code}</p><p class="text-[11px] text-black/70">${c.title}</p>`;
+        area.appendChild(card);
+      });
+    }
+
+    function closeQrPrintModal() {
+      document.getElementById('qr-print-modal').classList.add('hidden');
+    }
+
+    function handleUrlParameters() {
+      const params = new URLSearchParams(window.location.search);
+      const expId = parseInt(params.get('exponat'), 10);
+      const contestId = parseInt(params.get('concurs'), 10);
+
+      if (expId >= 1 && expId <= EXHIBITS_DATA.length) {
+        finishBookIntro();
+        openExhibitModal(expId);
+      } else if (contestId >= 1 && contestId <= CONTEST_CODES_DATA.length) {
+        finishBookIntro();
+        openContestCode(contestId);
+      }
+    }
+
+    function setupEventListeners() {
+      document.getElementById('exhibit-search').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase().trim();
+        const filtered = EXHIBITS_DATA.filter(item =>
+          item.title.toLowerCase().includes(term) ||
+          String(item.id).padStart(2, '0').includes(term) ||
+          item.poem.toLowerCase().includes(term)
+        );
+        renderExhibits(filtered);
+      });
+
+      document.querySelectorAll('.fc-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.fc-filter-btn').forEach(b => {
+            b.classList.remove('bg-terracotta', 'text-white');
+            b.classList.add('paper-card');
+          });
+          btn.classList.add('bg-terracotta', 'text-white');
+          btn.classList.remove('paper-card');
+          renderFlashcards(btn.dataset.cat);
+        });
+      });
+
+      const mobileMenu = document.getElementById('mobile-menu');
+      document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+      document.querySelectorAll('.mobile-nav-link').forEach(link => {
+        link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+      });
+
+      document.getElementById('toggle-event-day').addEventListener('change', (e) => {
+        const active = e.target.checked;
+        document.getElementById('concurs').classList.toggle('hidden', !active);
+        document.getElementById('nav-concurs-link').classList.toggle('hidden', !active);
+        document.getElementById('mobile-concurs-link').classList.toggle('hidden', !active);
+      });
+    }
+  </script>
+</body>
+</html>
