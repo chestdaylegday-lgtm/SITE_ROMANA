@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Liviu Rebreanu</title>
-  <meta name="description" content="Expoziție digitală interactivă dedicată lui Liviu Rebreanu: galerie foto și audio, quiz de personalitate, curiozități, proiecții, playlist și concursul celor 7 coduri QR." />
+  <meta name="description" content="Expoziție digitală interactivă dedicată lui Liviu Rebreanu: galerie foto și audio, quiz de personalitate, curiozități, proiecții, playlist și concursul Kahoot." />
   <meta id="meta-theme" name="theme-color" content="#EEE2C6" />
 
   <script>
@@ -776,7 +776,6 @@
     .plate-missing { display: none; position: absolute; inset: 0; place-items: center; font-family: var(--f-display); font-style: italic; color: #D8C6A2; font-size: 1.1rem; }
     .plate-frame.is-missing img { display: none; }
     .plate-frame.is-missing .plate-missing { display: grid; }
-    .plate-author { display: block; margin-top: .35rem; font-family: var(--f-label); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
     .plate-frame img {
       width: 100%;
       height: 100%;
@@ -818,11 +817,20 @@
       transition: transform .6s var(--ease-out);
     }
     .plate:hover .plate-listen { transform: scale(1.08) rotate(-10deg); }
-    .plate-caption { display: block; padding: 1.05rem .15rem 0; }
+    .plate-caption { display: block; padding: 1.05rem .15rem 0; text-align: center; }
     .plate-sub { display: block; color: var(--accent); font-size: .62rem; }
     .plate-title { display: block; margin-top: .45rem; font-family: var(--f-display); font-size: 1.25rem; line-height: 1.2; transition: color .3s; }
     .plate:hover .plate-title { color: var(--accent); }
-    .plate-cta { display: inline-flex; align-items: center; gap: .35rem; margin-top: .6rem; font-style: italic; font-size: 1rem; color: var(--ink-2); }
+
+    /* Credite sub titlul fotografiei (fotograf / autor poem / titlu poem) */
+    .plate-credits { display: block; margin-top: .7rem; padding-top: .7rem; border-top: 1px solid var(--rule, rgba(120, 85, 45, .22)); }
+    .plate-cr { display: block; margin-top: .3rem; line-height: 1.35; }
+    .plate-cr:first-child { margin-top: 0; }
+    .cr-k { display: block; font-family: var(--f-label); font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-2); opacity: .8; }
+    .cr-v { display: block; margin-top: .1rem; font-size: .95rem; color: var(--accent); }
+    .plate-cr .cr-v { font-family: var(--f-label); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
+
+    .plate-cta { display: inline-flex; align-items: center; gap: .35rem; margin-top: .75rem; font-style: italic; font-size: 1rem; color: var(--ink-2); }
     .plate-cta .ico { transition: transform .45s var(--ease-out); }
     .plate:hover .plate-cta .ico { transform: translate(3px, -3px); }
     .empty-note { grid-column: 1 / -1; text-align: center; font-style: italic; color: var(--ink-2); padding: 3rem 0; }
@@ -879,14 +887,17 @@
     .photo-mount .k3 { bottom: 0; right: 0; transform: rotate(180deg); }
     .photo-mount .k4 { bottom: 0; left: 0; transform: rotate(270deg); }
 
-    .modal-right { position: relative; padding: clamp(1.5rem, 3.5vw, 3rem); display: flex; flex-direction: column; gap: 1.35rem; }
+    .modal-right { position: relative; padding: clamp(1.5rem, 3.5vw, 3rem); display: flex; flex-direction: column; gap: 1.35rem; text-align: center; }
     .modal-meta { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-right: 3.2rem; }
     #modal-badge { color: var(--accent); }
     #modal-title { font-family: var(--f-display); font-weight: 500; font-size: clamp(1.75rem, 3.2vw, 2.5rem); line-height: 1.1; }
-    .modal-sub { margin-top: .35rem; font-style: italic; color: var(--ink-2); }
-    .poem { max-height: 15rem; overflow-y: auto; padding: .15rem 1rem .15rem 1.25rem; border-left: 1px solid var(--gold); scrollbar-width: thin; }
-    #modal-poem .poem-title { display: block; margin-bottom: .9rem; font-style: normal; font-family: var(--f-display); font-weight: 600; color: var(--accent); }
-    #modal-poem { font-style: italic; font-size: clamp(1.15rem, 1.8vw, 1.3rem); line-height: 1.65; white-space: pre-line; }
+
+    /* Creditele exponatului din fereastra mare */
+    .modal-credits { margin-top: 1.1rem; padding-top: 1.1rem; border-top: 1px solid var(--rule); display: grid; gap: .85rem; }
+    .modal-credits .cr-row { display: block; }
+    .modal-credits .cr-k { display: block; font-family: var(--f-label); font-size: .64rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-2); }
+    .modal-credits .cr-v { display: block; margin-top: .2rem; font-size: clamp(1.05rem, 1.6vw, 1.2rem); color: var(--accent); }
+    .modal-credits .cr-poem { font-family: var(--f-display); font-style: italic; font-size: clamp(1.2rem, 2vw, 1.45rem); }
     .modal-spread.is-swapping .photo-mount img,
     .modal-spread.is-swapping .swap { animation: swapIn .7s var(--ease-out); }
 
@@ -1165,6 +1176,7 @@
     .screen-caption .label { color: var(--accent); }
     .screen-caption h3 { font-family: var(--f-display); font-weight: 500; font-size: 1.65rem; line-height: 1.15; }
     .screen-caption p { color: var(--ink-2); }
+    .screen-caption .screen-credit { font-family: var(--f-label); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
 
     /* ==========================================================================
        12. PLAYLIST — gramofon & program de concert
@@ -1315,10 +1327,6 @@
     /* ==========================================================================
        13. CONCURS — bilete și telegrame
        ========================================================================== */
-    .contest-head { display: flex; flex-direction: column; gap: 2rem; margin-bottom: clamp(2.5rem, 5vw, 3.5rem); }
-    .contest-head .chapter-head { margin-bottom: 0; }
-    .contest-head .btn { align-self: flex-start; }
-    @media (min-width: 900px) { .contest-head { flex-direction: row; align-items: flex-end; justify-content: space-between; } .contest-head .btn { align-self: flex-end; } }
     .stamp {
       display: inline-flex;
       align-items: center;
@@ -1338,55 +1346,81 @@
     }
     .stamp .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: pulse 1.8s ease-in-out infinite; }
 
-    .tickets { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr)); }
-    .ticket {
+    /* --- Scena concursului Kahoot (unicul element din secțiunea VI) --- */
+    .kahoot-stage {
       position: relative;
-      display: flex;
-      align-items: stretch;
-      text-align: left;
-      min-height: 6.6rem;
-      background: var(--card);
-      border: 1px solid var(--rule-strong);
-      box-shadow: var(--aged);
-      transition: transform .55s var(--ease-out), box-shadow .55s var(--ease-out);
-    }
-    .ticket:hover { transform: translateY(-3px) rotate(-.5deg); box-shadow: var(--aged), 0 18px 28px -20px rgba(50, 28, 10, .6); }
-    .ticket::before, .ticket::after {
-      content: "";
-      position: absolute;
-      left: calc(4.6rem - .55rem);
-      width: 1.1rem;
-      height: 1.1rem;
-      border-radius: 50%;
-      background: var(--paper-2);
-      box-shadow: inset 0 0 0 1px var(--rule);
-      transition: background-color .6s var(--ease);
-    }
-    .ticket::before { top: -.6rem; }
-    .ticket::after { bottom: -.6rem; }
-    .ticket-stub { flex: none; width: 4.6rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .3rem; border-right: 1px dashed var(--rule-strong); color: var(--accent); background: var(--tint); }
-    .ticket-stub .label { font-size: .58rem; }
-    .ticket-no { font-family: var(--f-display); font-style: italic; font-size: 1.55rem; line-height: 1; }
-    .ticket-no small { font-size: .55em; margin-right: .1em; }
-    .ticket-body { display: flex; flex-direction: column; justify-content: space-between; gap: .6rem; padding: 1rem 1.1rem .9rem 1.2rem; }
-    .ticket-title { font-family: var(--f-display); font-size: 1.15rem; line-height: 1.22; }
-    .ticket-cta { font-style: italic; font-size: .93rem; color: var(--ink-2); }
-
-    .telegram {
-      position: relative;
-      margin-top: 2.5rem;
-      padding: clamp(1.6rem, 4vw, 2.75rem);
-      padding-right: clamp(4rem, 6vw, 5rem);
+      max-width: 52rem;
+      margin-inline: auto;
+      padding: clamp(2rem, 5vw, 3.4rem) clamp(1.4rem, 5vw, 3.4rem) clamp(2.2rem, 5vw, 3.4rem);
+      text-align: center;
       background: var(--paper-hi);
       border: 1px solid var(--rule-strong);
-      box-shadow: var(--aged), 0 24px 44px -30px rgba(50, 28, 10, .6);
+      box-shadow: var(--aged), 0 34px 60px -34px rgba(50, 28, 10, .62);
+      overflow: hidden;
     }
-    .telegram::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: repeating-linear-gradient(90deg, var(--accent) 0 18px, transparent 18px 27px); }
-    html.js:not(.reduced-motion) .telegram.is-new { animation: telegramIn .7s var(--ease-out); }
-    .telegram .label { color: var(--accent); }
-    .telegram h3 { margin-top: .7rem; font-family: var(--f-display); font-weight: 500; font-size: clamp(1.4rem, 3vw, 2rem); line-height: 1.28; }
-    .telegram .hint { margin-top: 1.1rem; font-style: italic; color: var(--ink-2); }
-    .telegram .tool-btn { position: absolute; top: 1.1rem; right: 1.1rem; }
+    .kahoot-stage::before {
+      content: "";
+      position: absolute; left: 0; right: 0; top: 0; height: 5px;
+      background: linear-gradient(90deg, var(--gold), var(--accent), var(--gold-hi), var(--accent), var(--gold));
+      background-size: 300% 100%;
+    }
+    html.js:not(.reduced-motion) .kahoot-stage::before { animation: kahootSweep 6s linear infinite; }
+    .kahoot-stage::after {
+      content: "";
+      position: absolute; inset: .55rem;
+      border: 1px solid var(--rule);
+      pointer-events: none;
+    }
+    .kahoot-glow {
+      position: absolute; left: 50%; top: -42%;
+      width: min(140%, 46rem); aspect-ratio: 1;
+      transform: translateX(-50%);
+      background: radial-gradient(circle, rgba(168, 130, 47, .20), transparent 62%);
+      pointer-events: none;
+    }
+    html.js:not(.reduced-motion) .kahoot-glow { animation: kahootBreathe 7s ease-in-out infinite; }
+    .kahoot-inner { position: relative; display: grid; justify-items: center; gap: .1rem; }
+    .kahoot-stamp { margin-bottom: 1.6rem; }
+    .kahoot-kicker { color: var(--accent); font-size: .68rem; letter-spacing: .3em; }
+    .kahoot-head {
+      margin-top: .7rem;
+      font-family: var(--f-display); font-weight: 500;
+      font-size: clamp(2rem, 6vw, 3.1rem); line-height: 1.04;
+      color: var(--accent);
+    }
+    .kahoot-lede { margin-top: 1rem; max-width: 34rem; font-size: clamp(1.02rem, 1.9vw, 1.2rem); color: var(--ink-2); }
+
+    .kahoot-btn {
+      position: relative;
+      display: inline-flex; align-items: center; gap: .75rem;
+      margin-top: clamp(1.6rem, 4vw, 2.3rem);
+      padding: 1.05rem 2.1rem .95rem;
+      background: var(--btn); color: var(--btn-ink);
+      border: 1px solid var(--btn);
+      box-shadow: 0 16px 30px -16px rgba(50, 28, 10, .72);
+      font-family: var(--f-label); font-size: .82rem; font-weight: 600;
+      letter-spacing: .18em; text-transform: uppercase;
+      overflow: hidden;
+      transition: transform .35s var(--ease-out), box-shadow .35s var(--ease-out), background .3s;
+    }
+    .kahoot-btn:hover, .kahoot-btn:focus-visible { transform: translateY(-3px) scale(1.015); box-shadow: 0 22px 38px -16px rgba(50, 28, 10, .78); }
+    .kahoot-btn .ico { font-size: 1.05rem; }
+    .kahoot-btn .ico-move { transition: transform .4s var(--ease-out); }
+    .kahoot-btn:hover .ico-move { transform: translate(3px, -3px); }
+    html.js:not(.reduced-motion) .kahoot-btn { animation: kahootPulse 2.6s ease-in-out infinite; }
+    html.js:not(.reduced-motion) .kahoot-btn:hover { animation: none; }
+    .kahoot-btn-glint {
+      position: absolute; top: 0; bottom: 0; left: -60%; width: 45%;
+      background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .34), transparent);
+      pointer-events: none;
+    }
+    html.js:not(.reduced-motion) .kahoot-btn-glint { animation: kahootGlint 3.4s ease-in-out infinite; }
+    .kahoot-note { margin-top: 1.25rem; font-style: italic; font-size: .95rem; color: var(--ink-3); }
+
+    @keyframes kahootSweep { to { background-position: 300% 0; } }
+    @keyframes kahootBreathe { 0%, 100% { opacity: .75; transform: translateX(-50%) scale(1); } 50% { opacity: 1; transform: translateX(-50%) scale(1.08); } }
+    @keyframes kahootPulse { 0%, 100% { box-shadow: 0 16px 30px -16px rgba(50, 28, 10, .72), 0 0 0 0 rgba(168, 130, 47, .5); } 60% { box-shadow: 0 16px 30px -16px rgba(50, 28, 10, .72), 0 0 0 14px rgba(168, 130, 47, 0); } }
+    @keyframes kahootGlint { 0% { left: -60%; } 55%, 100% { left: 125%; } }
 
     /* ==========================================================================
        14. COLOFON (subsol)
@@ -1642,7 +1676,7 @@
           <a href="#flashcards" data-nav="flashcards">Curiozități</a>
           <a href="#cinema" data-nav="cinema">Povestire audio</a>
           <a href="#playlist" data-nav="playlist">Playlist</a>
-          <a href="#concurs" id="nav-concurs-link" class="nav-concurs" data-nav="concurs">Concurs QR</a>
+          <a href="#concurs" id="nav-concurs-link" class="nav-concurs" data-nav="concurs">Concurs Kahoot</a>
         </nav>
 
         <div class="masthead-tools">
@@ -1669,7 +1703,7 @@
           <a href="#flashcards" class="mobile-nav-link"><span>Curiozități (Flashcard-uri)</span><span class="mm-leader"></span><span class="mm-roman">III</span></a>
           <a href="#cinema" class="mobile-nav-link"><span>Povestire audio „Strănutarea”</span><span class="mm-leader"></span><span class="mm-roman">IV</span></a>
           <a href="#playlist" class="mobile-nav-link"><span>Playlist Liviu Rebreanu</span><span class="mm-leader"></span><span class="mm-roman">V</span></a>
-          <a href="#concurs" id="mobile-concurs-link" class="mobile-nav-link is-concurs"><span>Concursul celor 7 Coduri QR</span><span class="mm-leader"></span><span class="mm-roman">VI</span></a>
+          <a href="#concurs" id="mobile-concurs-link" class="mobile-nav-link is-concurs"><span>Concursul Kahoot</span><span class="mm-leader"></span><span class="mm-roman">VI</span></a>
         </div>
       </div>
     </header>
@@ -1732,7 +1766,7 @@
               <li><a href="#flashcards"><span class="toc-roman">III</span><span class="toc-title">Curiozități</span><span class="toc-leader"></span><span class="toc-hint">9 fișe</span></a></li>
               <li><a href="#cinema"><span class="toc-roman">IV</span><span class="toc-title">Proiecții speciale</span><span class="toc-leader"></span><span class="toc-hint">1 povestire</span></a></li>
               <li><a href="#playlist"><span class="toc-roman">V</span><span class="toc-title">Atmosferă sonoră</span><span class="toc-leader"></span><span class="toc-hint">4 piese</span></a></li>
-              <li id="toc-concurs-item"><a href="#concurs"><span class="toc-roman">VI</span><span class="toc-title">Vânătoarea codurilor QR</span><span class="toc-leader"></span><span class="toc-hint">7 coduri</span></a></li>
+              <li id="toc-concurs-item"><a href="#concurs"><span class="toc-roman">VI</span><span class="toc-title">Concursul Kahoot</span><span class="toc-leader"></span><span class="toc-hint">1 provocare</span></a></li>
             </ol>
           </nav>
         </div>
@@ -1747,12 +1781,12 @@
             <div class="chapter-head reveal">
               <p class="chapter-kicker label"><span class="roman">I</span><span class="rule"></span><span>Colecția vizuală și sonoră</span></p>
               <h2 class="chapter-title">Galeria <em>Exponatelor</em> <span class="aside">(1 – 20)</span></h2>
-              <p class="chapter-intro">Apasă pe orice tablou pentru a citi poemul dedicat și pentru a asculta înregistrarea audio. În sala de expoziție, fiecare lucrare are propriul cod QR.</p>
+              <p class="chapter-intro">Apasă pe orice tablou pentru a vedea fotografia în format mare și pentru a asculta înregistrarea audio a poemului. În sala de expoziție, fiecare lucrare are propriul cod QR.</p>
             </div>
             <label class="search reveal" style="--rd:.15s" for="exhibit-search">
               <svg class="ico"><use href="#i-search"/></svg>
               <span class="sr-only">Caută exponat</span>
-              <input id="exhibit-search" type="search" placeholder="Caută titlu sau autor (ex: Veronica, 04)..." autocomplete="off" />
+              <input id="exhibit-search" type="search" placeholder="Caută titlu, fotograf sau autor (ex: Veronica, 04)..." autocomplete="off" />
             </label>
           </div>
 
@@ -1825,7 +1859,8 @@
               <div class="screen-caption">
                 <span class="label">Bobina I</span>
                 <h3>„Strănutarea” — Liviu Rebreanu</h3>
-                <p>Aici e înregistrarea povestirii „Strănutarea” de Liviu Rebreanu. Interpretează: Alex Georgiu (profesor), Adriana Zăgrean (bibliotecar) și Corneliu Linul (profesor consilier școlar).</p>
+                <p class="screen-credit">Interpretează: Alex Georgiu, Adriana Zăgrean și Corneliu Linul.</p>
+                <p>Lectură integrală a schiței „Strănutarea”, text în care Liviu Rebreanu surprinde, cu o ironie măsurată, ridicolul convențiilor sociale și fragilitatea aparențelor pe care se sprijină viața mărunt-cotidiană. Interpretarea pe trei voci restituie savoarea replicii și ritmul firesc al oralității, invitând ascultătorul să redescopere latura comică a unui scriitor cunoscut mai ales pentru romanele sale de factură realistă.</p>
               </div>
             </article>
 
@@ -1897,27 +1932,33 @@
       </section>
 
       <!-- ====================================================================
-           VI. CONCURSUL DIN ZIUA EXPOZIȚIEI (7 CODURI QR)
+           VI. CONCURSUL KAHOOT
            ==================================================================== -->
       <section id="concurs" class="chapter chapter--tinted">
         <div class="wrap">
-          <div class="contest-head">
-            <div class="chapter-head reveal">
-              <span class="stamp"><span class="dot"></span><span>Activ doar în ziua expoziției</span></span>
-              <p class="chapter-kicker label"><span class="roman">VI</span><span class="rule"></span><span>Concurs</span></p>
-              <h2 class="chapter-title">Vânătoarea celor <em>7 Coduri QR</em></h2>
-              <p class="chapter-intro">Găsește cele 7 coduri QR ascunse în spațiul expoziției! Fiecare cod îți dezvăluie o întrebare despre activitățile proiectului.</p>
-            </div>
-            <a href="https://kahoot.it" target="_blank" rel="noopener" class="btn btn-primary reveal">
-              <span>Intră în Kahoot Live</span>
-              <svg class="ico ico-move"><use href="#i-arrow-ur"/></svg>
-            </a>
+          <div class="chapter-head chapter-head--center reveal">
+            <p class="chapter-kicker label"><span class="roman">VI</span><span class="rule"></span><span>Concurs</span></p>
+            <h2 class="chapter-title">Testează-ți <em>cunoștințele</em><br />despre activitățile desfășurate</h2>
           </div>
 
-          <div id="contest-codes-grid" class="tickets"></div>
+          <div class="kahoot-stage reveal" style="--rd:.1s">
+            <span class="kahoot-glow" aria-hidden="true"></span>
+            <div class="kahoot-inner">
+              <span class="stamp kahoot-stamp"><span class="dot"></span><span>Activ doar în perioada Săptămânii Rebreanu</span></span>
 
-          <div id="contest-question-box" class="telegram hidden" aria-live="polite">
-            <!-- Injectat prin JS -->
+              <p class="kahoot-kicker label">Concurs live</p>
+              <p class="kahoot-head">Intră în joc și câștigă!</p>
+              <p class="kahoot-lede">Un singur clic te așează în arena concursului. Răspunde rapid, urcă în clasament și vezi cine cunoaște cel mai bine expoziția.</p>
+
+              <a href="https://kahoot.it" target="_blank" rel="noopener" class="kahoot-btn">
+                <span class="kahoot-btn-glint" aria-hidden="true"></span>
+                <svg class="ico"><use href="#i-play"/></svg>
+                <span>Intră în concursul Kahoot</span>
+                <svg class="ico ico-move"><use href="#i-arrow-ur"/></svg>
+              </a>
+
+              <p class="kahoot-note">Se deschide în kahoot.it — ai nevoie doar de codul PIN anunțat în sala de expoziție.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -1942,7 +1983,7 @@
 
           <label class="switch-label">
             <input type="checkbox" id="toggle-event-day" class="switch" checked />
-            <span>Mod Ziua Evenimentului (Concurs Activ)</span>
+            <span>Mod Săptămâna Rebreanu (Concurs Kahoot activ)</span>
           </label>
         </div>
       </div>
@@ -1979,11 +2020,7 @@
 
           <div class="swap">
             <h3 id="modal-title">Titlu Exponat</h3>
-            <p id="modal-sub" class="modal-sub"></p>
-          </div>
-
-          <div class="poem swap">
-            <p id="modal-poem"></p>
+            <div id="modal-credits" class="modal-credits"></div>
           </div>
 
           <!-- Player audio dedicat -->
@@ -2038,7 +2075,7 @@
       <div class="qr-sheet-head">
         <div>
           <h3 id="qr-sheet-title">Etichete QR pentru Sala de Expoziție</h3>
-          <p class="lede">Conține toate cele 20 de coduri pentru tablouri + cele 7 coduri pentru concurs. Apasă „Printează”.</p>
+          <p class="lede">Conține toate cele 20 de coduri QR pentru tablourile din expoziție. Apasă „Printează”.</p>
         </div>
         <div class="qr-sheet-actions">
           <button type="button" onclick="printQrLabels()" class="btn btn-primary">
@@ -2171,116 +2208,34 @@
     /* ======================================================================
        DATE (neschimbate)
        ====================================================================== */
-    // Poemele din Poeme.txt, asociate după numele de la finalul fiecărui poem (cheia = numărul exponatului)
-    const POEMS = {
-      "1": {
-        "title": "Spânzurat",
-        "body": "Se știe undeva ce se întâmplă, ce se ignoră, Erau de mult conspirații și toată lumea le șoptea, Dar acum când există, nu mai răsună, nu mai răspund,\nNici ecoul, nici copacii nu mai cară cadavrele.\nPoate e dezordinea pe care o lași în urma ta ce îi preocupă\nSau cât de repede te enervezi sau cum te dezgustă să vorbești.\nOricum ce se întâmplă nu mai e reamintit Și ce e un obiect nerecunoscut de nimeni?\nO umplutură în vid, nici măcar un reper."
-      },
-      "2": {
-        "title": "Melancolic",
-        "body": "Paleta de culori ștearsă.\nOrașul unde casele sunt mâncate de cer și pământ.\nCopilul care merge la școală pe nori.\nNu se uită în jos.\nNu aude nimic.\nOrașul unde săracii merg pe străzi, Iar porcii se aruncă din turla bisericii, O cădere de la înălțime în mijlocul pereților mâncați de pământ."
-      },
-      "3": {
-        "title": "Amnezică",
-        "body": "1. Ce înseamnă să fii copil și să te uiți la tatăl din serial cum își ajută copilul să asambleze trenuri (știind că pe tine nu te-au interesat niciodată mijloacele de transport)\n2. Trăiesc într-un oraș murdar cu o minte murdară.\n3. O,domnule Serpente, mai sună o dată din clopotul Bisericii Evanghelice!\n4. Biserica Evanghelică e ca luna- când eram mică, credeam că mă urmărește pe mine și doar pe mine.\n5. Știai că un tren bistrițean poate ajunge la viteza de 40 km/h?- aceeași viteză cu care am condus până acum la orele de șofat.\n6. Du-mă înapoi acasă (cafeneaua de pe centrul vechi unde în fiecare dimineață bunicul îmi păstra biscuitele de la cafea)\n7. amnezică n-am fost niciodată- îmi amintesc poza pe care am făcut-o cu mama în Italia la 2 ani și cine a ieșit ultima dată din grupul extins al familiei"
-      },
-      "4": {
-        "title": "Prinsă în mine",
-        "body": "Uneori, liniștea spune mai multe decât oamenii, lar timpul îşi lasă pașii în urmă, fără să privească.\nPrinsă între dorința de a striga în gura mare ceea ce simt\nȘi împrejurul ce mă oprește!\nMuzica sufletului meu... uitată pe o bancă printre frunze.\nAtâtea gânduri și întrebări ignorate!\nSingură rămân, deși atâta lume-i împrejur.\nPrinsă în mine! Nu am ce sã spun."
-      },
-      "5": {
-        "title": "Ce vei face?",
-        "body": "Lumea este în alb-negru, toti stim asta.\nCu contrastul de zero culori intensificat exact cu 5 min înainte sa se termine totul.\nIntre timp cineva se arcuieste peste cap atingand pamantul cu mainile avand o sete disperata sa simta un pic din realitate in cel mai de necrezut mod.\nUn sentiment perfect imortalizat de nostalgie."
-      },
-      "6": {
-        "title": "lluzie",
-        "body": "Dată cu capul de pământ\nConsum realități în Alb-Negru contemporan\nNu respectă conturul moralității mele\nContuzie emoțională\nLa nivel de traumă\nMă înec în sângerarea voastră colectivă"
-      },
-      "7": {
-        "title": "Tristețe de 7 minute",
-        "body": "Catârul de aripi distruge cei în cale.\n\nMâine e joi sau miercuri... Nu se oprește\n\nȘi dă și dă până capul îi lichid.\n\nEl ajunge acasă cu fața topită,\n\nCând noaptea, vine fără clopoțel.\n\nÎn pat, bâzâitul s-a dus, și minutul a început.\n\nPrezentul devine memorie căci muzica s-a oprit, după 7 minute."
-      },
-      "8": {
-        "title": "In spatele refugiului",
-        "body": "Las totul jos în covorul de toamnă – și aparatul cu poze trecute, și masca pe care o port zilnic.\nMă refugiez în căști, unde o melodie veche îmi ține loc de adăpost.\nCând realitatea și gândurile devin greu de dus, muzica mă izolează de cei ce mă vor mereu perfectă,\nIar eu las frunzele să strângă brățara ta, ca pe un semnal SOS trimis în tăcere.\nDar, în mijlocul refrenului, muzica se oprește.\nRămân nemișcată printre frunzele de ginkgo care au supraviețuit atâtor furtuni,\nÎnțelegând că muzica îmi poate salva viața.\nAșa că las toamna să mă curețe de toate fricile vechi, pregătită de o nouă primăvară."
-      },
-      "10": {
-        "title": "Vise",
-        "body": "1. Candelabre atârnă jalnic de tavane, spulberând întunericul.\n2. Privind in gol, vitrina desparte o persoană de o lume financiară\n3. Pe drum trec dubioși, lipindu-se de străzi ca și guma de asfalt\n4. Sinele se gândește prea departe de vitrina unui simplu magazin\n5. Am sau n-am? Pot? Nu pot? De ce si pentru ce? Sau e necesar?\n6. Adulți merg la serviciu sau acasă, viață banală, visuri uitate, dar un copil privește.\n7. Pavement de piatră, călcat de sute de ani, marcat de timp si evenimente\n8. Rimara."
-      },
-      "11": {
-        "title": "Gânduri pe zăpadă",
-        "body": "Privesc muntele și mă pierd printre gânduri parcă fiecare urmă ascunde o poveste.\nToți avem planuri, dar nimeni nu știe ce urmează, iar eu încerc să-mi găsesc locul printre atâtea schimbări.\nUneori aș vrea să dau timpul înapoi,\nsă mai fiu copil, fără griji și prea multe întrebări.\nDar poate că viața e un drum plin de surprize, iar cele mai frumoase răspunsuri apar atunci când nu le cauți."
-      },
-      "12": {
-        "title": "Apartenență la soare",
-        "body": "Finalul scârțâitului\nÎl găsesc sub roz,\nSub rozul de pe pământ.\nGhețarul blugilor\nStrigă cât poate de tare.\nCere ajutor.\nUn ajutor mut,\nCare iese din scurgerea mansardei.\nNici râsul, nici amprenta,\nNu mai au putere."
-      },
-      "13": {
-        "title": "singur / gunoi",
-        "body": "e un unic sens, unul comun,\nprins de strânsoarea reflectoarelor\nrealizezi,\ncă gunoiul ești chiar tu.\nflămând, aveai nevoie de țepii carora le cereai iertarea…\nai uitat cum e sa fugi, așa că sari\naștepți acu’ neajutorat\nsoarta destinului,\nsoarta care înfofolită-n\nfotoliul uitat,\nîncă așteaptă pe sintetic\nștiind prea bine că poarta-i\nevitabilă, ca-ntotdeauna"
-      },
-      "14": {
-        "title": "iz neobisnuit a lui septembrie",
-        "body": "În spate la groapă am învățat fumul pe de rost,\niar nostalgia mirosea a haine proaspăt spălate cu Perwoll.\nDouă singurătăți încăpeau într-un singur pronume,\nNoi, bricheta și vina întârzierii.\nCopacii se dezbrăcau,\nde parcă ar fi fost cel mai firesc\nlucru de pe pământ,\ndar e natura lor, cum ne-au predat-o și ei pe a noastră.\nCe profesori buni!\nTimpul, hoțul ăsta nemernic,\ncu mâini curate,\nne-a lăsat pe bordură, cu copilăria care fumegă între noi,\ncontinuând astfel mirosul\nurmătoarelor generații\ncu esență de țigări și cafeluțe reci cu gust de ploaie.\nSeptembrie încă ud în buzunare."
-      },
-      "15": {
-        "title": "Boarders",
-        "body": "„Hai să te duc la o cafenea mişto!\"\nUltima dată când m-am dat cap in cap cu cineva a fost aici\nFetele finuțe beau bere la draft și rulează în pauza de masă\nUn ristretto, o apă minerală si o vodcă- e comanda clientului fidel\nAscult Kazi ploaie, Killa fonic, Falling in reverse și Delia\nNu mă uit la Teo cum îmi face cafeaua- ştiu că o să verse câte puțin lapte pe jos.\nȘi oricine ar intra, ne ascundem după tejghea și numărăm până la 5.\n5 ore am stat „hai odată acasă\" o să mai vin pe la tine, spor lo lucru!\nLove u!"
-      },
-      "16": {
-        "title": "– Libertatea –",
-        "body": "Întreaga lume se grăbește,\nDar mai ales oamenii mari\nUnde vor să ajungă? De ce atâta grabă?\nViața trece: Gooooooooolll!!!\nÎn 90 de minute, poți trăi ce nu ai trăit o zi întreagă...\nPoți simți că trăiești, că ai de luat o decizie imbatabilă!\nSentimentul de libertate\nÎl găsești doar dacă te oprești puțin,\nȘi observi mișcarea din preajma ta."
-      },
-      "17": {
-        "title": "Dor de nicăieri",
-        "body": "La cincisprezece ani, lumea mi se pare prea mare pentru gândurile mele și prea mică pentru tot ce visez.\n\nPrivesc căsuța ridicată pe stâlpi și mă regăsesc în ea: parcă nici eu nu știu încă unde îmi sunt rădăcinile.\n\nStau între ceea ce am fost și ceea ce urmează să devin, fără să aparțin pe deplin niciuneia dintre lumi.\n\nIarba crește în voie, timpul trece, dar eu încă îmi caut locul.\n\nLa fereastră, o siluetă privește în depărtare, poate cu aceleași întrebări pe care nu îndrăznesc să le rostesc.\n\nMi-e dor de lucruri pe care nici măcar nu le-am trăit și teamă de lucruri pe care nu le cunosc.\n\nPoate că asta înseamnă să ai cincisprezece ani: să fii o casă neterminată, cu toate ferestrele deschise spre necunoscut."
-      },
-      "18": {
-        "title": "Vertij",
-        "body": "Avem furtuni care nu încap în oceane\nȘi ceruri care se prăbușesc în spatele pleoapelor.\nNe creștem aripi din întrebări și le frângem de marginea lumii\nCu suflete încă pline de cerneală\nȘi rani care nu au primit nume.\nTinerețea ne arde în tăcere ca un soare captiv sub piele, lar fiecare vis devine o formă de nesupunere.\nNu știm să aparținem niciunui țărm, Suntem doar infinitul care încearcă\nSă încapă într-o singură viață."
-      },
-      "19": {
-        "title": "Ambiție",
-        "body": "Te agăți și cazi cu picioarele-n sus\nAsfaltul, mai rece ca orice emoție simțită vreodată\nTe îmbrățişează prin crăpături\nDe acolo ies mici firicele de iarbă\nCare, la rândul lor, încep să te gâdile pe unde\nNu știi dacă să râzi sau să plângi de la disconfort\nDar alegi să te ridici și să te agăți din nou\nDe data asta nu mai cazi"
-      },
-      "20": {
-        "title": "Urme și lumină",
-        "body": "Timpul curge domol și lasă urme adânci în oraș\nOamenii pleacă grăbiți să nu simtă prea mult...\nInima locului mai bate încă\nDar tocmai unde doare, începe adevărata poveste\nSuntem făcuți din clipele în care am găsit curajul…\nSă desenăm frumos...Lumină și speranță cu mâinile goale."
-      }
-    };
-
+    // Datele exponatelor: titlul fotografiei, fotograful, titlul si autorul poemului (sursa: Autor.x.xlsx)
     const EXHIBITS_DATA = [
-      { title: "Arta fericirii", author: "Larisa Bulea", image: "img/exponat-01.jpg", audio: "audio/Larisa Bulea.mp3" },
-      { title: "Arte și meserii", author: "Alin Mihai", image: "img/exponat-02.jpg", audio: "audio/Alin mihai.mp3" },
-      { title: "Cineva să ne aducă vara", author: "Millie", image: "img/exponat-03.jpg", audio: "audio/millie2.mp3" },
-      { title: "Columb (III)", author: "Nuria", image: "img/exponat-04.jpg", audio: "audio/Nuria.mp3" },
-      { title: "Când lumea e întreagă și timpul prea scurt", author: "Anna", image: "img/exponat-05.jpg", audio: "audio/Anna.mp3" },
-      { title: "Desene cu creta", author: "Ana", image: "img/exponat-06.jpg", audio: "audio/Ana.mp3" },
-      { title: "EU II", author: "Alin Luca", image: "img/exponat-07.jpg", audio: "audio/Alin Luca.mp3" },
-      { title: "EU II", author: "Mede", image: "img/exponat-08.jpg", audio: "audio/Mede.mp3" },
-      { title: "Identitate", author: "Reghina", image: "img/exponat-09.jpg", audio: "audio/Reghina.mp3" },
-      { title: "Memorii", author: "Pelian", image: "img/exponat-10.jpg", audio: "audio/Pelian.mp3" },
-      { title: "Momente înghețate", author: "Lavinia", image: "img/exponat-11.jpg", audio: "audio/Lavinia.mp3" },
-      { title: "Noi", author: "Oprea Maria", image: "img/exponat-12.jpg", audio: "audio/Oprea Maria.mp3" },
-      { title: "Noi, la 17...", author: "Veronica", image: "img/exponat-13.jpg", audio: "audio/Veronica.mp3" },
-      { title: "Oriunde, oricând", author: "Veronica", image: "img/exponat-14.jpg", audio: "audio/Veronica2.mp3" },
-      { title: "Roata destinului, o călătorie spre infinit", author: "Millie", image: "img/exponat-15.jpg", audio: "audio/millie1.mp3" },
-      { title: "Ultima rundă", author: "Alex", image: "img/exponat-16.jpg", audio: "audio/Alex.mp3" },
-      { title: "În castel", author: "Mara", image: "img/exponat-17.jpg", audio: "audio/Mara.mp3" },
-      { title: "Înainte", author: "Iulia", image: "img/exponat-18.jpg", audio: "audio/Iulia.mp3" },
-      { title: "Încercare", author: "Ioana", image: "img/exponat-19.jpg", audio: "audio/Ioana.mp3" },
-      // Lazăr: există înregistrarea audio (audio/lazar.mp3), dar lipsește fotografia.
-      // Pune poza în img/exponat-20.jpg și completează titlul corect aici.
-      { title: "Lucrarea lui Lazăr", author: "Lazăr", image: "img/exponat-20.jpg", audio: "audio/lazar.mp3" }
+      { title: "Arta fericirii",                              photographer: "Alin Luca",      poemTitle: "Spânzurat",                      poemAuthor: "Larisa Bulea X B",      image: "img/exponat-01.jpg", audio: "audio/Larisa Bulea.mp3" },
+      { title: "Arte și meserii",                             photographer: "Irina Frandeș",  poemTitle: "Melancolic",                     poemAuthor: "Alin Mihăilă IX B",     image: "img/exponat-02.jpg", audio: "audio/Alin mihai.mp3" },
+      { title: "Cineva să ne aducă vara înapoi",              photographer: "Irina Frandeș",  poemTitle: "Amneziacă",                      poemAuthor: "Milie Alexandra XI E",  image: "img/exponat-03.jpg", audio: "audio/millie1.mp3" },
+      { title: "Columb (III)",                                photographer: "Irina Frandeș",  poemTitle: "Prinsă în mine",                 poemAuthor: "Nuria Pop X B",         image: "img/exponat-04.jpg", audio: "audio/Nuria.mp3" },
+      { title: "Când lumea e întreagă și timpul prea scurt",  photographer: "Nuria Pop",      poemTitle: "Ce vei face?",                   poemAuthor: "Cormoș Anna X G",       image: "img/exponat-05.jpg", audio: "audio/Anna.mp3" },
+      { title: "Desene cu creta",                             photographer: "Oana Ariana",    poemTitle: "Iluzie",                         poemAuthor: "Ana Ceteraș XI H",      image: "img/exponat-06.jpg", audio: "audio/Ana.mp3" },
+      { title: "Roata destinului",                            photographer: "Lazăr David",    poemTitle: "Boarders",                       poemAuthor: "Milie Alexandra XI E",  image: "img/exponat-15.jpg", audio: "audio/millie2.mp3" },
+      { title: "EU II",                                       photographer: "Irina Frandeș",  poemTitle: "În spatele refugiului",          poemAuthor: "Moldovan Meedea IX H",  image: "img/exponat-08.jpg", audio: "audio/Mede.mp3" },
+      { title: "Identitate",                                  photographer: "Alin Luca",      poemTitle: "Urma",                           poemAuthor: "Olariu Reghina X B",    image: "img/exponat-09.jpg", audio: "audio/Reghina.mp3" },
+      { title: "Memorii",                                     photographer: "Alin Luca",      poemTitle: "Vise",                           poemAuthor: "Pelian Andreia X A",    image: "img/exponat-10.jpg", audio: "audio/Pelian.mp3" },
+      { title: "Momente înghețate",                           photographer: "Oana Ariana",    poemTitle: "Gânduri pe zăpadă",              poemAuthor: "Moisil Lavinia X B",    image: "img/exponat-11.jpg", audio: "audio/Lavinia.mp3" },
+      { title: "Noi",                                         photographer: "Berendea Doris", poemTitle: "Apartenența la soare",           poemAuthor: "Oprea Maria IX B",      image: "img/exponat-12.jpg", audio: "audio/Oprea Maria.mp3" },
+      { title: "Noi, la 17...",                               photographer: "Reghina Olariu", poemTitle: "Singur",                         poemAuthor: "Veronica Mureșan XI G", image: "img/exponat-13.jpg", audio: "audio/Veronica.mp3" },
+      { title: "Oriunde, oricând",                            photographer: "Alin Luca",      poemTitle: "Iz neobișnuit a lui septembrie", poemAuthor: "Veronica Mureșan XI G", image: "img/exponat-14.jpg", audio: "audio/Veronica2.mp3" },
+      { title: "EU II",                                       photographer: "Irina Frandeș",  poemTitle: "Tristețe de 7 minute",           poemAuthor: "Alin Luca X B",         image: "img/exponat-07.jpg", audio: "audio/Alin Luca.mp3" },
+      { title: "Ultima rundă",                                photographer: "Alin Luca",      poemTitle: "Libertatea",                     poemAuthor: "Alex Crihan X B",       image: "img/exponat-16.jpg", audio: "audio/Alex.mp3" },
+      { title: "În castel",                                   photographer: "Alin Luca",      poemTitle: "Dor de nicăieri",                poemAuthor: "Pop Mara IX C",         image: "img/exponat-17.jpg", audio: "audio/Mara.mp3" },
+      { title: "Înainte",                                     photographer: "Alin Luca",      poemTitle: "Vertij",                         poemAuthor: "Iulia Ilieșiu IX C",    image: "img/exponat-18.jpg", audio: "audio/Iulia.mp3" },
+      { title: "Încercare",                                   photographer: "Alin Luca",      poemTitle: "Ambiție",                        poemAuthor: "Emrich Ioana XI G",     image: "img/exponat-19.jpg", audio: "audio/Ioana.mp3" },
+      { title: "Arte și meserii",                             photographer: "Irina Frandeș",  poemTitle: "Urme și lumină",                 poemAuthor: "Lazăr David X A",       image: "img/exponat-20.jpg", audio: "audio/lazar.mp3" }
     ].map((e, i) => ({
       ...e,
       id: i + 1,
-      subtitle: e.author,
-      audio: encodeURI(e.audio),
-      poemTitle: POEMS[i + 1] ? POEMS[i + 1].title : "",
-      poem: POEMS[i + 1] ? POEMS[i + 1].body : `Fotografie și poem de ${e.author}.\n\nApasă butonul de redare de mai jos pentru a asculta poemul în lectura autorului.`
+      author: e.photographer,
+      subtitle: e.photographer,
+      audio: encodeURI(e.audio)
     }));
 
     const QUIZ_CHARACTERS = [
@@ -2507,16 +2462,6 @@
       { title: "Por una cabeza", artist: "Carlos Gardel", duration: "--:--", src: "./piesa-4.mp3" }
     ];
 
-    const CONTEST_CODES_DATA = [
-      { code: 1, title: "Codul #1 — Pripas", question: "Cum se numește satul în care se petrece acțiunea principală a romanului „Ion”?", hint: "Verifică Tabloul #01 din galerie." },
-      { code: 2, title: "Codul #2 — Automobilul", question: "Ce scriitor român a fost primul care și-a cumpărat mașină exclusiv din banii câștigați din literatură?", hint: "Răspunsul se află în Flashcard-urile de la secțiunea Curiozități." },
-      { code: 3, title: "Codul #3 — Muzică", question: "Ce piesă celebră cântată de Maria Tănase se regăsește în Playlist-ul expoziției?", hint: "Ascultă secțiunea 05 • Playlist." },
-      { code: 4, title: "Codul #4 — Pădurea spânzuraților", question: "Cine este personajul principal din romanul inspirat de drama fratelui său, Emil?", hint: "Poți afla și din Quiz-ul de personalitate." },
-      { code: 5, title: "Codul #5 — Gestul real", question: "De la ce scenă reală văzută pe câmp a pornit ideea romanului „Ion”?", hint: "Caută în Flashcard-urile despre ritualurile de scris." },
-      { code: 6, title: "Codul #6 — Animație", question: "Care este numele personajului din secțiunea de animații video ale expoziției?", hint: "Privește secțiunea 04 • Cinema." },
-      { code: 7, title: "Codul #7 — Tabieturi nocturne", question: "Câți litri de cafea consuma Liviu Rebreanu pe noapte în timpul orelor de creație?", hint: "Răspunsul este pe unul dintre Flashcard-urile 3D." }
-    ];
-
     let currentExhibitIndex = 0;
     let currentQuizStep = -1;
     let quizPicks = Array(8).fill(null);
@@ -2565,7 +2510,6 @@
       renderQuiz();
       renderFlashcards('toate');
       renderPlaylist();
-      renderContestCodes();
       setupEventListeners();
       setupEnhancements();
       observeReveals(document);
@@ -2603,10 +2547,10 @@
         return;
       }
       grid.innerHTML = list.map((item, i) => `
-        <button type="button" class="plate reveal" style="--rd:${(i % 4) * 80}ms" onclick="openExhibitModal(${item.id})" aria-label="Exponatul ${pad2(item.id)}: ${escapeAttr(item.title)}. Citește poemul și ascultă">
+        <button type="button" class="plate reveal" style="--rd:${(i % 4) * 80}ms" onclick="openExhibitModal(${item.id})" aria-label="Exponatul ${pad2(item.id)}: ${escapeAttr(item.title)}. Fotografie de ${escapeAttr(item.photographer)}. Poemul „${escapeAttr(item.poemTitle)}” de ${escapeAttr(item.poemAuthor)}. Ascultă înregistrarea">
           <span class="plate-mat">
             <span class="plate-frame">
-              <img src="${item.image}" alt="${escapeAttr(item.title)} — fotografie de ${escapeAttr(item.author)}" loading="lazy" decoding="async" width="1600" height="1200" onload="this.classList.add('is-loaded')" onerror="this.parentElement.classList.add('is-missing')" />
+              <img src="${item.image}" alt="${escapeAttr(item.title)} — fotografie de ${escapeAttr(item.photographer)}" loading="lazy" decoding="async" onload="this.classList.add('is-loaded')" onerror="this.parentElement.classList.add('is-missing')" />
               <span class="plate-missing" aria-hidden="true">Fotografia urmează</span>
             </span>
             <span class="plate-no">Nº ${pad2(item.id)}</span>
@@ -2614,8 +2558,12 @@
           </span>
           <span class="plate-caption">
             <span class="plate-title">${item.title}</span>
-            <span class="plate-author">${item.author}</span>
-            <span class="plate-cta">Citește poemul &amp; ascultă <svg class="ico"><use href="#i-arrow-ur"/></svg></span>
+            <span class="plate-credits">
+              <span class="plate-cr"><span class="cr-k">Fotografie</span><span class="cr-v">${item.photographer}</span></span>
+              <span class="plate-cr"><span class="cr-k">Autorul poemului</span><span class="cr-v">${item.poemAuthor}</span></span>
+              <span class="plate-cr"><span class="cr-k">Titlul poemului</span><span class="cr-v">„${item.poemTitle}”</span></span>
+            </span>
+            <span class="plate-cta">Ascultă înregistrarea <svg class="ico"><use href="#i-arrow-ur"/></svg></span>
           </span>
         </button>
       `).join('');
@@ -2658,10 +2606,12 @@
 
       document.getElementById('modal-badge').textContent = `Exponat #${String(item.id).padStart(2, '0')}`;
       document.getElementById('modal-title').textContent = item.title;
-      document.getElementById('modal-sub').textContent = `de ${item.author}`;
       document.getElementById('modal-img').src = item.image;
-      document.getElementById('modal-img').alt = `${item.title} — fotografie de ${item.author}`;
-      document.getElementById('modal-poem').innerHTML = (item.poemTitle ? `<strong class="poem-title">${escapeHtml(item.poemTitle)}</strong>` : '') + escapeHtml(item.poem);
+      document.getElementById('modal-img').alt = `${item.title} — fotografie de ${item.photographer}`;
+      document.getElementById('modal-credits').innerHTML = `
+        <p class="cr-row"><span class="cr-k">Fotografie</span><span class="cr-v">${escapeHtml(item.photographer)}</span></p>
+        <p class="cr-row"><span class="cr-k">Autorul poemului</span><span class="cr-v">${escapeHtml(item.poemAuthor)}</span></p>
+        <p class="cr-row"><span class="cr-k">Titlul poemului</span><span class="cr-v cr-poem">„${escapeHtml(item.poemTitle)}”</span></p>`;
       document.getElementById('modal-audio-note').classList.add('hidden');
 
       exhibitAudio.pause();
@@ -2681,8 +2631,6 @@
         void spread.offsetWidth;
         spread.classList.add('is-swapping');
       }
-      const poemBox = modal.querySelector('.poem');
-      if (poemBox) poemBox.scrollTop = 0;
     }
 
     function closeExhibitModal() {
@@ -3344,44 +3292,6 @@
     })();
 
     /* ======================================================================
-       VI. CONCURS
-       ====================================================================== */
-    function renderContestCodes() {
-      const grid = document.getElementById('contest-codes-grid');
-      grid.innerHTML = CONTEST_CODES_DATA.map((c, i) => `
-        <button type="button" onclick="openContestCode(${c.code})" class="ticket reveal" style="--rd:${(i % 4) * 70}ms">
-          <span class="ticket-stub">
-            <span class="label">QR</span>
-            <span class="ticket-no"><small>Nº</small>0${c.code}</span>
-          </span>
-          <span class="ticket-body">
-            <span class="ticket-title">${c.title}</span>
-            <span class="ticket-cta">Apasă pentru întrebarea #${c.code} →</span>
-          </span>
-        </button>
-      `).join('');
-      observeReveals(grid);
-    }
-
-    function openContestCode(codeNum) {
-      const item = CONTEST_CODES_DATA.find(c => c.code === codeNum);
-      if (!item) return;
-      const box = document.getElementById('contest-question-box');
-      box.classList.remove('hidden', 'is-new');
-      box.innerHTML = `
-        <span class="label">Provocarea QR #0${item.code}</span>
-        <h3>${item.question}</h3>
-        <p class="hint">Indiciu: ${item.hint}</p>
-        <button type="button" class="tool-btn" aria-label="Închide întrebarea" onclick="document.getElementById('contest-question-box').classList.add('hidden')">
-          <svg class="ico"><use href="#i-close"/></svg>
-        </button>
-      `;
-      void box.offsetWidth;
-      box.classList.add('is-new');
-      box.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
-    }
-
-    /* ======================================================================
        ETICHETE QR (PRINT)
        ====================================================================== */
     function openQrPrintModal() {
@@ -3410,16 +3320,6 @@
         card.insertAdjacentHTML('beforeend', `<p class="t">Exponat #${String(item.id).padStart(2, '0')}</p><p class="s">${item.title}</p>`);
         area.appendChild(card);
       });
-
-      CONTEST_CODES_DATA.forEach(c => {
-        const card = document.createElement('div');
-        card.className = 'qr-card is-contest';
-        const qrHolder = document.createElement('div');
-        new QRCode(qrHolder, { text: `${baseUrl}?concurs=${c.code}`, width: 120, height: 120 });
-        card.appendChild(qrHolder);
-        card.insertAdjacentHTML('beforeend', `<p class="t">CONCURS QR #0${c.code}</p><p class="s">${c.title}</p>`);
-        area.appendChild(card);
-      });
     }
 
     function closeQrPrintModal() {
@@ -3437,20 +3337,15 @@
     }
 
     /* ======================================================================
-       LINKURI QR (?exponat= / ?concurs=)
+       LINKURI QR (?exponat=)
        ====================================================================== */
     function handleUrlParameters() {
       const params = new URLSearchParams(window.location.search);
       const expId = parseInt(params.get('exponat'), 10);
-      const contestId = parseInt(params.get('concurs'), 10);
 
       if (expId >= 1 && expId <= EXHIBITS_DATA.length) {
         finishBookIntro(true);
         openExhibitModal(expId);
-        return true;
-      } else if (contestId >= 1 && contestId <= CONTEST_CODES_DATA.length) {
-        finishBookIntro(true);
-        openContestCode(contestId);
         return true;
       }
       return false;
@@ -3464,9 +3359,10 @@
         const term = e.target.value.toLowerCase().trim();
         const filtered = EXHIBITS_DATA.filter(item =>
           item.title.toLowerCase().includes(term) ||
-          item.author.toLowerCase().includes(term) ||
-          String(item.id).padStart(2, '0').includes(term) ||
-          item.poem.toLowerCase().includes(term)
+          item.photographer.toLowerCase().includes(term) ||
+          item.poemAuthor.toLowerCase().includes(term) ||
+          item.poemTitle.toLowerCase().includes(term) ||
+          String(item.id).padStart(2, '0').includes(term)
         );
         renderExhibits(filtered);
       });
